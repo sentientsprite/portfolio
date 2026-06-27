@@ -17,7 +17,47 @@ const detailUrl = withBase(`/work/${systemProject.slug}`);
 ---
 
 <section class="mb-16 overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 via-neutral-900/60 to-neutral-950" data-animate>
-  <div class="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
+  <!-- Mobile: condensed, sales-focused card -->
+  <div class="p-7 lg:hidden">
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Integrated growth stack</p>
+    <h2 class="mt-3 text-2xl font-bold tracking-tight text-neutral-100">{system.name}</h2>
+    <p class="mt-3 text-sm leading-relaxed text-neutral-400">{system.salesPitch}</p>
+
+    <div class="mt-5 grid grid-cols-2 gap-2.5">
+      {
+        system.outcomes.map((outcome) => (
+          <div class="rounded-xl border border-neutral-800 bg-neutral-950/50 p-3 text-center">
+            <b class="block text-xl font-bold text-emerald-400">{outcome.value}</b>
+            <span class="mt-0.5 block text-[11px] text-neutral-500">{outcome.label}</span>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-6 flex flex-col gap-2.5">
+      <a
+        href={detailUrl}
+        class="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400"
+      >
+        See the full growth system &rarr;
+      </a>
+      {
+        demoUrl && (
+          <a
+            href={demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-2 rounded-lg border border-neutral-700 px-5 py-3 text-sm font-medium text-neutral-300 transition hover:border-emerald-500/30 hover:text-emerald-400"
+          >
+            Open live demo &nearr;
+          </a>
+        )
+      }
+    </div>
+  </div>
+
+  <!-- Desktop: full integrated showcase -->
+  <div class="hidden gap-0 lg:grid lg:grid-cols-[1.1fr_0.9fr]">
     <div class="border-b border-neutral-800 p-8 lg:border-b-0 lg:border-r lg:p-10">
       <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Integrated growth stack</p>
       <h2 class="mt-3 text-3xl font-bold tracking-tight text-neutral-100 sm:text-4xl">{system.name}</h2>

@@ -17,6 +17,8 @@ export interface GrowthSystem {
   name: string;
   tagline: string;
   pitch: string;
+  /** Condensed, sales-focused pitch used on small screens. */
+  salesPitch: string;
   demoPath: string;
   modules: GrowthSystemModule[];
   outcomes: { value: string; label: string }[];
@@ -29,6 +31,8 @@ export const growthSystems: GrowthSystem[] = [
     tagline: 'From click to customer — tracked, automated, and measurable.',
     pitch:
       'A full-stack growth stack for business owners who need more than a website. Capture intent on a conversion landing page, score and route leads automatically, book appointments without phone tag, nurture prospects who are not ready yet, and audit new opportunities with data — all connected through CRM sync and attribution tracking.',
+    salesPitch:
+      'More than a website — a system that turns clicks into booked revenue. Capture leads, book appointments, and follow up automatically, all tracked end to end.',
     demoPath: 'demos/growth-system/index.html',
     modules: [
       {
