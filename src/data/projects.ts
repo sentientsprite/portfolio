@@ -147,12 +147,11 @@ export const projectOverrides: ProjectOverride[] = [
     category: 'product',
     featured: true,
     screenshot: 'images/projects/zephyr-pkm.svg',
-    demoUrl: 'https://zephyr-lyart-beta.vercel.app',
     sourceUrl: '',
     description:
-      'AI-powered second brain with Obsidian-style vault structure — inbox capture, daily briefs, weekly connections, graph view, and Chief of Staff chat.',
+      'Private AI-powered second brain with Obsidian vault structure — inbox capture, daily briefs, weekly connections, graph view, and Chief of Staff chat.',
     details:
-      'Zephyr implements the Chief of Staff knowledge system: a structured vault (INBOX → CAPTURES → CONNECTIONS → PROJECTS → VELLUM), frictionless capture (text, voice, Telegram-style), one-click inbox processing, daily briefs with emerging patterns and key questions, weekly connection synthesis, an interactive note graph, and a persistent VELLUM system-prompt editor. Built for crypto/AI knowledge workers who want Obsidian organization with Vellum-like AI workflows — deployed live on Vercel, demo mode uses in-browser persistence.',
+      'Zephyr implements the Chief of Staff knowledge system: a structured vault (INBOX → CAPTURES → CONNECTIONS → PROJECTS → VELLUM), frictionless capture, one-click inbox processing, daily briefs, weekly connection synthesis, an interactive note graph, and a persistent VELLUM system-prompt editor. This is a personal tool I run locally against my Obsidian vault — not a public live demo. Visitors can leave ideas via the suggestion box on this page; I import those into `01-CAPTURES/suggestions` in the vault.',
     techStack: ['Next.js', 'AI PKM', 'Obsidian Vault', 'Graph View', 'Workflows'],
   },
   {

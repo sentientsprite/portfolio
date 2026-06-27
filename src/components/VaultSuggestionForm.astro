@@ -1,0 +1,117 @@
+---
+import { site } from '../config/site';
+
+interface Props {
+  apiUrl?: string;
+}
+
+const { apiUrl = site.zephyrSuggestApi } = Astro.props;
+---
+
+<section
+  class="glow-card mt-10 rounded-xl border border-violet-500/20 bg-gradient-to-br from-violet-500/5 via-neutral-900/40 to-neutral-950 p-6 sm:p-8"
+  data-vault-suggest
+  data-api-url={apiUrl}
+>
+  <h2 class="text-xl font-semibold text-neutral-100">Leave a suggestion</h2>
+  <p class="mt-2 max-w-2xl text-sm text-neutral-400">
+    Zephyr is a private tool I use locally — not a public app. If you have an idea,
+    pattern, or question for my vault, drop it here. I import these into
+    <span class="text-violet-300">01-CAPTURES/suggestions</span> in Obsidian.
+  </p>
+
+  <form class="mt-6 space-y-4" data-suggest-form>
+    <div>
+      <label for="suggest-name" class="mb-1.5 block text-xs font-medium text-neutral-400">
+        Name <span class="text-neutral-600">(optional)</span>
+      </label>
+      <input
+        id="suggest-name"
+        name="name"
+        type="text"
+        maxlength="80"
+        autocomplete="name"
+        placeholder="Your name"
+        class="w-full rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+      />
+    </div>
+    <div>
+      <label for="suggest-message" class="mb-1.5 block text-xs font-medium text-neutral-400">
+        Suggestion
+      </label>
+      <textarea
+        id="suggest-message"
+        name="message"
+        required
+        rows="4"
+        maxlength="2000"
+        placeholder="An idea, article, pattern, or question worth capturing…"
+        class="w-full resize-y rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+      ></textarea>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <button
+        type="submit"
+        class="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-60"
+        data-suggest-submit
+      >
+        Send suggestion
+      </button>
+      <p class="text-xs text-neutral-500" data-suggest-status aria-live="polite"></p>
+    </div>
+  </form>
+</section>
+
+<script>
+  const root = document.querySelector('[data-vault-suggest]');
+  if (root) {
+    const apiUrl = root.getAttribute('data-api-url') ?? '';
+    const form = root.querySelector('[data-suggest-form]');
+    const status = root.querySelector('[data-suggest-status]');
+    const submitBtn = root.querySelector('[data-suggest-submit]');
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!apiUrl) return;
+
+      const data = new FormData(form as HTMLFormElement);
+      const message = String(data.get('message') ?? '').trim();
+      const name = String(data.get('name') ?? '').trim();
+
+      if (!message) return;
+
+      submitBtn?.setAttribute('disabled', 'true');
+      if (status) {
+        status.textContent = 'Sending…';
+        status.className = 'text-xs text-neutral-500';
+      }
+
+      try {
+        const res = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message, name: name || undefined }),
+        });
+        const body = (await res.json()) as { ok?: boolean; error?: string };
+
+        if (!res.ok || !body.ok) {
+          throw new Error(body.error ?? 'Could not send suggestion');
+        }
+
+        (form as HTMLFormElement).reset();
+        if (status) {
+          status.textContent = 'Thanks — captured for review.';
+          status.className = 'text-xs text-emerald-400';
+        }
+      } catch (err) {
+        if (status) {
+          status.textContent =
+            err instanceof Error ? err.message : 'Something went wrong. Try again later.';
+          status.className = 'text-xs text-amber-400';
+        }
+      } finally {
+        submitBtn?.removeAttribute('disabled');
+      }
+    });
+  }
+</script>

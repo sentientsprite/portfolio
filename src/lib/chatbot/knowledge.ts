@@ -215,10 +215,9 @@ export function buildChatbotConfig(): ChatbotConfig {
           'vault',
           'vellum',
         ],
-        response: `Obsidian Based Second Brain (Zephyr) is an AI-powered knowledge system with an Obsidian-style vault: inbox capture, daily briefs, weekly connections, a graph view, and Chief of Staff chat. Built for knowledge workers who want structured notes plus AI workflows.`,
+        response: `Obsidian Based Second Brain (Zephyr) is my private AI knowledge system with an Obsidian-style vault: inbox capture, daily briefs, weekly connections, a graph view, and Chief of Staff chat. It's not a public live demo — but you can leave a suggestion on the work page and I'll pull it into my vault.`,
         links: [
-          { label: 'Live app', href: 'https://zephyr-lyart-beta.vercel.app' },
-          { label: 'Work detail', href: withBase('/work/zephyr') },
+          { label: 'Work detail & suggestions', href: withBase('/work/zephyr') },
         ],
         quickReplies: ['Prana AI', 'Start a project'],
       },

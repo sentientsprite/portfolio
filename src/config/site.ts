@@ -12,6 +12,8 @@ export const site = {
     x: 'https://x.com/prana_juana',
   },
   accent: 'emerald',
+  /** Public intake for Zephyr portfolio suggestions (API only — not the full app). */
+  zephyrSuggestApi: 'https://zephyr-lyart-beta.vercel.app/api/suggest',
   skills: [
     'SEO & SEM',
     'Google Ads',

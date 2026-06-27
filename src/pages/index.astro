@@ -18,7 +18,7 @@ const pageTitle = site.name;
 const description = site.description;
 
 // Products & launches — three flagship products, in order.
-const showcaseOrder = ['fieldsync-scheduler', 'spryte', 'prana', 'zephyr'];
+const showcaseOrder = ['fieldsync-scheduler', 'spryte', 'prana'];
 const showcase = showcaseOrder
   .map((repoName) => projectOverrides.find((p) => p.repoName === repoName && !p.hidden))
   .filter((p): p is NonNullable<typeof p> => Boolean(p))
