@@ -1,0 +1,839 @@
+---
+/**
+ * studio.astro — Immersive 3D agency/portfolio landing page.
+ *
+ * Stack: Astro (static) + Tailwind v4 (project pipeline) + Three.js + GSAP (ScrollTrigger) + Lenis.
+ * This route is intentionally self-contained (its own nav/footer) for a full-bleed,
+ * cinematic experience rather than using the standard BaseLayout chrome.
+ */
+import '../styles/global.css';
+import { site } from '../config/site';
+import { withBase } from '../lib/url';
+import { resolveDemoUrl, slugify } from '../lib/url';
+import { projectOverrides } from '../data/projects';
+
+const pageTitle = `${site.name} — 3D Studio`;
+const description =
+  'An immersive 3D showcase of SEO-focused websites, growth systems, and AI products by Raymond King.';
+
+// Reuse real featured work for the showcase grid.
+const showcase = projectOverrides
+  .filter((p) => p.featured && !p.hidden)
+  .map((p) => ({
+    name: p.displayName ?? p.repoName,
+    description: p.description ?? '',
+    tech: p.techStack ?? [],
+    href:
+      resolveDemoUrl({ demoPath: p.demoPath, demoUrl: p.demoUrl }) ??
+      withBase(`/work/${slugify(p.displayName ?? p.repoName)}`),
+  }));
+
+const services = [
+  {
+    title: 'SEO & GEO Strategy',
+    body: 'Technical audits, content architecture, and AI-search optimization that compound organic growth month over month.',
+    icon: 'M21 21l-4.35-4.35M11 19a8 8 0 110-16 8 8 0 010 16z',
+  },
+  {
+    title: 'Web Development',
+    body: 'Fast, accessible, conversion-focused sites built on modern tooling — from marketing pages to full product UIs.',
+    icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
+  },
+  {
+    title: 'Automation Systems',
+    body: 'Lead scoring, nurture funnels, and workflow automation that quietly run your pipeline 24/7.',
+    icon: 'M13 10V3L4 14h7v7l9-11h-7z',
+  },
+  {
+    title: 'Growth Marketing',
+    body: 'Paid + organic experiments wired to analytics, so every dollar is measured against revenue, not vanity metrics.',
+    icon: 'M3 17l6-6 4 4 8-8M21 7v6h-6',
+  },
+  {
+    title: 'AI Products',
+    body: 'Agent-driven tooling and dashboards — audits, command centers, and lead engines that turn data into action.',
+    icon: 'M12 2a10 10 0 100 20 10 10 0 000-20zM12 8v4l3 3',
+  },
+  {
+    title: 'Analytics & Reporting',
+    body: 'Client-ready dashboards that translate raw data into a clear story: traffic, rankings, and conversion impact.',
+    icon: 'M4 19h16M7 16V8m5 8V4m5 12v-6',
+  },
+];
+
+const stats = [
+  { value: '45%', label: 'Avg. conversion lift' },
+  { value: '80%', label: 'Nurture emails automated' },
+  { value: '6+', label: 'Shipped products' },
+  { value: '∞', label: 'Curiosity' },
+];
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <title>{pageTitle}</title>
+  </head>
+
+  <body class="studio-body min-h-screen overflow-x-hidden bg-neutral-950 text-neutral-100 antialiased">
+    <!-- Loading overlay: removed once the 3D scene's first frame is painted -->
+    <div id="loader" class="fixed inset-0 z-[100] flex items-center justify-center bg-neutral-950">
+      <div class="flex flex-col items-center gap-5">
+        <div class="loader-ring"></div>
+        <p class="text-xs uppercase tracking-[0.4em] text-emerald-400/80">Rendering studio…</p>
+      </div>
+    </div>
+
+    <!-- Fixed full-viewport 3D canvas (sits behind all content) -->
+    <canvas id="scene" class="pointer-events-none fixed inset-0 z-0 h-full w-full"></canvas>
+    <!-- Atmospheric gradient layer behind the canvas -->
+    <div class="bg-atmosphere pointer-events-none fixed inset-0 z-[-1]"></div>
+
+    <!-- ===================== NAVBAR (glassmorphism, scroll-aware) ===================== -->
+    <header
+      id="navbar"
+      class="fixed inset-x-0 top-0 z-50 transition-all duration-500"
+    >
+      <div
+        class="nav-shell mx-auto mt-4 flex max-w-6xl items-center justify-between rounded-2xl px-5 py-3 transition-all duration-500"
+      >
+        <a href="#hero" class="group flex items-center gap-2 font-semibold tracking-tight">
+          <span class="grid h-8 w-8 place-items-center rounded-lg bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-400/30 transition group-hover:bg-emerald-500/25">RK</span>
+          <span class="hidden text-sm text-neutral-200 sm:inline">Studio</span>
+        </a>
+
+        <nav class="hidden items-center gap-7 md:flex">
+          <a href="#services" class="nav-link">Services</a>
+          <a href="#showcase" class="nav-link">Showcase</a>
+          <a href="#about" class="nav-link">About</a>
+          <a href={withBase('/')} class="nav-link">Main site</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <a
+            href="#contact"
+            class="hidden rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400 sm:inline-block"
+          >
+            Start a project
+          </a>
+          <button
+            id="menu-toggle"
+            aria-label="Toggle menu"
+            class="grid h-9 w-9 place-items-center rounded-lg ring-1 ring-neutral-700 text-neutral-300 md:hidden"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile menu -->
+      <div
+        id="mobile-menu"
+        class="mx-auto mt-2 hidden max-w-6xl flex-col gap-1 rounded-2xl border border-neutral-800 bg-neutral-900/90 p-3 backdrop-blur-xl md:hidden"
+      >
+        <a href="#services" class="mobile-link">Services</a>
+        <a href="#showcase" class="mobile-link">Showcase</a>
+        <a href="#about" class="mobile-link">About</a>
+        <a href={withBase('/')} class="mobile-link">Main site</a>
+        <a href="#contact" class="mobile-link text-emerald-400">Start a project</a>
+      </div>
+    </header>
+
+    <main class="relative z-10">
+      <!-- ===================== HERO ===================== -->
+      <section id="hero" class="relative flex min-h-screen items-center justify-center px-4">
+        <div class="mx-auto max-w-4xl text-center">
+          <p
+            data-hero="line"
+            class="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/5 px-4 py-1.5 text-xs uppercase tracking-[0.3em] text-emerald-300"
+          >
+            <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400"></span>
+            Growth · Web · Automation
+          </p>
+
+          <h1 class="text-balance text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl md:text-8xl">
+            <span data-hero="line" class="block">Build the</span>
+            <span data-hero="line" class="block bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 bg-clip-text text-transparent">
+              Future
+            </span>
+          </h1>
+
+          <p
+            data-hero="line"
+            class="mx-auto mt-7 max-w-2xl text-pretty text-base text-neutral-400 sm:text-lg"
+          >
+            I design and engineer fast, SEO-focused websites and growth systems —
+            blending marketing, code, and automation into products that move real metrics.
+          </p>
+
+          <div data-hero="line" class="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <a
+              href="#showcase"
+              class="group relative overflow-hidden rounded-full bg-emerald-500 px-7 py-3 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400"
+            >
+              <span class="relative z-10">View the work</span>
+            </a>
+            <a
+              href="#contact"
+              class="rounded-full border border-neutral-700 px-7 py-3 text-sm font-medium text-neutral-200 transition hover:border-emerald-400/50 hover:text-emerald-300"
+            >
+              Let’s talk
+            </a>
+          </div>
+        </div>
+
+        <!-- Scroll cue -->
+        <div data-hero="line" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-neutral-500">
+          <div class="flex flex-col items-center gap-2">
+            <span class="text-[10px] uppercase tracking-[0.3em]">Scroll</span>
+            <span class="scroll-dot"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== STATS STRIP ===================== -->
+      <section class="border-y border-neutral-900/80 bg-neutral-950/40 backdrop-blur-sm">
+        <div class="mx-auto grid max-w-6xl grid-cols-2 gap-px md:grid-cols-4">
+          {stats.map((s) => (
+            <div data-reveal class="px-6 py-10 text-center">
+              <div class="bg-gradient-to-b from-emerald-200 to-emerald-500 bg-clip-text text-4xl font-semibold text-transparent sm:text-5xl">
+                {s.value}
+              </div>
+              <div class="mt-2 text-xs uppercase tracking-widest text-neutral-500">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ===================== SERVICES ===================== -->
+      <section id="services" class="relative mx-auto max-w-6xl px-4 py-28">
+        <div class="mb-16 max-w-2xl">
+          <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">What I do</p>
+          <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
+            Systems that compound, not campaigns that fade.
+          </h2>
+        </div>
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((svc) => (
+            <article
+              data-reveal
+              data-tilt
+              class="tilt-card group relative rounded-2xl border border-neutral-800 bg-neutral-900/40 p-7 backdrop-blur-sm"
+            >
+              <div class="tilt-inner">
+                <div class="mb-5 grid h-12 w-12 place-items-center rounded-xl bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-400/20 transition group-hover:bg-emerald-500/20">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d={svc.icon} />
+                  </svg>
+                </div>
+                <h3 class="mb-2 text-lg font-medium text-neutral-100">{svc.title}</h3>
+                <p class="text-sm leading-relaxed text-neutral-400">{svc.body}</p>
+              </div>
+              <div class="card-glow"></div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- ===================== SHOWCASE / GALLERY ===================== -->
+      <section id="showcase" class="relative mx-auto max-w-6xl px-4 py-28">
+        <div class="mb-16 flex flex-wrap items-end justify-between gap-6">
+          <div class="max-w-2xl">
+            <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">Selected work</p>
+            <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
+              Products & launches.
+            </h2>
+          </div>
+          <a data-reveal href={withBase('/work')} class="nav-link text-sm">All work →</a>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          {showcase.map((proj, i) => (
+            <a
+              href={proj.href}
+              data-reveal
+              data-tilt
+              class="tilt-card group relative overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/40 p-8 backdrop-blur-sm"
+            >
+              <div class="tilt-inner">
+                <div class="mb-6 flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-neutral-800 bg-gradient-to-br from-neutral-900 to-neutral-950">
+                  <span class="showcase-orb" style={`--hue:${150 + i * 18}`}></span>
+                </div>
+                <h3 class="mb-2 text-xl font-medium text-neutral-100 transition group-hover:text-emerald-300">
+                  {proj.name}
+                </h3>
+                <p class="mb-5 line-clamp-2 text-sm leading-relaxed text-neutral-400">{proj.description}</p>
+                <div class="flex flex-wrap gap-2">
+                  {proj.tech.slice(0, 4).map((t) => (
+                    <span class="rounded-full border border-neutral-800 bg-neutral-950/60 px-2.5 py-1 text-[11px] text-neutral-400">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div class="card-glow"></div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <!-- ===================== ABOUT / TESTIMONIALS ===================== -->
+      <section id="about" class="relative mx-auto max-w-6xl px-4 py-28">
+        <div class="grid items-center gap-16 lg:grid-cols-2">
+          <div>
+            <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">About</p>
+            <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
+              One operator, full stack of growth.
+            </h2>
+            <p data-reveal class="mt-6 text-pretty leading-relaxed text-neutral-400">
+              {site.bio}
+            </p>
+            <div data-reveal class="mt-8 flex flex-wrap gap-2">
+              {site.skills.map((skill) => (
+                <span class="rounded-full border border-neutral-800 bg-neutral-900/50 px-3 py-1.5 text-xs text-neutral-300">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div class="space-y-5">
+            <figure data-reveal class="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-7 backdrop-blur-sm">
+              <blockquote class="text-pretty leading-relaxed text-neutral-300">
+                “Raymond rebuilt our funnel and the conversion lift paid for the project in the first month. Fast, sharp, and genuinely strategic.”
+              </blockquote>
+              <figcaption class="mt-4 text-sm text-neutral-500">— Founder, DTC wellness brand</figcaption>
+            </figure>
+            <figure data-reveal class="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-7 backdrop-blur-sm">
+              <blockquote class="text-pretty leading-relaxed text-neutral-300">
+                “The automation he set up quietly handles most of our nurture. It just works — and we finally trust the numbers.”
+              </blockquote>
+              <figcaption class="mt-4 text-sm text-neutral-500">— Ops lead, B2B SaaS</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== CTA ===================== -->
+      <section id="contact" class="relative mx-auto max-w-6xl px-4 py-28">
+        <div
+          data-reveal
+          class="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-neutral-900/40 to-neutral-950 p-12 text-center backdrop-blur-sm sm:p-20"
+        >
+          <h2 class="mx-auto max-w-2xl text-balance text-4xl font-semibold tracking-tight sm:text-6xl">
+            Ready to build something that ranks and converts?
+          </h2>
+          <p class="mx-auto mt-5 max-w-xl text-neutral-400">
+            Tell me about the problem you’re solving. I’ll bring the strategy, code, and systems.
+          </p>
+          <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <a
+              href={`mailto:${site.email}`}
+              class="rounded-full bg-emerald-500 px-8 py-3.5 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400"
+            >
+              Email me
+            </a>
+            <a
+              href={withBase('/contact')}
+              class="rounded-full border border-neutral-700 px-8 py-3.5 text-sm font-medium text-neutral-200 transition hover:border-emerald-400/50 hover:text-emerald-300"
+            >
+              Contact page
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== FOOTER ===================== -->
+      <footer class="relative border-t border-neutral-900 px-4 py-12">
+        <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 sm:flex-row">
+          <p class="text-sm text-neutral-500">© {new Date().getFullYear()} {site.name}. Built with Astro + Three.js.</p>
+          <div class="flex items-center gap-6 text-sm">
+            <a href={site.social.github} class="nav-link" target="_blank" rel="noopener">GitHub</a>
+            <a href={site.social.linkedin} class="nav-link" target="_blank" rel="noopener">LinkedIn</a>
+            <a href={site.social.x} class="nav-link" target="_blank" rel="noopener">X</a>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <!-- ===================== STYLES ===================== -->
+    <style>
+      /* Atmospheric background: layered radial glows for depth behind the canvas */
+      .bg-atmosphere {
+        background:
+          radial-gradient(60% 50% at 50% 0%, rgba(16, 185, 129, 0.12), transparent 70%),
+          radial-gradient(40% 40% at 80% 60%, rgba(20, 184, 166, 0.08), transparent 70%),
+          radial-gradient(50% 50% at 15% 80%, rgba(16, 185, 129, 0.06), transparent 70%),
+          #0a0a0a;
+      }
+
+      /* ---- Loader ---- */
+      .loader-ring {
+        width: 46px;
+        height: 46px;
+        border-radius: 9999px;
+        border: 2px solid rgba(16, 185, 129, 0.15);
+        border-top-color: rgb(16, 185, 129);
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      #loader.is-hidden {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.6s ease, visibility 0.6s ease;
+      }
+
+      /* ---- Navbar glass ---- */
+      .nav-shell {
+        border: 1px solid transparent;
+        background: transparent;
+      }
+      #navbar.scrolled .nav-shell {
+        border-color: rgba(38, 38, 38, 0.9);
+        background: rgba(10, 10, 10, 0.6);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 10px 40px -20px rgba(0, 0, 0, 0.8);
+      }
+      .nav-link {
+        color: rgb(163, 163, 163);
+        transition: color 0.2s ease;
+      }
+      .nav-link:hover { color: rgb(52, 211, 153); }
+      .mobile-link {
+        display: block;
+        border-radius: 0.5rem;
+        padding: 0.6rem 0.9rem;
+        font-size: 0.9rem;
+        color: rgb(212, 212, 212);
+      }
+      .mobile-link:hover { background: rgba(38, 38, 38, 0.6); }
+
+      /* ---- Scroll cue ---- */
+      .scroll-dot {
+        position: relative;
+        display: block;
+        width: 22px;
+        height: 36px;
+        border: 1px solid rgba(115, 115, 115, 0.6);
+        border-radius: 12px;
+      }
+      .scroll-dot::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 7px;
+        width: 3px;
+        height: 7px;
+        margin-left: -1.5px;
+        border-radius: 2px;
+        background: rgb(52, 211, 153);
+        animation: scroll-bob 1.6s ease-in-out infinite;
+      }
+      @keyframes scroll-bob {
+        0%, 100% { transform: translateY(0); opacity: 1; }
+        50% { transform: translateY(10px); opacity: 0.3; }
+      }
+
+      /* ---- 3D tilt cards ---- */
+      .tilt-card {
+        transform-style: preserve-3d;
+        transition: transform 0.2s ease, border-color 0.3s ease;
+        will-change: transform;
+      }
+      .tilt-card:hover { border-color: rgba(16, 185, 129, 0.4); }
+      .tilt-inner { transform: translateZ(20px); transform-style: preserve-3d; }
+      .card-glow {
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        opacity: 0;
+        background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(16, 185, 129, 0.15), transparent 45%);
+        transition: opacity 0.3s ease;
+      }
+      .tilt-card:hover .card-glow { opacity: 1; }
+
+      /* ---- Showcase orb preview ---- */
+      .showcase-orb {
+        width: 110px;
+        height: 110px;
+        border-radius: 9999px;
+        background: radial-gradient(circle at 35% 30%, hsl(var(--hue) 80% 65%), hsl(var(--hue) 70% 30%) 60%, transparent 72%);
+        box-shadow: 0 0 60px -10px hsl(var(--hue) 80% 45% / 0.6);
+        animation: float-orb 6s ease-in-out infinite;
+      }
+      .group:hover .showcase-orb { animation-duration: 3s; }
+      @keyframes float-orb {
+        0%, 100% { transform: translateY(-6px) scale(1); }
+        50% { transform: translateY(6px) scale(1.05); }
+      }
+
+      /* Respect reduced-motion users */
+      @media (prefers-reduced-motion: reduce) {
+        .scroll-dot::after,
+        .showcase-orb,
+        .loader-ring { animation: none; }
+      }
+    </style>
+
+    <!-- ===================== SCRIPT (Three.js + GSAP + Lenis) ===================== -->
+    <script>
+      import * as THREE from 'three';
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+      import Lenis from 'lenis';
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      const isTouch = window.matchMedia('(hover: none)').matches;
+
+      /* ----------------------------------------------------------------------
+       * 1. SMOOTH SCROLL (Lenis) + ScrollTrigger sync
+       * -------------------------------------------------------------------- */
+      let lenis: Lenis | null = null;
+      if (!prefersReduced) {
+        lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => lenis!.raf(time * 1000));
+        gsap.ticker.lagSmoothing(0);
+      }
+
+      /* ----------------------------------------------------------------------
+       * 2. THREE.JS SCENE — floating low-poly island
+       * -------------------------------------------------------------------- */
+      const canvas = document.getElementById('scene') as HTMLCanvasElement | null;
+
+      // Pointer state (normalized -0.5..0.5), shared by scene + parallax
+      const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+      window.addEventListener('pointermove', (e) => {
+        pointer.tx = e.clientX / window.innerWidth - 0.5;
+        pointer.ty = e.clientY / window.innerHeight - 0.5;
+      });
+
+      function jitter(geo: THREE.BufferGeometry, amount: number) {
+        const pos = geo.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+          pos.setXYZ(
+            i,
+            pos.getX(i) + (Math.random() - 0.5) * amount,
+            pos.getY(i) + (Math.random() - 0.5) * amount,
+            pos.getZ(i) + (Math.random() - 0.5) * amount,
+          );
+        }
+        pos.needsUpdate = true;
+        geo.computeVertexNormals();
+      }
+
+      function initScene() {
+        if (!canvas) return hideLoader();
+
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x0a0a0a, 0.035);
+
+        const camera = new THREE.PerspectiveCamera(
+          45,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          100,
+        );
+        camera.position.set(0, 1.5, 9);
+
+        const renderer = new THREE.WebGLRenderer({
+          canvas,
+          antialias: !isMobile,
+          alpha: true,
+          powerPreference: 'high-performance',
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+
+        const seg = isMobile ? 8 : 16; // geometry detail (reduced on mobile)
+
+        /* --- Island assembly --- */
+        const pivot = new THREE.Group(); // parallax pivot (mouse-driven)
+        const island = new THREE.Group(); // the island itself (auto-rotates)
+        pivot.add(island);
+        scene.add(pivot);
+
+        // Grass disc (top)
+        const grassGeo = new THREE.CylinderGeometry(2.1, 1.9, 0.7, seg);
+        jitter(grassGeo, 0.08);
+        const grass = new THREE.Mesh(
+          grassGeo,
+          new THREE.MeshStandardMaterial({ color: 0x10b981, flatShading: true, roughness: 0.9 }),
+        );
+        island.add(grass);
+
+        // Rocky underside (cone pointing down)
+        const rockGeo = new THREE.ConeGeometry(1.95, 3.4, seg);
+        jitter(rockGeo, 0.18);
+        const rock = new THREE.Mesh(
+          rockGeo,
+          new THREE.MeshStandardMaterial({ color: 0x3f3f46, flatShading: true, roughness: 1 }),
+        );
+        rock.position.y = -2;
+        rock.rotation.y = Math.PI / seg;
+        island.add(rock);
+
+        // Trees (cone foliage + trunk), scattered on the grass
+        const treeCount = isMobile ? 3 : 5;
+        for (let i = 0; i < treeCount; i++) {
+          const angle = (i / treeCount) * Math.PI * 2;
+          const radius = 0.6 + Math.random() * 0.9;
+          const tx = Math.cos(angle) * radius;
+          const tz = Math.sin(angle) * radius;
+          const scale = 0.7 + Math.random() * 0.6;
+
+          const trunk = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.06, 0.08, 0.4, 5),
+            new THREE.MeshStandardMaterial({ color: 0x78350f, flatShading: true }),
+          );
+          trunk.position.set(tx, 0.55, tz);
+          trunk.scale.setScalar(scale);
+          island.add(trunk);
+
+          const foliage = new THREE.Mesh(
+            new THREE.ConeGeometry(0.3, 0.7, 6),
+            new THREE.MeshStandardMaterial({ color: 0x059669, flatShading: true }),
+          );
+          foliage.position.set(tx, 0.95, tz);
+          foliage.scale.setScalar(scale);
+          island.add(foliage);
+        }
+
+        // Glowing crystal at the center
+        const crystal = new THREE.Mesh(
+          new THREE.IcosahedronGeometry(0.4, 0),
+          new THREE.MeshStandardMaterial({
+            color: 0x34d399,
+            emissive: 0x10b981,
+            emissiveIntensity: 1.4,
+            flatShading: true,
+          }),
+        );
+        crystal.position.y = 0.9;
+        island.add(crystal);
+
+        // Orbiting floating rocks
+        const debris = new THREE.Group();
+        const debrisCount = isMobile ? 4 : 7;
+        const debrisItems: { mesh: THREE.Mesh; radius: number; speed: number; offset: number; y: number }[] = [];
+        for (let i = 0; i < debrisCount; i++) {
+          const m = new THREE.Mesh(
+            new THREE.DodecahedronGeometry(0.12 + Math.random() * 0.18, 0),
+            new THREE.MeshStandardMaterial({ color: 0x52525b, flatShading: true }),
+          );
+          const radius = 2.6 + Math.random() * 1.8;
+          const y = -0.5 + Math.random() * 2;
+          debrisItems.push({ mesh: m, radius, speed: 0.2 + Math.random() * 0.3, offset: Math.random() * Math.PI * 2, y });
+          debris.add(m);
+        }
+        pivot.add(debris);
+
+        /* --- Particles (drifting glow) --- */
+        const pCount = isMobile ? 1200 : 4000;
+        const positions = new Float32Array(pCount * 3);
+        for (let i = 0; i < pCount; i++) {
+          positions[i * 3] = (Math.random() - 0.5) * 40;
+          positions[i * 3 + 1] = (Math.random() - 0.5) * 30;
+          positions[i * 3 + 2] = (Math.random() - 0.5) * 40;
+        }
+        const pGeo = new THREE.BufferGeometry();
+        pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const particles = new THREE.Points(
+          pGeo,
+          new THREE.PointsMaterial({
+            color: 0x34d399,
+            size: 0.045,
+            transparent: true,
+            opacity: 0.7,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            sizeAttenuation: true,
+          }),
+        );
+        scene.add(particles);
+
+        /* --- Lights --- */
+        scene.add(new THREE.AmbientLight(0x404858, 0.7));
+        const key = new THREE.DirectionalLight(0xffffff, 1.4);
+        key.position.set(5, 8, 5);
+        scene.add(key);
+        const rim = new THREE.DirectionalLight(0x34d399, 0.6);
+        rim.position.set(-6, 2, -4);
+        scene.add(rim);
+        const glow = new THREE.PointLight(0x10b981, 3, 12, 2);
+        glow.position.set(0, -1, 0);
+        scene.add(glow);
+
+        /* --- Render loop --- */
+        const clock = new THREE.Clock();
+        let frameId = 0;
+
+        function animate() {
+          frameId = requestAnimationFrame(animate);
+          const t = clock.getElapsedTime();
+
+          // Gentle bob + auto-rotate
+          island.position.y = Math.sin(t * 0.7) * 0.15;
+          island.rotation.y = t * 0.12;
+          crystal.rotation.y = t * 0.6;
+          crystal.rotation.x = t * 0.3;
+          particles.rotation.y = t * 0.02;
+
+          // Orbiting debris
+          debrisItems.forEach((d) => {
+            const a = t * d.speed + d.offset;
+            d.mesh.position.set(Math.cos(a) * d.radius, d.y + Math.sin(a * 1.5) * 0.3, Math.sin(a) * d.radius);
+            d.mesh.rotation.x = a;
+            d.mesh.rotation.y = a * 0.7;
+          });
+
+          // Mouse parallax (lerped) — pivot tilt + camera drift
+          if (!prefersReduced) {
+            pointer.x += (pointer.tx - pointer.x) * 0.05;
+            pointer.y += (pointer.ty - pointer.y) * 0.05;
+            pivot.rotation.y = pointer.x * 0.5;
+            pivot.rotation.x = pointer.y * 0.3;
+            camera.position.x += (pointer.x * 1.2 - camera.position.x) * 0.05;
+          }
+          camera.lookAt(0, 0, 0);
+
+          renderer.render(scene, camera);
+        }
+        animate();
+
+        /* --- Scroll-driven camera move (parallax depth through the page) --- */
+        if (!prefersReduced) {
+          gsap.to(camera.position, {
+            z: 14,
+            y: 3,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '#hero',
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 1,
+            },
+          });
+        }
+
+        /* --- Resize --- */
+        window.addEventListener('resize', () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Pause rendering when tab is hidden (saves battery/CPU)
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) cancelAnimationFrame(frameId);
+          else animate();
+        });
+
+        // Hide loader once the first frame is on screen
+        requestAnimationFrame(hideLoader);
+      }
+
+      function hideLoader() {
+        const loader = document.getElementById('loader');
+        if (loader) loader.classList.add('is-hidden');
+        // Recalculate scroll positions once layout is final
+        ScrollTrigger.refresh();
+      }
+
+      /* ----------------------------------------------------------------------
+       * 3. GSAP ENTRANCE + SCROLL REVEALS
+       * -------------------------------------------------------------------- */
+      function initAnimations() {
+        // Hero entrance
+        gsap.from('[data-hero="line"]', {
+          y: 40,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.12,
+          ease: 'power3.out',
+          delay: 0.2,
+        });
+
+        // Scroll-triggered reveals
+        gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+          gsap.from(el, {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 88%' },
+          });
+        });
+      }
+
+      /* ----------------------------------------------------------------------
+       * 4. UI INTERACTIONS — navbar, mobile menu, 3D tilt cards
+       * -------------------------------------------------------------------- */
+      function initUI() {
+        const navbar = document.getElementById('navbar');
+        const onScroll = (y: number) => {
+          if (navbar) navbar.classList.toggle('scrolled', y > 40);
+        };
+        if (lenis) lenis.on('scroll', ({ scroll }: { scroll: number }) => onScroll(scroll));
+        else window.addEventListener('scroll', () => onScroll(window.scrollY));
+        onScroll(window.scrollY);
+
+        // Mobile menu
+        const toggle = document.getElementById('menu-toggle');
+        const menu = document.getElementById('mobile-menu');
+        toggle?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+        menu?.querySelectorAll('a').forEach((a) =>
+          a.addEventListener('click', () => menu.classList.add('hidden')),
+        );
+
+        // Smooth-scroll anchor links via Lenis
+        document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
+          a.addEventListener('click', (e) => {
+            const id = a.getAttribute('href');
+            if (!id || id === '#') return;
+            const target = document.querySelector(id);
+            if (!target) return;
+            e.preventDefault();
+            if (lenis) lenis.scrollTo(target as HTMLElement, { offset: -20 });
+            else target.scrollIntoView({ behavior: 'smooth' });
+          });
+        });
+
+        // 3D tilt cards (disabled on touch devices)
+        if (!isTouch && !prefersReduced) {
+          document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
+            card.addEventListener('pointermove', (e) => {
+              const r = card.getBoundingClientRect();
+              const px = (e.clientX - r.left) / r.width - 0.5;
+              const py = (e.clientY - r.top) / r.height - 0.5;
+              card.style.transform = `perspective(900px) rotateY(${px * 8}deg) rotateX(${-py * 8}deg)`;
+              card.style.setProperty('--mx', `${(px + 0.5) * 100}%`);
+              card.style.setProperty('--my', `${(py + 0.5) * 100}%`);
+            });
+            card.addEventListener('pointerleave', () => {
+              card.style.transform = '';
+            });
+          });
+        }
+      }
+
+      /* ---- Boot ---- */
+      initScene();
+      initAnimations();
+      initUI();
+    </script>
+  </body>
+</html>
