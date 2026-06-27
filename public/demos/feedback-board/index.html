@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anonymous Feedback Board — Interactive Demo</title>
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --panel:#141414;
+    --border:#262626;
+    --text:#f5f5f5;
+    --muted:#a3a3a3;
+    --accent:#10b981;
+    --accent-hover:#34d399;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding:24px 16px;
+  }
+  .wrap{
+    max-width:700px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    height:calc(100vh - 48px);
+    min-height:500px;
+  }
+  .disclaimer{
+    background:#422006;border:1px solid #854d0e;border-radius:12px;
+    padding:10px 14px;margin-bottom:14px;font-size:12px;color:#fcd34d;line-height:1.5;
+  }
+  .disclaimer strong{color:#fde68a}
+  .header{margin-bottom:14px;}
+  h1{font-size:22px;font-weight:600;margin:0 0 4px;letter-spacing:-.02em;}
+  .sub{color:var(--muted);font-size:14px;margin:0;}
+  .anon-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(16,185,129,.12);color:var(--accent);
+    font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;margin:10px 0 0;
+  }
+  .chat-window{
+    flex:1;overflow-y:auto;background:var(--panel);
+    border:1px solid var(--border);border-radius:14px;
+    padding:16px;display:flex;flex-direction:column;gap:10px;margin-bottom:14px;
+  }
+  .chat-window::-webkit-scrollbar{width:8px;}
+  .chat-window::-webkit-scrollbar-thumb{background:#33363f;border-radius:8px;}
+  .bubble{
+    align-self:flex-start;max-width:80%;padding:10px 14px;
+    border-radius:14px;border:1px solid transparent;
+    animation:fadeIn .25s ease;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(4px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .bubble p{
+    margin:0 0 4px;font-size:14px;line-height:1.5;
+    white-space:pre-wrap;word-break:break-word;
+  }
+  .bubble .meta{display:flex;gap:8px;align-items:center;font-size:11px;opacity:.75;}
+  .empty{margin:auto;text-align:center;color:var(--muted);font-size:14px;}
+  .composer{
+    background:var(--panel);border:1px solid var(--border);
+    border-radius:14px;padding:12px;
+  }
+  textarea{
+    width:100%;min-height:54px;max-height:140px;resize:vertical;
+    border:1px solid var(--border);border-radius:10px;
+    padding:10px 12px;font-size:14px;font-family:inherit;
+    color:var(--text);background:#0e0f12;outline:none;
+  }
+  textarea::placeholder{color:var(--muted);}
+  textarea:focus{border-color:var(--accent);}
+  .row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:10px;}
+  .char-count{font-size:12px;color:var(--muted);}
+  button{
+    background:var(--accent);color:#03130d;border:none;border-radius:10px;
+    padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;
+  }
+  button:hover{background:var(--accent-hover);}
+  button:disabled{background:#3a3d45;color:#888;cursor:not-allowed;}
+  .footnote{text-align:center;font-size:11px;color:var(--muted);margin-top:10px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="disclaimer" role="note">
+    <strong>Demo disclaimer:</strong> Messages persist in your browser only for this preview.
+    A production board uses shared real-time storage so every team member sees the same thread.
+  </div>
+
+  <div class="header">
+    <h1>Anonymous Feedback Board</h1>
+    <p class="sub">One running thread. Everyone sees everything. No names attached.</p>
+    <div class="anon-badge">100% anonymous</div>
+  </div>
+
+  <div class="chat-window" id="chatWindow">
+    <div class="empty">No messages yet. Say something.</div>
+  </div>
+
+  <div class="composer">
+    <textarea id="feedbackInput" maxlength="1000" placeholder="Type your feedback…"></textarea>
+    <div class="row">
+      <span class="char-count" id="charCount">0 / 1000</span>
+      <button id="submitBtn">Post anonymously</button>
+    </div>
+  </div>
+  <p class="footnote">Posts are never linked to any identity — honest signal for teams and business owners.</p>
+</div>
+
+<script>
+(function () {
+  const STORAGE_KEY = 'feedback-board-demo';
+
+  const COLORS = [
+    { bg:'#2a1f3d', border:'#6d4fd1', text:'#c9b6ff' },
+    { bg:'#1f3327', border:'#3fae6a', text:'#8fe3ac' },
+    { bg:'#3a2418', border:'#d1763f', text:'#ffb98a' },
+    { bg:'#3d1f2a', border:'#d14f7f', text:'#ff9dc0' },
+    { bg:'#1f2c3d', border:'#4f8fd1', text:'#9ccaff' },
+    { bg:'#33301f', border:'#cbb84f', text:'#f0e08f' },
+    { bg:'#3d1f1f', border:'#d14f4f', text:'#ff9b9b' },
+    { bg:'#1f3d3a', border:'#4fd1bb', text:'#9bf0e3' },
+    { bg:'#2c1f3d', border:'#9a4fd1', text:'#d3a8ff' },
+    { bg:'#3d2f1f', border:'#d19a4f', text:'#ffd09b' },
+  ];
+
+  const SEED = [
+    { text: 'The new booking flow is way clearer — customers are actually finishing it.', ts: Date.now() - 7200000 },
+    { text: 'Can we get a weekly summary of which landing pages convert best?', ts: Date.now() - 5400000 },
+    { text: 'Love that nurture emails run without us chasing people manually.', ts: Date.now() - 3600000 },
+    { text: 'Scheduler SMS confirmations cut our no-shows noticeably.', ts: Date.now() - 1800000 },
+  ].map((entry, i) => ({ ...entry, color: COLORS[i % COLORS.length] }));
+
+  let allFeedback = [];
+
+  const feedbackInput = document.getElementById('feedbackInput');
+  const charCount = document.getElementById('charCount');
+  const submitBtn = document.getElementById('submitBtn');
+  const chatWindow = document.getElementById('chatWindow');
+
+  function randomColor() {
+    return COLORS[Math.floor(Math.random() * COLORS.length)];
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function timeAgo(ts) {
+    const diff = Math.floor((Date.now() - ts) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    return Math.floor(diff / 86400) + 'd ago';
+  }
+
+  async function loadFeedback() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        allFeedback = JSON.parse(raw);
+      } else {
+        allFeedback = SEED.slice();
+        await saveFeedback();
+      }
+    } catch {
+      allFeedback = SEED.slice();
+    }
+    render(true);
+  }
+
+  async function saveFeedback() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(allFeedback));
+  }
+
+  function render(autoScroll) {
+    if (allFeedback.length === 0) {
+      chatWindow.innerHTML = '<div class="empty">No messages yet. Say something.</div>';
+      return;
+    }
+
+    const sorted = allFeedback.slice().sort((a, b) => a.ts - b.ts);
+
+    chatWindow.innerHTML = sorted.map((f) => {
+      const c = f.color || randomColor();
+      return (
+        '<div class="bubble" style="background:' + c.bg + ';border-color:' + c.border + ';">' +
+        '<p style="color:' + c.text + ';">' + escapeHtml(f.text) + '</p>' +
+        '<div class="meta" style="color:' + c.text + ';">' + timeAgo(f.ts) + '</div></div>'
+      );
+    }).join('');
+
+    if (autoScroll !== false) {
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+  }
+
+  feedbackInput.addEventListener('input', () => {
+    charCount.textContent = feedbackInput.value.length + ' / 1000';
+  });
+
+  feedbackInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      submitBtn.click();
+    }
+  });
+
+  submitBtn.addEventListener('click', async () => {
+    const text = feedbackInput.value.trim();
+    if (!text) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Posting…';
+
+    allFeedback.push({ text, ts: Date.now(), color: randomColor() });
+    await saveFeedback();
+
+    feedbackInput.value = '';
+    charCount.textContent = '0 / 1000';
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Post anonymously';
+    render(true);
+  });
+
+  loadFeedback();
+})();
+</script>
+</body>
+</html>

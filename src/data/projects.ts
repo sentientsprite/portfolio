@@ -101,6 +101,19 @@ export const projectOverrides: ProjectOverride[] = [
     techStack: ['Next.js', 'AI Audit', 'Lead Scoring', 'SEO', 'Zod'],
   },
   {
+    repoName: 'feedback-board',
+    displayName: 'Anonymous Feedback Board',
+    category: 'product',
+    featured: false,
+    demoPath: 'demos/feedback-board/index.html',
+    sourceUrl: '',
+    description:
+      'Lightweight anonymous team feedback chat — one shared thread, no names, honest signal for owners and managers.',
+    details:
+      'A simple tool for collecting unfiltered team feedback without attribution anxiety. Everyone posts into one running chat thread; messages are color-coded and timestamped but never linked to identity. Useful for internal retros, culture pulse checks, or client teams who want candid input. The portfolio demo seeds sample messages and persists posts in-browser; production deployments wire up shared real-time storage so the whole team sees the same board.',
+    techStack: ['HTML', 'CSS', 'JavaScript', 'Real-time UX'],
+  },
+  {
     repoName: 'prana',
     displayName: 'Prana AI CMO Terminal',
     category: 'product',
