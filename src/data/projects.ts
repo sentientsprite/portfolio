@@ -1,4 +1,4 @@
-export type WorkCategory = 'marketing' | 'development' | 'automation' | 'meta';
+export type WorkCategory = 'product' | 'marketing' | 'development' | 'automation' | 'meta';
 
 export interface ProjectOverride {
   repoName: string;
@@ -9,6 +9,8 @@ export interface ProjectOverride {
   demoUrl?: string;
   /** Internal, self-hosted demo served from /public (e.g. 'demos/landing-page/index.html'). */
   demoPath?: string;
+  /** Optional public source repository URL. Omit for private/local product work. */
+  sourceUrl?: string;
   /** Longer write-up shown on the work detail page. */
   details?: string;
   featured?: boolean;
@@ -18,6 +20,7 @@ export interface ProjectOverride {
 }
 
 export const categoryLabels: Record<WorkCategory, string> = {
+  product: 'Product Systems',
   marketing: 'Marketing',
   development: 'Development',
   automation: 'Automation',
@@ -26,10 +29,50 @@ export const categoryLabels: Record<WorkCategory, string> = {
 
 export const projectOverrides: ProjectOverride[] = [
   {
+    repoName: 'prana',
+    displayName: 'Prana AI CMO Terminal',
+    category: 'product',
+    featured: true,
+    screenshot: 'images/projects/prana-cmo-terminal.png',
+    demoPath: 'demos/prana-command-center/index.html',
+    sourceUrl: '',
+    description:
+      'AI-powered CMO command center for local businesses: audits, competitor research, SEO/GEO recommendations, content workflows, and lead-opportunity feeds.',
+    details:
+      'Prana brings marketing operations into one terminal-style workspace. It combines product information, competitor analysis, brand voice, AI chat, SEO/GEO recommendations, article workflows, Reddit/Hacker News opportunity feeds, and analytics into a single operating room for local growth. The desktop/iOS shell wraps the dashboard with Tauri, notification support, and a Mac Mini connection flow.',
+    techStack: ['AI Agents', 'Next.js', 'Tauri', 'SEO/GEO', 'Analytics'],
+  },
+  {
+    repoName: 'mission-control',
+    displayName: 'Prana Mission Control',
+    category: 'product',
+    featured: true,
+    demoPath: 'demos/mission-control/index.html',
+    sourceUrl: 'https://github.com/builderz-labs/mission-control',
+    description:
+      'Agent orchestration dashboard for managing AI task fleets, workflows, skills, logs, costs, schedules, and quality gates.',
+    details:
+      'Mission Control is the infrastructure layer behind multi-agent operations. It is designed as a single pane of glass for tasks, agents, sessions, memory, logs, cost tracking, cron schedules, security, webhooks, skills, and Aegis-style quality gates. It belongs on the site as platform/infrastructure work rather than a normal marketing case study.',
+    techStack: ['Next.js 16', 'React 19', 'SQLite', 'WebSockets', 'Agent Ops'],
+  },
+  {
+    repoName: 'spryte',
+    displayName: 'Spryte Lead Audit Tool',
+    category: 'product',
+    featured: true,
+    demoPath: 'demos/spryte-audit/index.html',
+    sourceUrl: '',
+    description:
+      'AI-assisted lead audit tool for turning prospect websites into scored opportunities and prioritized outreach recommendations.',
+    details:
+      'Spryte fits as a lightweight prospecting and audit product: it evaluates lead websites, surfaces SEO/performance issues, and turns the result into a practical sales conversation. It supports the same positioning as Prana: growth systems that connect analysis, automation, and client acquisition.',
+    techStack: ['Next.js', 'AI Audit', 'Lead Scoring', 'SEO', 'Zod'],
+  },
+  {
     repoName: 'landing-page-template',
     displayName: 'Wellness Landing Page',
     category: 'marketing',
-    featured: true,
+    featured: false,
     demoPath: 'demos/landing-page/index.html',
     description:
       'High-converting, SEO-optimized landing page for a wellness brand — built for speed and conversions.',
@@ -41,7 +84,7 @@ export const projectOverrides: ProjectOverride[] = [
     repoName: 'email-automation',
     displayName: 'Email Automation Funnel',
     category: 'automation',
-    featured: true,
+    featured: false,
     demoPath: 'demos/email-funnel/index.html',
     description:
       'Interactive Zapier-HubSpot lead-scoring funnel that automated 80% of nurture emails.',
@@ -53,7 +96,7 @@ export const projectOverrides: ProjectOverride[] = [
     repoName: 'seo-dashboard',
     displayName: 'SEO Performance Dashboard',
     category: 'marketing',
-    featured: true,
+    featured: false,
     demoPath: 'demos/seo-dashboard/index.html',
     description:
       'A clean reporting dashboard surfacing organic traffic, rankings, and conversion trends.',

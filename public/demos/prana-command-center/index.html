@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prana Command Center</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --accent: #7fff6e;
+    --accent2: #6e8fff;
+    --accent3: #ff6e8f;
+    --accent4: #ffe06e;
+    --text: #e8e8f0;
+    --muted: #5a5a7a;
+    --success: #7fff6e;
+    --warning: #ffe06e;
+    --danger: #ff6e8f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(127,255,110,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(127,255,110,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { 
+    max-width: 1400px; 
+    margin: 0 auto; 
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+
+  .logo-sub {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .status-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+    margin-right: 0.4rem;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .last-updated {
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+
+  /* Milestone countdown */
+  .milestone-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .milestone {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .milestone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .milestone-label {
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .milestone-days {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent4);
+  }
+
+  .milestone-target {
+    font-size: 0.75rem;
+    color: var(--text);
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  /* KPI Grid */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .kpi-card:hover { border-color: var(--accent); }
+
+  .kpi-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .kpi-card.revenue::after { background: var(--accent); }
+  .kpi-card.pipeline::after { background: var(--accent2); }
+  .kpi-card.activity::after { background: var(--accent4); }
+  .kpi-card.health::after { background: var(--accent3); }
+  .kpi-card.milestone::after { background: var(--muted); }
+
+  .kpi-label {
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+  }
+
+  .kpi-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .kpi-card.revenue .kpi-value { color: var(--accent); }
+  .kpi-card.pipeline .kpi-value { color: var(--accent2); }
+  .kpi-card.activity .kpi-value { color: var(--accent4); }
+  .kpi-card.health .kpi-value { color: var(--accent3); }
+  .kpi-card.milestone .kpi-value { color: var(--text); }
+
+  .kpi-sub {
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+
+  /* Main grid */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .panel-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .panel-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text);
+  }
+
+  .panel-badge {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    background: var(--border);
+    color: var(--muted);
+  }
+
+  .panel-badge.live {
+    background: rgba(127,255,110,0.1);
+    color: var(--accent);
+  }
+
+  /* Pipeline stages */
+  .pipeline-stages {
+    padding: 1.25rem;
+  }
+
+  .stage-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 40px;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .stage-name {
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .stage-bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .stage-fill {
+    height: 100%;
+    border-radius: 3px;
+    min-width: 4px;
+  }
+
+  .stage-count {
+    font-size: 0.75rem;
+    color: var(--text);
+    text-align: right;
+    font-weight: 500;
+  }
+
+  /* Agent activity feed */
+  .activity-feed {
+    padding: 0;
+    max-height: 340px;
+    overflow-y: auto;
+  }
+
+  .activity-item {
+    padding: 0.875rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 0.75rem;
+    align-items: start;
+    transition: background 0.15s;
+  }
+
+  .activity-item:hover { background: rgba(255,255,255,0.02); }
+  .activity-item:last-child { border-bottom: none; }
+
+  .agent-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .activity-content { min-width: 0; }
+
+  .activity-agent {
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.2rem;
+  }
+
+  .activity-text {
+    font-size: 0.7rem;
+    color: var(--muted);
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .activity-time {
+    font-size: 0.6rem;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .activity-verified {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.6rem;
+    margin-top: 0.2rem;
+  }
+
+  .verified-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  /* Bottom grid */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Prospect table */
+  .prospect-table {
+    width: 100%;
+    font-size: 0.68rem;
+    border-collapse: collapse;
+  }
+
+  .prospect-table th {
+    font-size: 0.58rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+  }
+
+  .prospect-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid rgba(30,30,46,0.5);
+    color: var(--text);
+  }
+
+  .stage-tag {
+    font-size: 0.58rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+
+  .stage-tag.identified { background: rgba(90,90,122,0.3); color: var(--muted); }
+  .stage-tag.audited { background: rgba(110,143,255,0.15); color: var(--accent2); }
+  .stage-tag.drafted { background: rgba(255,224,110,0.15); color: var(--accent4); }
+  .stage-tag.contacted { background: rgba(127,255,110,0.15); color: var(--accent); }
+  .stage-tag.closed { background: rgba(127,255,110,0.25); color: var(--accent); }
+
+  /* Agent status */
+  .agent-list { padding: 0.75rem; }
+
+  .agent-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.5rem;
+    border-radius: 6px;
+    transition: background 0.15s;
+    margin-bottom: 0.25rem;
+  }
+
+  .agent-row:hover { background: rgba(255,255,255,0.03); }
+
+  .agent-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .agent-info { flex: 1; min-width: 0; }
+
+  .agent-name {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .agent-role {
+    font-size: 0.6rem;
+    color: var(--muted);
+  }
+
+  .agent-last-run {
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .agent-files {
+    font-size: 0.65rem;
+    color: var(--accent4);
+    text-align: right;
+  }
+
+  /* Hallucination detector */
+  .hallucination-panel { padding: 1rem 1.25rem; }
+
+  .hal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.68rem;
+  }
+
+  .hal-row:last-child { border-bottom: none; }
+
+  .hal-label { color: var(--muted); }
+
+  .hal-result {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+  }
+
+  .hal-match { color: var(--accent); }
+  .hal-mismatch { color: var(--danger); }
+  .hal-unknown { color: var(--muted); }
+
+  /* Revenue tracker */
+  .revenue-panel { padding: 1.25rem; }
+
+  .revenue-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.7rem;
+  }
+
+  .revenue-row:last-child { border-bottom: none; }
+  .revenue-label { color: var(--muted); }
+  .revenue-value { color: var(--text); font-weight: 500; }
+  .revenue-value.positive { color: var(--accent); }
+  .revenue-value.target { color: var(--accent4); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* Refresh button */
+  .refresh-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .refresh-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .hallucination-score {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <span class="logo-text">PRANA</span>
+      <span class="logo-sub">Command Center</span>
+    </div>
+    <div class="status-bar">
+      <span><span class="status-dot"></span>Systems Live</span>
+      <span class="last-updated" id="lastUpdated">Loading...</span>
+      <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+    </div>
+  </div>
+
+  <!-- Milestone Countdown -->
+  <div class="milestone-bar">
+    <div class="milestone">
+      <div class="milestone-header">
+        <span class="milestone-label">First Client Deadline</span>
+        <span class="milestone-days" id="daysToClient">—</span>
+      </div>
+      <div class="milestone-target">April 30, 2026 — First Paid Client</div>
+      <div class="progress-bar" style="margin-top:0.5rem">
+        <div class="progress-fill" id="clientProgress" style="background:var(--accent4);width:0%"></div>
+      </div>
+    </div>
+    <div class="milestone">
+      <div class="milestone-header">
+        <span class="milestone-label">Revenue Target</span>
+        <span class="milestone-days" id="daysToRevenue">—</span>
+      </div>
+      <div class="milestone-target">Sept 30, 2026 — $3,000+ MRR</div>
+      <div class="progress-bar" style="margin-top:0.5rem">
+        <div class="progress-fill" id="revenueProgress" style="background:var(--accent2);width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Strip -->
+  <div class="kpi-grid">
+    <div class="kpi-card revenue">
+      <div class="kpi-label">MRR</div>
+      <div class="kpi-value" id="mrr">$0</div>
+      <div class="kpi-sub">Target: $3,000</div>
+    </div>
+    <div class="kpi-card pipeline">
+      <div class="kpi-label">Pipeline Value</div>
+      <div class="kpi-value" id="pipelineValue">$0</div>
+      <div class="kpi-sub" id="pipelineCount">0 prospects</div>
+    </div>
+    <div class="kpi-card activity">
+      <div class="kpi-label">Files Generated</div>
+      <div class="kpi-value" id="filesGenerated">0</div>
+      <div class="kpi-sub">Verified on disk</div>
+    </div>
+    <div class="kpi-card health">
+      <div class="kpi-label">Active Clients</div>
+      <div class="kpi-value" id="activeClients">0</div>
+      <div class="kpi-sub">Target: 2 by Sept</div>
+    </div>
+    <div class="kpi-card milestone">
+      <div class="kpi-label">Next Action</div>
+      <div class="kpi-value" style="font-size:1rem;margin-top:0.25rem" id="nextAction">—</div>
+      <div class="kpi-sub" id="nextActionSub">—</div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="main-grid">
+
+    <!-- Pipeline -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Pipeline Stages</span>
+        <span class="panel-badge live">Ground Truth</span>
+      </div>
+      <div class="pipeline-stages" id="pipelineStages">
+        <!-- populated by JS -->
+      </div>
+      <!-- Prospect table -->
+      <div style="padding:0 1.25rem 1.25rem">
+        <table class="prospect-table" id="prospectTable">
+          <thead>
+            <tr>
+              <th>Prospect</th>
+              <th>Vertical</th>
+              <th>Stage</th>
+              <th>Tier</th>
+              <th>Next Action</th>
+            </tr>
+          </thead>
+          <tbody id="prospectBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Agent Activity Feed -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Agent Activity</span>
+        <span class="panel-badge">Real File Verification</span>
+      </div>
+      <div class="activity-feed" id="activityFeed">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Grid -->
+  <div class="bottom-grid">
+
+    <!-- Agent Status -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Agent Roster</span>
+        <span class="panel-badge" id="agentLiveCount">—</span>
+      </div>
+      <div class="agent-list" id="agentList">
+      </div>
+    </div>
+
+    <!-- Hallucination Detector -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Hallucination Detector</span>
+        <span class="panel-badge live" id="halScore">—</span>
+      </div>
+      <div class="hallucination-panel" id="halPanel">
+      </div>
+    </div>
+
+    <!-- Revenue Tracker -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Revenue Tracker</span>
+        <span class="panel-badge">Stripe + Pipeline</span>
+      </div>
+      <div class="revenue-panel" id="revenuePanel">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ============================================================
+// PRANA COMMAND CENTER — Data Engine
+// Reads from PIPELINE.md and workspace files via /api endpoint
+// Falls back to demo data if server not running
+// ============================================================
+
+const WORKSPACE = '/Users/symbiote_home/.openclaw/workspace';
+const PIPELINE_FILE = WORKSPACE + '/pipeline/PIPELINE.md';
+
+// Agent definitions
+const AGENTS = [
+  { id: 'main', name: 'Aria', role: 'Chief of Operations', emoji: '🌊', color: '#7fff6e' },
+  { id: 'hunter', name: 'Hunter', role: 'Lead Gen & Nurture', emoji: '🎯', color: '#ffe06e' },
+  { id: 'scout', name: 'Scout', role: 'R&D Ingestion', emoji: '🔭', color: '#6e8fff' },
+  { id: 'architect', name: 'Architect', role: 'R&D Reverse Eng.', emoji: '🏗️', color: '#ff6e8f' },
+  { id: 'validator', name: 'Validator', role: 'R&D Test & Debug', emoji: '✅', color: '#a06eff' },
+];
+
+// Pipeline tier values
+const TIER_VALUES = {
+  'Spark': 1800,
+  'Flow': 1500,
+  'Prana': 3500,
+};
+
+// Real data state
+let state = {
+  pipeline: [],
+  agentFiles: {},
+  hallucination: {},
+  revenue: { mrr: 0, collected: 0 },
+  lastUpdated: null,
+};
+
+// ---- Data Loading ----
+async function loadData() {
+  try {
+    const res = await fetch('/api/data');
+    if (res.ok) {
+      const data = await res.json();
+      state = { ...state, ...data };
+    }
+  } catch(e) {
+    // Use demo data if server not running
+    loadDemoData();
+  }
+  render();
+}
+
+function loadDemoData() {
+  state.pipeline = [
+    { name: 'Nelson Jones Legal', vertical: 'Legal', stage: 'Audited', tier: 'Flow', nextAction: 'Draft outreach', url: 'nelsonjoneslegal.com' },
+    { name: 'SLC Landscaping', vertical: 'Home Services', stage: 'Audited', tier: 'Prana', nextAction: 'Draft outreach', url: 'landscapinganddumpsters.com' },
+  ];
+  state.agentFiles = {
+    'scout': { count: 4, lastFile: 'scout-semrush.json', verified: true, lastRun: '2h ago' },
+    'architect': { count: 1, lastFile: 'architect-semrush.md', verified: true, lastRun: '2h ago' },
+    'validator': { count: 2, lastFile: 'validator-semrush-caveats.md', verified: true, lastRun: '2h ago' },
+    'main': { count: 2, lastFile: 'prospect-audits-mar16.md', verified: true, lastRun: '30m ago' },
+    'hunter': { count: 0, lastFile: '—', verified: false, lastRun: 'Credits needed' },
+  };
+  state.hallucination = {
+    'Aria (PRA-9)': { claimed: true, verified: true },
+    'Scout (Semrush)': { claimed: true, verified: true },
+    'Architect (Blueprint)': { claimed: true, verified: true },
+    'Validator (Caveats)': { claimed: true, verified: true },
+    'Hunter (Leads)': { claimed: true, verified: false },
+  };
+  state.revenue = { mrr: 0, collected: 0, pipelineValue: 5000 };
+  state.lastUpdated = new Date();
+  state.activity = [
+    { agent: 'Aria', text: 'Prospect audits complete — Nelson Jones (Flow) + SLC Landscaping (Prana)', time: '30m ago', verified: true, color: '#7fff6e' },
+    { agent: 'Validator', text: 'Semrush blueprint approved with mitigations — validator-semrush-caveats.md', time: '2h ago', verified: true, color: '#a06eff' },
+    { agent: 'Architect', text: 'Implementation blueprint written — architect-semrush.md (11,997 bytes)', time: '2h ago', verified: true, color: '#ff6e8f' },
+    { agent: 'Scout', text: 'Semrush analysis complete — scout-semrush.json (2,950 bytes)', time: '2h ago', verified: true, color: '#6e8fff' },
+    { agent: 'Hunter', text: 'LLM request rejected: insufficient credits', time: '10m ago', verified: false, color: '#ffe06e' },
+  ];
+}
+
+// ---- Rendering ----
+function render() {
+  renderMilestones();
+  renderKPIs();
+  renderPipeline();
+  renderActivityFeed();
+  renderAgentRoster();
+  renderHalDetector();
+  renderRevenue();
+  document.getElementById('lastUpdated').textContent = 
+    'Updated ' + (state.lastUpdated ? state.lastUpdated.toLocaleTimeString() : 'never');
+}
+
+function renderMilestones() {
+  const now = new Date();
+  const client = new Date('2026-04-30');
+  const revenue = new Date('2026-09-30');
+  const start = new Date('2026-03-14'); // project start
+
+  const daysToClient = Math.ceil((client - now) / 86400000);
+  const daysToRevenue = Math.ceil((revenue - now) / 86400000);
+
+  const clientPct = Math.min(100, Math.max(0, 
+    ((now - start) / (client - start)) * 100));
+  const revenuePct = Math.min(100, Math.max(0, 
+    ((now - start) / (revenue - start)) * 100));
+
+  document.getElementById('daysToClient').textContent = daysToClient + 'd';
+  document.getElementById('daysToRevenue').textContent = daysToRevenue + 'd';
+  document.getElementById('clientProgress').style.width = clientPct + '%';
+  document.getElementById('revenueProgress').style.width = revenuePct + '%';
+}
+
+function renderKPIs() {
+  const pipeline = state.pipeline || [];
+  const pipelineValue = pipeline.reduce((sum, p) => {
+    return sum + (TIER_VALUES[p.tier] || 0);
+  }, 0);
+
+  const totalFiles = Object.values(state.agentFiles || {})
+    .reduce((sum, a) => sum + (a.count || 0), 0);
+
+  document.getElementById('mrr').textContent = '$' + (state.revenue?.mrr || 0).toLocaleString();
+  document.getElementById('pipelineValue').textContent = '$' + pipelineValue.toLocaleString();
+  document.getElementById('pipelineCount').textContent = pipeline.length + ' prospects';
+  document.getElementById('filesGenerated').textContent = totalFiles;
+  document.getElementById('activeClients').textContent = state.revenue?.clients || 0;
+
+  // Next action
+  const drafted = pipeline.find(p => p.stage === 'Audited');
+  if (drafted) {
+    document.getElementById('nextAction').textContent = 'SEND';
+    document.getElementById('nextActionSub').textContent = drafted.name + ' outreach ready';
+  } else {
+    document.getElementById('nextAction').textContent = 'LOAD';
+    document.getElementById('nextActionSub').textContent = 'Add Anthropic credits';
+  }
+}
+
+function renderPipeline() {
+  const pipeline = state.pipeline || [];
+  const stages = ['Identified','Audited','Drafted','Contacted','Nurturing','Call Scheduled','Proposal Sent','Closed Won'];
+  const stageCounts = {};
+  stages.forEach(s => stageCounts[s] = 0);
+  pipeline.forEach(p => { if (stageCounts[p.stage] !== undefined) stageCounts[p.stage]++; });
+
+  const maxCount = Math.max(1, ...Object.values(stageCounts));
+  const colors = ['#5a5a7a','#6e8fff','#ffe06e','#7fff6e','#7fff6e','#a06eff','#ff6e8f','#7fff6e'];
+
+  document.getElementById('pipelineStages').innerHTML = stages.map((s, i) => `
+    <div class="stage-row">
+      <span class="stage-name">${s}</span>
+      <div class="stage-bar">
+        <div class="stage-fill" style="width:${(stageCounts[s]/maxCount)*100}%;background:${colors[i]}"></div>
+      </div>
+      <span class="stage-count">${stageCounts[s]}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('prospectBody').innerHTML = pipeline.map(p => `
+    <tr>
+      <td style="color:var(--text)">${p.name}</td>
+      <td style="color:var(--muted)">${p.vertical}</td>
+      <td><span class="stage-tag ${p.stage.toLowerCase().replace(' ','-')}">${p.stage}</span></td>
+      <td style="color:var(--accent4)">${p.tier}</td>
+      <td style="color:var(--muted);font-size:0.62rem">${p.nextAction}</td>
+    </tr>
+  `).join('') || '<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:1rem">No prospects yet</td></tr>';
+}
+
+function renderActivityFeed() {
+  const activity = state.activity || [];
+  document.getElementById('activityFeed').innerHTML = activity.map(a => `
+    <div class="activity-item">
+      <div class="agent-avatar" style="background:${a.color}20;color:${a.color}">
+        ${a.agent.charAt(0)}
+      </div>
+      <div class="activity-content">
+        <div class="activity-agent" style="color:${a.color}">${a.agent}</div>
+        <div class="activity-text">${a.text}</div>
+        <div class="activity-verified">
+          <div class="verified-dot" style="background:${a.verified ? 'var(--accent)' : 'var(--danger)'}"></div>
+          <span style="color:${a.verified ? 'var(--accent)' : 'var(--danger)'};font-size:0.58rem">
+            ${a.verified ? 'File verified on disk' : 'Not verified — possible hallucination'}
+          </span>
+        </div>
+      </div>
+      <span class="activity-time">${a.time}</span>
+    </div>
+  `).join('') || '<div style="padding:2rem;text-align:center;color:var(--muted);font-size:0.7rem">No activity yet</div>';
+}
+
+function renderAgentRoster() {
+  const files = state.agentFiles || {};
+  document.getElementById('agentLiveCount').textContent = 
+    AGENTS.length + ' agents';
+
+  document.getElementById('agentList').innerHTML = AGENTS.map(a => {
+    const data = files[a.id] || {};
+    const isActive = data.verified;
+    return `
+    <div class="agent-row">
+      <div class="agent-status-dot" style="background:${isActive ? a.color : 'var(--muted)'}"></div>
+      <div style="font-size:1rem">${a.emoji}</div>
+      <div class="agent-info">
+        <div class="agent-name">${a.name}</div>
+        <div class="agent-role">${a.role}</div>
+      </div>
+      <div>
+        <div class="agent-files" style="color:${a.color}">${data.count || 0} files</div>
+        <div class="agent-last-run">${data.lastRun || '—'}</div>
+      </div>
+    </div>
+  `}).join('');
+}
+
+function renderHalDetector() {
+  const hal = state.hallucination || {};
+  const entries = Object.entries(hal);
+  const matchCount = entries.filter(([,v]) => v.claimed && v.verified).length;
+  const total = entries.length;
+  const score = total > 0 ? Math.round((matchCount/total)*100) : 100;
+
+  document.getElementById('halScore').textContent = score + '% verified';
+  document.getElementById('halScore').style.color = score === 100 ? 'var(--accent)' : score > 70 ? 'var(--warning)' : 'var(--danger)';
+
+  document.getElementById('halPanel').innerHTML = entries.map(([name, v]) => {
+    const match = v.claimed && v.verified;
+    const cls = match ? 'hal-match' : (!v.claimed ? 'hal-unknown' : 'hal-mismatch');
+    const label = match ? '✓ verified' : (!v.claimed ? '— no claim' : '✗ hallucinated');
+    return `
+    <div class="hal-row">
+      <span class="hal-label">${name}</span>
+      <span class="hal-result ${cls}">${label}</span>
+    </div>
+  `}).join('') || '<div style="padding:1rem;color:var(--muted);font-size:0.7rem">No data yet</div>';
+}
+
+function renderRevenue() {
+  const rev = state.revenue || {};
+  const pipeline = state.pipeline || [];
+  const pipelineVal = pipeline.reduce((s,p) => s + (TIER_VALUES[p.tier]||0), 0);
+
+  document.getElementById('revenuePanel').innerHTML = `
+    <div class="revenue-row">
+      <span class="revenue-label">MRR (Stripe)</span>
+      <span class="revenue-value positive">$${(rev.mrr||0).toLocaleString()}</span>
+    </div>
+    <div class="revenue-row">
+      <span class="revenue-label">Total Collected</span>
+      <span class="revenue-value positive">$${(rev.collected||0).toLocaleString()}</span>
+    </div>
+    <div class="revenue-row">
+      <span class="revenue-label">Pipeline Value</span>
+      <span class="revenue-value">$${pipelineVal.toLocaleString()}</span>
+    </div>
+    <div class="revenue-row">
+      <span class="revenue-label">Sept 30 Target</span>
+      <span class="revenue-value target">$3,000 MRR</span>
+    </div>
+    <div class="revenue-row">
+      <span class="revenue-label">Gap to Target</span>
+      <span class="revenue-value" style="color:${(rev.mrr||0) >= 3000 ? 'var(--accent)' : 'var(--danger)'}">
+        $${Math.max(0, 3000-(rev.mrr||0)).toLocaleString()}
+      </span>
+    </div>
+    <div class="revenue-row">
+      <span class="revenue-label">Active Clients</span>
+      <span class="revenue-value">${rev.clients||0} / 2 target</span>
+    </div>
+  `;
+}
+
+// Auto-refresh every 60 seconds
+setInterval(loadData, 60000);
+loadData();
+</script>
+</body>
+</html>

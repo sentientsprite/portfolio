@@ -20,7 +20,7 @@ export interface MergedProject {
   category: WorkCategory;
   description: string;
   details: string | null;
-  htmlUrl: string;
+  htmlUrl: string | null;
   demoUrl: string | null;
   demoPath: string | null;
   stars: number;
@@ -111,7 +111,7 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
       description:
         override?.description ?? repo.description ?? 'No description available.',
       details: override?.details ?? null,
-      htmlUrl: repo.html_url,
+      htmlUrl: override?.sourceUrl === undefined ? repo.html_url : override.sourceUrl || null,
       demoUrl: override?.demoUrl ?? repo.homepage ?? null,
       demoPath: override?.demoPath ?? null,
       stars: repo.stargazers_count,
@@ -131,7 +131,7 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
         category: override.category ?? 'development',
         description: override.description ?? 'Curated project.',
         details: override.details ?? null,
-        htmlUrl: `https://github.com/${site.githubUsername}/${override.repoName}`,
+        htmlUrl: override.sourceUrl === undefined ? `https://github.com/${site.githubUsername}/${override.repoName}` : override.sourceUrl || null,
         demoUrl: override.demoUrl ?? null,
         demoPath: override.demoPath ?? null,
         stars: 0,
@@ -143,7 +143,7 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
     }
   }
 
-  const categoryOrder: WorkCategory[] = ['marketing', 'development', 'automation', 'meta'];
+  const categoryOrder: WorkCategory[] = ['product', 'marketing', 'development', 'automation', 'meta'];
 
   return merged.sort((a, b) => {
     if (a.featured !== b.featured) return a.featured ? -1 : 1;
