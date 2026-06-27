@@ -4,7 +4,7 @@ export const site = {
   description:
     'SEO-focused websites, automation systems, and growth marketing projects.',
   githubUsername: 'sentientsprite',
-  email: 'raymondking.mktg@gmail.com',
+  email: 'raymondtheking@proton.me',
   social: {
     github: 'https://github.com/sentientsprite',
     linkedin: 'https://www.linkedin.com/in/raymond-raymundo-king',
