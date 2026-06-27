@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FieldSync Scheduler — Interactive Demo</title>
+<style>
+:root {
+  --bg: #0a0a0a; --panel: #141414; --panel-2: #111113; --border: #262626;
+  --ink: #f5f5f5; --muted: #a3a3a3; --accent: #10b981; --accent-soft: rgba(16,185,129,.12);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.12);
+  --danger: #ef4444; --danger-soft: rgba(239,68,68,.12);
+  --blue: #38bdf8; --blue-soft: rgba(56,189,248,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.5;padding:28px 20px 56px;
+}
+.wrap{max-width:1100px;margin:0 auto}
+.head{text-align:center;margin-bottom:28px}
+.head h1{font-size:30px;letter-spacing:-.02em}
+.head p{color:var(--muted);margin-top:8px;font-size:15px}
+.disclaimer{
+  background:#422006;border:1px solid #854d0e;border-radius:12px;
+  padding:12px 16px;margin-bottom:22px;font-size:13px;color:#fcd34d;line-height:1.5;
+}
+.disclaimer strong{color:#fde68a}
+.layout{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px}
+.panel h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:14px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+input,select,button{font-family:inherit}
+input,select{
+  width:100%;background:var(--panel-2);border:1px solid var(--border);border-radius:10px;
+  color:var(--ink);padding:10px 12px;font-size:14px;outline:none;
+}
+input:focus,select:focus{border-color:var(--accent)}
+.field{margin-bottom:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.customer-pick{
+  border:1px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;
+  transition:border-color .15s,background .15s;margin-bottom:8px;
+}
+.customer-pick:hover,.customer-pick.active{border-color:var(--accent);background:var(--accent-soft)}
+.customer-pick b{display:block;font-size:14px}
+.customer-pick small{color:var(--muted);font-size:12px}
+.api-card{
+  background:var(--panel-2);border:1px solid var(--border);border-radius:12px;
+  padding:12px;margin-bottom:14px;
+}
+.api-card p{font-size:12px;color:var(--muted);margin-bottom:10px}
+.api-card code{color:var(--accent)}
+.api-mode{display:block;margin-top:8px;font-size:11px;color:var(--muted)}
+.api-mode.live{color:var(--accent)}
+.btn{
+  width:100%;background:var(--accent);color:#03130d;border:0;border-radius:10px;
+  padding:12px;font-weight:700;font-size:14px;cursor:pointer;margin-top:6px;
+}
+.btn:hover{background:#34d399}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.timeline-wrap{margin-bottom:18px}
+.timeline-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.timeline-header h3{font-size:16px;font-weight:600}
+.timeline-header span{font-size:12px;color:var(--muted)}
+.timeline{
+  position:relative;height:72px;background:var(--panel-2);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;
+}
+.timeline-axis{
+  position:absolute;inset:0;display:flex;justify-content:space-between;
+  padding:0 8px;align-items:flex-end;font-size:10px;color:var(--muted);pointer-events:none;
+}
+.block{
+  position:absolute;top:8px;height:56px;border-radius:8px;padding:6px 8px;font-size:11px;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;border:1px solid transparent;
+}
+.block.drive{background:var(--blue-soft);border-color:rgba(56,189,248,.35);color:#7dd3fc}
+.block.job{background:var(--accent-soft);border-color:rgba(16,185,129,.35);color:#6ee7b7}
+.block.proposed{opacity:.65;border-style:dashed}
+.block.conflict{background:var(--danger-soft);border-color:rgba(239,68,68,.4);color:#fca5a5}
+.block.preview{background:rgba(16,185,129,.22);border:2px dashed var(--accent);z-index:2}
+.pipeline{display:flex;flex-direction:column;gap:0;margin-bottom:18px}
+.step{
+  display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--border);
+  border-radius:12px;background:var(--panel-2);position:relative;
+}
+.step+.step{margin-top:-1px;border-top-left-radius:0;border-top-right-radius:0}
+.step:first-child{border-bottom-left-radius:0;border-bottom-right-radius:0}
+.step .icon{
+  width:28px;height:28px;border-radius:999px;display:grid;place-items:center;
+  font-size:13px;font-weight:700;flex-shrink:0;background:var(--border);color:var(--muted);
+}
+.step.pending .icon{background:var(--border)}
+.step.running .icon{background:var(--warn-soft);color:var(--warn);animation:pulse 1s infinite}
+.step.ok .icon{background:var(--accent-soft);color:var(--accent)}
+.step.fail .icon{background:var(--danger-soft);color:var(--danger)}
+.step h4{font-size:14px;margin-bottom:2px}
+.step p{font-size:12px;color:var(--muted)}
+@keyframes pulse{50%{opacity:.55}}
+.audit{max-height:220px;overflow:auto}
+.audit-item{
+  display:grid;grid-template-columns:auto 1fr auto;gap:10px;padding:10px 0;
+  border-bottom:1px solid var(--border);font-size:12px;
+}
+.audit-item:last-child{border-bottom:0}
+.badge{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+  padding:3px 8px;border-radius:999px;white-space:nowrap;height:max-content;
+}
+.badge.proposed{background:var(--accent-soft);color:var(--accent)}
+.badge.conflict{background:var(--danger-soft);color:var(--danger)}
+.badge.sms{background:var(--blue-soft);color:var(--blue)}
+.badge.confirmed{background:var(--accent-soft);color:var(--accent)}
+.badge.declined{background:var(--danger-soft);color:var(--danger)}
+.badge.hubspot{background:#1e1b4b;color:#a5b4fc}
+.badge.maps{background:var(--warn-soft);color:var(--warn)}
+.audit-time{color:var(--muted);font-size:11px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.kpi b{display:block;font-size:26px;color:var(--accent)}
+.kpi span{font-size:12px;color:var(--muted)}
+.sms-mock{
+  margin-top:14px;padding:14px;background:var(--panel-2);border:1px solid var(--border);
+  border-radius:14px;display:none;
+}
+.sms-mock.visible{display:block}
+.sms-bubble{
+  background:#1c1c1e;border-radius:16px 16px 16px 4px;padding:12px 14px;
+  font-size:13px;line-height:1.45;margin-bottom:12px;max-width:92%;
+}
+.sms-actions{display:flex;gap:8px}
+.sms-actions button{
+  flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);
+  background:var(--panel);color:var(--ink);font-weight:600;cursor:pointer;font-size:13px;
+}
+.sms-actions button.yes{border-color:var(--accent);color:var(--accent)}
+.sms-actions button.no{border-color:var(--danger);color:#fca5a5}
+.result-banner{
+  margin-top:12px;padding:12px 14px;border-radius:10px;font-size:13px;display:none;
+}
+.result-banner.visible{display:block}
+.result-banner.ok{background:var(--accent-soft);border:1px solid rgba(16,185,129,.35);color:#6ee7b7}
+.result-banner.err{background:var(--danger-soft);border:1px solid rgba(239,68,68,.35);color:#fca5a5}
+.cta-box{
+  margin-top:24px;text-align:center;padding:24px;background:var(--panel);
+  border:1px solid var(--border);border-radius:16px;
+}
+.cta-box p{color:var(--muted);margin:0 0 14px;font-size:14px}
+.cta-box a{
+  display:inline-block;background:var(--accent);color:#03130d;text-decoration:none;
+  padding:12px 24px;border-radius:10px;font-weight:700;font-size:14px;
+}
+.cta-box a:hover{background:#34d399}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>FieldSync Scheduler</h1>
+    <p>HubSpot + Google Maps + SMS confirmation — propose a job and watch the zero-mistake engine run.</p>
+  </div>
+
+  <div class="disclaimer" role="note">
+    <strong>Demo disclaimer:</strong> Customer data, drive times, and SMS flows are simulated for portfolio preview.
+    The production system runs on Node.js, PostgreSQL, HubSpot CRM, Google Maps Distance Matrix, and Twilio.
+  </div>
+
+  <div class="layout">
+  <aside class="panel">
+    <h2>Propose appointment</h2>
+    <div class="api-card">
+      <p>Static simulation by default. Add a backend URL to call the live Node API from the zip, for example <code>?api=http://localhost:3000</code>.</p>
+      <label for="api-base">Live API URL (optional)</label>
+      <input type="url" id="api-base" placeholder="http://localhost:3000">
+      <span class="api-mode" id="api-mode">Simulation mode · no external calls</span>
+    </div>
+    <form id="schedule-form">
+      <div class="field">
+        <label>Customer (HubSpot)</label>
+        <div id="customer-list"></div>
+      </div>
+      <div class="field">
+        <label for="employee">Technician</label>
+        <select id="employee" required></select>
+      </div>
+      <div class="field">
+        <label for="job-type">Job type</label>
+        <select id="job-type" required>
+          <option value="HVAC repair">HVAC repair</option>
+          <option value="Plumbing install">Plumbing install</option>
+          <option value="Electrical inspection">Electrical inspection</option>
+          <option value="Water heater service">Water heater service</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="job-date">Date</label>
+          <input type="date" id="job-date" required>
+        </div>
+        <div class="field">
+          <label for="job-time">Start time</label>
+          <input type="time" id="job-time" value="14:00" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="duration">Duration (minutes)</label>
+        <select id="duration">
+          <option value="60">60 min</option>
+          <option value="90" selected>90 min</option>
+          <option value="120">120 min</option>
+        </select>
+      </div>
+      <button type="submit" class="btn" id="propose-btn">Propose &amp; send SMS</button>
+    </form>
+    <div class="result-banner" id="result-banner"></div>
+    <div class="sms-mock" id="sms-mock">
+      <div class="sms-bubble" id="sms-text"></div>
+      <div class="sms-actions">
+        <button type="button" class="yes" id="sms-yes">YES — confirm</button>
+        <button type="button" class="no" id="sms-no">NO — decline</button>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="panel timeline-wrap">
+      <div class="timeline-header">
+        <h3 id="timeline-title">Technician schedule</h3>
+        <span id="shift-label"></span>
+      </div>
+      <div class="timeline" id="timeline">
+        <div class="timeline-axis" id="timeline-axis"></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:18px">
+      <h2>Orchestration pipeline</h2>
+      <div class="pipeline" id="pipeline">
+        <div class="step pending" data-step="hubspot">
+          <div class="icon">1</div>
+          <div><h4>Load customer from HubSpot</h4><p>Sync contact address, phone, and CRM ID into local cache.</p></div>
+        </div>
+        <div class="step pending" data-step="maps">
+          <div class="icon">2</div>
+          <div><h4>Calculate drive time</h4><p>Google Maps Distance Matrix with traffic-aware departure time + 5 min buffer.</p></div>
+        </div>
+        <div class="step pending" data-step="conflict">
+          <div class="icon">3</div>
+          <div><h4>Run conflict engine</h4><p>Shift hours, job overlaps, and drive-block collisions — all must pass.</p></div>
+        </div>
+        <div class="step pending" data-step="sms">
+          <div class="icon">4</div>
+          <div><h4>Write + SMS employee</h4><p>Atomic DB transaction. SMS expires in 30 min if no reply.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Audit log</h2>
+      <div class="audit" id="audit-log"></div>
+    </div>
+  </main>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><b>0</b><span>Double-bookings</span></div>
+    <div class="kpi"><b>28m</b><span>Avg SMS confirm</span></div>
+    <div class="kpi"><b>94%</b><span>First-slot accept</span></div>
+    <div class="kpi"><b>100%</b><span>Events logged</span></div>
+  </div>
+
+  <div class="cta-box">
+    <p>Need real HubSpot sync, live drive times, and Twilio SMS for your field team?</p>
+    <a href="mailto:raymondtheking@proton.me?subject=FieldSync%20Scheduler%20demo">Contact me for the full build</a>
+  </div>
+</div>
+
+<script>
+(function () {
+  const TZ = 'America/Denver';
+  const SHIFT_START = 8;
+  const SHIFT_END = 17;
+  const TIMELINE_HOURS = SHIFT_END - SHIFT_START;
+
+  const CUSTOMERS = [
+    { hubspotId: 'hs-1042', name: 'Amy Torres', address: '1420 Oak St, Denver, CO' },
+    { hubspotId: 'hs-2088', name: 'James Whitfield', address: '8801 W Colfax Ave, Lakewood, CO' },
+    { hubspotId: 'hs-3115', name: 'Linda Park', address: '3150 S University Blvd, Denver, CO' },
+    { hubspotId: 'hs-4201', name: 'Roberto Vega', address: '5990 E Hampden Ave, Denver, CO' },
+  ];
+
+  const EMPLOYEES = [
+    {
+      id: 1, name: 'Marcus Chen', phone: '+1 303-555-0142',
+      shiftStart: '08:00', shiftEnd: '17:00', specialty: 'HVAC',
+      homeBase: '2200 Blake St, Denver, CO',
+      appointments: [
+        {
+          id: 101, status: 'confirmed', customer: 'Amy Torres',
+          address: '1420 Oak St, Denver, CO', jobType: 'AC tune-up',
+          jobStart: [9, 0], duration: 90, driveMins: 22,
+        },
+      ],
+    },
+    {
+      id: 2, name: 'Priya Sharma', phone: '+1 303-555-0198',
+      shiftStart: '08:00', shiftEnd: '17:00', specialty: 'Plumbing',
+      homeBase: '4500 E Evans Ave, Denver, CO',
+      appointments: [
+        {
+          id: 102, status: 'proposed', customer: 'Bob Nguyen',
+          address: '2100 S Broadway, Denver, CO', jobType: 'Leak repair',
+          jobStart: [13, 0], duration: 60, driveMins: 18,
+        },
+      ],
+    },
+    {
+      id: 3, name: 'Danny Ruiz', phone: '+1 303-555-0167',
+      shiftStart: '07:00', shiftEnd: '16:00', specialty: 'Electrical',
+      homeBase: '1600 Glenarm Pl, Denver, CO',
+      appointments: [],
+    },
+  ];
+
+  const DRIVE_MATRIX = {
+    '2200 Blake St, Denver, CO': { '1420 Oak St, Denver, CO': 22, '8801 W Colfax Ave, Lakewood, CO': 28, '3150 S University Blvd, Denver, CO': 19, '5990 E Hampden Ave, Denver, CO': 24, '2100 S Broadway, Denver, CO': 16 },
+    '1420 Oak St, Denver, CO': { '8801 W Colfax Ave, Lakewood, CO': 18, '3150 S University Blvd, Denver, CO': 14, '5990 E Hampden Ave, Denver, CO': 21, '2100 S Broadway, Denver, CO': 12 },
+    '4500 E Evans Ave, Denver, CO': { '2100 S Broadway, Denver, CO': 18, '1420 Oak St, Denver, CO': 20, '8801 W Colfax Ave, Lakewood, CO': 25, '3150 S University Blvd, Denver, CO': 15, '5990 E Hampden Ave, Denver, CO': 22 },
+    '1600 Glenarm Pl, Denver, CO': { '1420 Oak St, Denver, CO': 17, '8801 W Colfax Ave, Lakewood, CO': 22, '3150 S University Blvd, Denver, CO': 16, '5990 E Hampden Ave, Denver, CO': 20, '2100 S Broadway, Denver, CO': 14 },
+  };
+
+  let selectedCustomer = CUSTOMERS[1];
+  let selectedEmployeeId = 1;
+  let pendingProposal = null;
+  let auditEvents = [
+    { type: 'hubspot', label: 'HUBSPOT_SYNC', detail: 'Cached 4 contacts from HubSpot CRM', time: minsAgo(42) },
+    { type: 'maps', label: 'MAPS_CACHE', detail: 'Pre-warmed drive times for morning dispatch', time: minsAgo(38) },
+    { type: 'confirmed', label: 'CONFIRMED', detail: 'Marcus Chen confirmed AC tune-up at Amy Torres', time: minsAgo(95) },
+  ];
+  let nextApptId = 200;
+
+  const $ = (sel) => document.querySelector(sel);
+  const customerList = $('#customer-list');
+  const employeeSelect = $('#employee');
+  const timeline = $('#timeline');
+  const timelineAxis = $('#timeline-axis');
+  const auditLog = $('#audit-log');
+  const pipeline = $('#pipeline');
+  const smsMock = $('#sms-mock');
+  const resultBanner = $('#result-banner');
+  const apiBaseInput = $('#api-base');
+  const apiMode = $('#api-mode');
+
+  function minsAgo(m) {
+    const d = new Date();
+    d.setMinutes(d.getMinutes() - m);
+    return d;
+  }
+
+  function fmtTime(h, m) {
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    return h12 + ':' + String(m).padStart(2, '0') + ' ' + ampm;
+  }
+
+  function fmtClock(date) {
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function parseShift(timeStr) {
+    const [h, m] = timeStr.split(':').map(Number);
+    return h * 60 + m;
+  }
+
+  function getEmployee(id) {
+    return EMPLOYEES.find((e) => e.id === id);
+  }
+
+  function lookupDrive(origin, dest) {
+    if (origin === dest) return 5;
+    const row = DRIVE_MATRIX[origin];
+    if (row && row[dest]) return row[dest];
+    return 15 + (origin.length + dest.length) % 12;
+  }
+
+  function getOriginBefore(employee, jobStartMins) {
+    const confirmed = employee.appointments
+      .filter((a) => a.status === 'confirmed')
+      .map((a) => ({
+        end: a.jobStart[0] * 60 + a.jobStart[1] + a.duration,
+        address: a.address,
+      }))
+      .filter((a) => a.end <= jobStartMins)
+      .sort((a, b) => b.end - a.end);
+    return confirmed.length ? confirmed[0].address : employee.homeBase;
+  }
+
+  function minsToLeft(minsFromMidnight, shiftStartMins, shiftEndMins) {
+    const window = shiftEndMins - shiftStartMins;
+    const offset = minsFromMidnight - shiftStartMins;
+    return Math.max(0, Math.min(100, (offset / window) * 100));
+  }
+
+  function minsToWidth(durationMins, shiftStartMins, shiftEndMins) {
+    const window = shiftEndMins - shiftStartMins;
+    return Math.max(1.5, (durationMins / window) * 100);
+  }
+
+  function renderCustomers() {
+    customerList.innerHTML = CUSTOMERS.map((c) =>
+      '<div class="customer-pick' + (c.hubspotId === selectedCustomer.hubspotId ? ' active' : '') + '" data-id="' + c.hubspotId + '">' +
+      '<b>' + c.name + '</b><small>' + c.address + '</small></div>'
+    ).join('');
+    customerList.querySelectorAll('.customer-pick').forEach((el) => {
+      el.addEventListener('click', () => {
+        selectedCustomer = CUSTOMERS.find((c) => c.hubspotId === el.dataset.id);
+        renderCustomers();
+      });
+    });
+  }
+
+  function renderEmployees() {
+    employeeSelect.innerHTML = EMPLOYEES.map((e) =>
+      '<option value="' + e.id + '">' + e.name + ' · ' + e.specialty + '</option>'
+    ).join('');
+    employeeSelect.value = String(selectedEmployeeId);
+  }
+
+  function renderTimeline(preview) {
+    const emp = getEmployee(selectedEmployeeId);
+    const shiftStartMins = parseShift(emp.shiftStart);
+    const shiftEndMins = parseShift(emp.shiftEnd);
+    const startH = Math.floor(shiftStartMins / 60);
+    const endH = Math.floor(shiftEndMins / 60);
+
+    $('#timeline-title').textContent = emp.name + ' — today';
+    $('#shift-label').textContent = emp.shiftStart + ' – ' + emp.shiftEnd + ' MT';
+
+    timelineAxis.innerHTML = '';
+    for (let h = startH; h <= endH; h++) {
+      const tick = document.createElement('span');
+      tick.textContent = (h > 12 ? h - 12 : h || 12) + (h >= 12 ? 'p' : 'a');
+      timelineAxis.appendChild(tick);
+    }
+
+    timeline.querySelectorAll('.block').forEach((b) => b.remove());
+
+    emp.appointments.forEach((appt) => {
+      const jobStartMins = appt.jobStart[0] * 60 + appt.jobStart[1];
+      const driveStartMins = jobStartMins - appt.driveMins - 5;
+
+      const driveEl = document.createElement('div');
+      driveEl.className = 'block drive' + (appt.status === 'proposed' ? ' proposed' : '');
+      driveEl.style.left = minsToLeft(driveStartMins, shiftStartMins, shiftEndMins) + '%';
+      driveEl.style.width = minsToWidth(appt.driveMins + 5, shiftStartMins, shiftEndMins) + '%';
+      driveEl.title = 'Drive to ' + appt.customer;
+      driveEl.textContent = 'Drive · ' + appt.driveMins + 'm';
+      timeline.appendChild(driveEl);
+
+      const jobEl = document.createElement('div');
+      jobEl.className = 'block job' + (appt.status === 'proposed' ? ' proposed' : '');
+      jobEl.style.left = minsToLeft(jobStartMins, shiftStartMins, shiftEndMins) + '%';
+      jobEl.style.width = minsToWidth(appt.duration, shiftStartMins, shiftEndMins) + '%';
+      jobEl.title = appt.jobType + ' — ' + appt.customer;
+      jobEl.textContent = appt.jobType;
+      timeline.appendChild(jobEl);
+    });
+
+    if (preview) {
+      const driveEl = document.createElement('div');
+      driveEl.className = 'block drive preview';
+      driveEl.style.left = minsToLeft(preview.driveStartMins, shiftStartMins, shiftEndMins) + '%';
+      driveEl.style.width = minsToWidth(preview.driveMins + 5, shiftStartMins, shiftEndMins) + '%';
+      driveEl.textContent = 'New drive';
+      timeline.appendChild(driveEl);
+
+      const jobEl = document.createElement('div');
+      jobEl.className = 'block job preview';
+      jobEl.style.left = minsToLeft(preview.jobStartMins, shiftStartMins, shiftEndMins) + '%';
+      jobEl.style.width = minsToWidth(preview.duration, shiftStartMins, shiftEndMins) + '%';
+      jobEl.textContent = preview.jobType;
+      timeline.appendChild(jobEl);
+    }
+  }
+
+  function renderAudit() {
+    auditLog.innerHTML = auditEvents.slice(0, 12).map((ev) => {
+      const badgeClass = ev.type === 'conflict' ? 'conflict'
+        : ev.type === 'sms' ? 'sms'
+        : ev.type === 'hubspot' ? 'hubspot'
+        : ev.type === 'maps' ? 'maps'
+        : ev.type === 'declined' ? 'declined'
+        : 'confirmed';
+      return '<div class="audit-item">' +
+        '<span class="badge ' + badgeClass + '">' + ev.label + '</span>' +
+        '<span>' + ev.detail + '</span>' +
+        '<span class="audit-time">' + fmtClock(ev.time) + '</span></div>';
+    }).join('');
+  }
+
+  function setStep(name, state) {
+    const el = pipeline.querySelector('[data-step="' + name + '"]');
+    el.className = 'step ' + state;
+  }
+
+  function resetPipeline() {
+    ['hubspot', 'maps', 'conflict', 'sms'].forEach((s) => setStep(s, 'pending'));
+  }
+
+  function pushAudit(type, label, detail) {
+    auditEvents.unshift({ type, label, detail, time: new Date() });
+    renderAudit();
+  }
+
+  function sleep(ms) {
+    return new Promise((r) => setTimeout(r, ms));
+  }
+
+  function getApiBase() {
+    return apiBaseInput.value.trim().replace(/\/$/, '');
+  }
+
+  function updateApiMode() {
+    const apiBase = getApiBase();
+    apiMode.textContent = apiBase
+      ? 'Live API mode · POST ' + apiBase + '/api/appointments/propose'
+      : 'Simulation mode · no external calls';
+    apiMode.className = 'api-mode' + (apiBase ? ' live' : '');
+  }
+
+  async function submitLiveProposal(data, jobStartIso, origin) {
+    const apiBase = getApiBase();
+    if (!apiBase) return null;
+
+    const response = await fetch(apiBase + '/api/appointments/propose', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        employeeId: data.employeeId,
+        hubspotId: data.customer.hubspotId,
+        jobStart: jobStartIso,
+        durationMins: data.duration,
+        jobType: data.jobType,
+        createdBy: 'portfolio-demo',
+        originAddress: origin,
+      }),
+    });
+
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || payload.ok === false) {
+      throw new Error(payload.error || 'Live API rejected the proposal.');
+    }
+    return payload;
+  }
+
+  function checkConflicts(employee, jobStartMins, jobEndMins, driveStartMins) {
+    const shiftStartMins = parseShift(employee.shiftStart);
+    const shiftEndMins = parseShift(employee.shiftEnd);
+    const errors = [];
+
+    if (driveStartMins < shiftStartMins) {
+      errors.push("Drive starts before " + employee.name + "'s shift (" + employee.shiftStart + ").");
+    }
+    if (jobEndMins > shiftEndMins) {
+      errors.push('Job ends after shift end (' + employee.shiftEnd + ').');
+    }
+
+    for (const appt of employee.appointments) {
+      if (!['confirmed', 'proposed'].includes(appt.status)) continue;
+      const aJobStart = appt.jobStart[0] * 60 + appt.jobStart[1];
+      const aJobEnd = aJobStart + appt.duration;
+      const aDriveStart = aJobStart - appt.driveMins - 5;
+      const aDriveEnd = aJobStart;
+      const windowStart = driveStartMins;
+      const windowEnd = jobEndMins;
+
+      const overlaps = (s1, e1, s2, e2) => s1 < e2 && e1 > s2;
+
+      if (overlaps(windowStart, windowEnd, aJobStart, aJobEnd)) {
+        errors.push('Overlaps ' + appt.status + ' job at ' + appt.customer + ' (' + fmtTime(appt.jobStart[0], appt.jobStart[1]) + ').');
+      }
+      if (overlaps(windowStart, windowEnd, aDriveStart, aDriveEnd)) {
+        errors.push('Overlaps drive block for ' + appt.customer + '.');
+      }
+    }
+
+    return errors;
+  }
+
+  async function runProposal(data) {
+    resetPipeline();
+    resultBanner.className = 'result-banner';
+    smsMock.classList.remove('visible');
+    pendingProposal = null;
+    $('#propose-btn').disabled = true;
+
+    const employee = getEmployee(data.employeeId);
+    const [h, m] = data.time.split(':').map(Number);
+    const jobStartMins = h * 60 + m;
+    const jobEndMins = jobStartMins + data.duration;
+    const jobStartIso = new Date(data.date + 'T' + data.time + ':00').toISOString();
+
+    setStep('hubspot', 'running');
+    await sleep(500);
+    setStep('hubspot', 'ok');
+    pushAudit('hubspot', 'HUBSPOT_SYNC', 'Loaded ' + data.customer.name + ' (' + data.customer.hubspotId + ')');
+
+    setStep('maps', 'running');
+    await sleep(600);
+    const origin = getOriginBefore(employee, jobStartMins);
+    const driveMins = lookupDrive(origin, data.customer.address);
+    const driveBuffered = driveMins + 5;
+    const driveStartMins = jobStartMins - driveBuffered;
+    setStep('maps', 'ok');
+    pushAudit('maps', 'MAPS_CALC', driveBuffered + ' min drive from ' + origin.split(',')[0] + ' (traffic-aware)');
+
+    setStep('conflict', 'running');
+    await sleep(500);
+    const errors = checkConflicts(employee, jobStartMins, jobEndMins, driveStartMins);
+
+    renderTimeline({
+      jobStartMins, duration: data.duration, driveStartMins,
+      driveMins: driveBuffered, jobType: data.jobType,
+    });
+
+    if (errors.length) {
+      setStep('conflict', 'fail');
+      pushAudit('conflict', 'CONFLICT_BLOCKED', errors[0]);
+      resultBanner.textContent = errors.join(' ');
+      resultBanner.className = 'result-banner visible err';
+      $('#propose-btn').disabled = false;
+      return;
+    }
+
+    setStep('conflict', 'ok');
+    await sleep(400);
+
+    setStep('sms', 'running');
+    await sleep(700);
+    let liveResult = null;
+    try {
+      liveResult = await submitLiveProposal(data, jobStartIso, origin);
+    } catch (err) {
+      setStep('sms', 'fail');
+      pushAudit('conflict', 'API_ERROR', err.message);
+      resultBanner.textContent = 'Live API call failed: ' + err.message;
+      resultBanner.className = 'result-banner visible err';
+      $('#propose-btn').disabled = false;
+      return;
+    }
+    setStep('sms', 'ok');
+
+    const apptId = liveResult?.appointmentId || nextApptId++;
+    const confirmedDriveMins = liveResult?.driveMinutes || driveBuffered;
+    pendingProposal = {
+      id: apptId,
+      employee,
+      customer: data.customer,
+      jobType: data.jobType,
+      jobStart: [h, m],
+      duration: data.duration,
+      driveMins: confirmedDriveMins,
+      status: 'proposed',
+      address: data.customer.address,
+    };
+
+    pushAudit('sms', 'PROPOSED', 'Appt #' + apptId + ' proposed' + (liveResult ? ' via live API' : '') + ' — SMS sent to ' + employee.name);
+    pushAudit('sms', 'SMS_SENT', 'Reply YES/NO within 30 minutes');
+
+    const smsText =
+      'FieldSync: New ' + data.jobType + ' job at ' + data.customer.name +
+      ' (' + data.customer.address.split(',')[0] + ') ' +
+      fmtTime(h, m) + '–' + fmtTime(Math.floor(jobEndMins / 60), jobEndMins % 60) +
+      '. Drive: ' + confirmedDriveMins + ' min. Reply YES to confirm or NO to decline.';
+
+    $('#sms-text').textContent = smsText;
+    smsMock.classList.add('visible');
+    resultBanner.textContent = 'Proposal #' + apptId + ' created. Waiting for employee SMS reply…';
+    resultBanner.className = 'result-banner visible ok';
+    $('#propose-btn').disabled = false;
+  }
+
+  function resolveSms(reply) {
+    if (!pendingProposal) return;
+    const p = pendingProposal;
+    smsMock.classList.remove('visible');
+
+    if (reply === 'YES') {
+      p.status = 'confirmed';
+      p.employee.appointments.push({
+        id: p.id,
+        status: 'confirmed',
+        customer: p.customer.name,
+        address: p.address,
+        jobType: p.jobType,
+        jobStart: p.jobStart,
+        duration: p.duration,
+        driveMins: p.driveMins,
+      });
+      pushAudit('confirmed', 'CONFIRMED', p.employee.name + ' confirmed ' + p.jobType + ' at ' + p.customer.name);
+      resultBanner.textContent = 'Appointment #' + p.id + ' confirmed and locked on the schedule.';
+      resultBanner.className = 'result-banner visible ok';
+    } else {
+      pushAudit('declined', 'DECLINED', p.employee.name + ' declined ' + p.jobType + ' at ' + p.customer.name);
+      resultBanner.textContent = 'Appointment #' + p.id + ' declined. Slot released — no calendar change.';
+      resultBanner.className = 'result-banner visible err';
+    }
+
+    pendingProposal = null;
+    renderTimeline();
+  }
+
+  const today = new Date();
+  $('#job-date').value = today.toISOString().slice(0, 10);
+
+  const apiParam = new URLSearchParams(window.location.search).get('api');
+  if (apiParam) apiBaseInput.value = apiParam;
+  updateApiMode();
+
+  renderCustomers();
+  renderEmployees();
+  renderTimeline();
+  renderAudit();
+
+  employeeSelect.addEventListener('change', () => {
+    selectedEmployeeId = parseInt(employeeSelect.value, 10);
+    renderTimeline();
+  });
+
+  $('#schedule-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    runProposal({
+      employeeId: selectedEmployeeId,
+      customer: selectedCustomer,
+      jobType: $('#job-type').value,
+      date: $('#job-date').value,
+      time: $('#job-time').value,
+      duration: parseInt($('#duration').value, 10),
+    });
+  });
+
+  apiBaseInput.addEventListener('input', updateApiMode);
+  $('#sms-yes').addEventListener('click', () => resolveSms('YES'));
+  $('#sms-no').addEventListener('click', () => resolveSms('NO'));
+})();
+</script>
+</body>
+</html>

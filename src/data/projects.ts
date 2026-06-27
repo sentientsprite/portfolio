@@ -106,6 +106,20 @@ export const projectOverrides: ProjectOverride[] = [
     techStack: ['Zapier', 'HubSpot', 'Klaviyo', 'Python'],
   },
   {
+    repoName: 'fieldsync-scheduler',
+    displayName: 'FieldSync Scheduler',
+    category: 'product',
+    featured: true,
+    screenshot: 'images/projects/fieldsync-scheduler.png',
+    demoPath: 'demos/fieldsync-scheduler/index.html',
+    sourceUrl: '',
+    description:
+      'High-converting field-service scheduler with HubSpot sync, traffic-aware drive times, conflict blocking, and SMS confirmation.',
+    details:
+      'FieldSync turns a complex dispatch workflow into a simple propose-and-confirm form. Every appointment runs through a strict orchestration pipeline: load the customer from HubSpot, calculate real drive time via Google Maps, pass five conflict checks (shift hours, job overlaps, drive-block collisions), then atomically write to PostgreSQL and SMS the technician. Nothing touches the calendar silently — every event is logged to an immutable audit trail. The live demo simulates the full flow with technician timelines, pipeline steps, and YES/NO SMS replies.',
+    techStack: ['Node.js', 'PostgreSQL', 'HubSpot', 'Google Maps', 'Twilio'],
+  },
+  {
     repoName: 'seo-dashboard',
     displayName: 'SEO Performance Dashboard',
     category: 'marketing',
