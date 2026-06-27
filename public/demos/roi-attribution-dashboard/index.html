@@ -36,13 +36,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 .grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start}
 .panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px}
 .panel h2{font-size:14px;margin-bottom:14px}
-.chart{display:flex;align-items:flex-end;gap:10px;height:200px;padding-top:8px}
+.chart{display:flex;align-items:flex-end;gap:10px;padding-top:26px}
 .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
-.bar{width:100%;border-radius:6px 6px 0 0;transition:height .5s ease;position:relative;cursor:pointer}
+.bar-group{display:flex;align-items:flex-end;justify-content:center;gap:5px;height:170px;width:100%}
+.bar{width:42%;max-width:30px;min-height:4px;border-radius:5px 5px 0 0;transition:height .5s ease;position:relative;cursor:pointer}
 .bar.spend{background:linear-gradient(180deg,#525252,#404040)}
 .bar.rev{background:linear-gradient(180deg,#34d399,var(--accent))}
-.bar:hover::after{content:attr(data-v);position:absolute;top:-24px;left:50%;transform:translateX(-50%);background:#000;color:var(--accent);font-size:10px;padding:3px 7px;border-radius:4px;white-space:nowrap;z-index:2}
-.bar-col span{font-size:10px;color:var(--muted);text-align:center;line-height:1.2}
+.bar:hover::after,.bar:focus::after{content:attr(data-v);position:absolute;top:-22px;left:50%;transform:translateX(-50%);background:#000;color:var(--accent);font-size:10px;padding:3px 7px;border-radius:4px;white-space:nowrap;z-index:2}
+.bar-col span{font-size:10px;color:var(--muted);text-align:center;line-height:1.2;word-break:break-word}
 .legend{display:flex;gap:14px;margin-bottom:12px;font-size:12px;color:var(--muted)}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
 table{width:100%;border-collapse:collapse}
@@ -62,7 +63,26 @@ td.num{text-align:right;font-variant-numeric:tabular-nums}
 .funnel-row .pct{font-size:12px;text-align:right;color:var(--ink);font-weight:600}
 .disclaimer{margin-top:20px;padding:14px 16px;border:1px dashed var(--border);border-radius:12px;font-size:12px;color:var(--muted);background:var(--panel-2)}
 .disclaimer strong{color:var(--warn)}
+.table-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 @media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+@media(max-width:640px){
+  body{padding:20px 14px 44px}
+  .top{flex-direction:column}
+  .top h1{font-size:21px}
+  .top p{font-size:13px}
+  .controls{width:100%}
+  .controls select{flex:1 1 100%}
+  .controls button{flex:1 1 0}
+  .cards{gap:10px}
+  .card{padding:13px}
+  .card .value{font-size:22px}
+  .panel{padding:14px}
+  .bar-group{height:130px}
+  .funnel-row{grid-template-columns:78px 1fr 44px;gap:8px}
+  th,td{padding:8px 6px;font-size:12px}
+  th{font-size:10px}
+}
+@media(max-width:380px){.cards{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -109,7 +129,8 @@ td.num{text-align:right;font-variant-numeric:tabular-nums}
 
   <div class="panel" style="margin-top:16px">
     <h2>Channel performance</h2>
-    <table>
+    <div class="table-scroll">
+    <table style="min-width:520px">
       <thead>
         <tr>
           <th>Channel</th>
@@ -123,6 +144,7 @@ td.num{text-align:right;font-variant-numeric:tabular-nums}
       </thead>
       <tbody id="channel-table"></tbody>
     </table>
+    </div>
   </div>
 
   <div class="disclaimer">
@@ -192,14 +214,17 @@ td.num{text-align:right;font-variant-numeric:tabular-nums}
       '<div class="card"><div class="label">Leads captured</div><div class="value">' + d.summary.leads + '</div><div class="sub">GA4 + form events</div></div>' +
       '<div class="card"><div class="label">Cost per lead</div><div class="value">$' + d.summary.cpl.toFixed(0) + '</div><div class="sub">Paid channels only</div></div>';
 
+    const maxVal = Math.max(maxRev, maxSpend, 1);
     document.getElementById('channel-chart').innerHTML = d.channels.map((c) => {
-      const spendH = c.spend ? Math.max(12, (c.spend / maxSpend) * 160) : 0;
-      const revH = Math.max(12, (c.revenue / maxRev) * 160);
+      const spendH = c.spend ? Math.max(4, (c.spend / maxVal) * 160) : 0;
+      const revH = c.revenue ? Math.max(4, (c.revenue / maxVal) * 160) : 0;
       const short = c.name.replace('Organic ', '').replace(' Ads', '');
-      return '<div class="bar-col">' +
-        (c.spend ? '<div class="bar spend" style="height:' + spendH + 'px" data-v="$' + c.spend.toLocaleString() + '"></div>' : '<div style="height:4px"></div>') +
-        '<div class="bar rev" style="height:' + revH + 'px" data-v="$' + c.revenue.toLocaleString() + '"></div>' +
-        '<span>' + short + '</span></div>';
+      return '<div class="bar-col"><div class="bar-group">' +
+        (c.spend
+          ? '<div class="bar spend" tabindex="0" style="height:' + spendH + 'px" data-v="Spend $' + c.spend.toLocaleString() + '"></div>'
+          : '') +
+        '<div class="bar rev" tabindex="0" style="height:' + revH + 'px" data-v="Revenue $' + c.revenue.toLocaleString() + '"></div>' +
+        '</div><span>' + short + '</span></div>';
     }).join('');
 
     document.getElementById('funnel').innerHTML = d.funnel.map((f) =>

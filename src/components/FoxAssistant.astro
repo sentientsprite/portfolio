@@ -1,0 +1,389 @@
+---
+/**
+ * FoxAssistant.astro — animated green fox mascot.
+ *
+ * Placeholder for the upcoming AI-FAQ chatbot + lead-funnel widget. It lives in
+ * the bottom-right corner on every page and behaves like a little pet:
+ *   1. Scampers onto the screen ~3s after the first page load of a session.
+ *   2. Watches the cursor for ~5s, then curls up and falls asleep (Zzz).
+ *   3. Wakes back up whenever you navigate to another page — and because the
+ *      visit is remembered (sessionStorage), it's treated as "the same fox"
+ *      that will eventually carry the persistent chat context.
+ * Hovering or clicking the fox also wakes it.
+ */
+---
+
+<button
+  id="fox-assistant"
+  class="fox-root"
+  type="button"
+  aria-label="Chat assistant — coming soon"
+  title="Chat assistant — coming soon"
+>
+  <span class="fox-bubble" aria-hidden="true">Hi! I’m your guide.</span>
+
+  <span class="fox-bob">
+    <span class="fox-zzz" aria-hidden="true"><i>z</i><i>z</i><i>z</i></span>
+
+    <svg class="fox-svg" viewBox="0 0 120 120" role="img" aria-hidden="true" focusable="false">
+      <!-- ground shadow -->
+      <ellipse cx="60" cy="114" rx="30" ry="5" fill="#020617" opacity="0.4" />
+
+      <!-- tail -->
+      <g class="fox-tail">
+        <path d="M46 94 C 12 96 6 58 27 47 C 21 61 27 78 48 75 C 52 84 52 91 46 94 Z" fill="#0f9d6f" />
+        <path d="M27 47 C 19 53 16 63 18 71 C 10 61 13 50 27 47 Z" fill="#a7f3d0" />
+      </g>
+
+      <!-- body -->
+      <ellipse cx="62" cy="90" rx="25" ry="24" fill="#10b981" />
+      <ellipse cx="62" cy="96" rx="13" ry="15" fill="#d1fae5" />
+      <ellipse cx="53" cy="109" rx="6.5" ry="5" fill="#0b5e44" />
+      <ellipse cx="71" cy="109" rx="6.5" ry="5" fill="#0b5e44" />
+
+      <!-- head -->
+      <g class="fox-head">
+        <!-- ears (drawn behind the head so the bases tuck under) -->
+        <path class="fox-ear fox-ear-l" d="M37 33 L30 7 L56 25 Z" fill="#10b981" />
+        <path class="fox-ear fox-ear-r" d="M83 33 L90 7 L64 25 Z" fill="#10b981" />
+        <path d="M39 30 L35 15 L51 26 Z" fill="#6ee7b7" />
+        <path d="M81 30 L85 15 L69 26 Z" fill="#6ee7b7" />
+
+        <circle cx="60" cy="50" r="30" fill="#10b981" />
+
+        <!-- muzzle -->
+        <ellipse cx="60" cy="62" rx="13" ry="11" fill="#ecfdf5" />
+
+        <!-- open eyes -->
+        <g class="fox-eyes">
+          <ellipse cx="49" cy="50" rx="8" ry="9.5" fill="#ffffff" />
+          <ellipse cx="71" cy="50" rx="8" ry="9.5" fill="#ffffff" />
+          <g class="fox-pupils">
+            <circle cx="49" cy="51.5" r="4.2" fill="#06281c" />
+            <circle cx="71" cy="51.5" r="4.2" fill="#06281c" />
+            <circle cx="47.4" cy="49.5" r="1.4" fill="#ffffff" />
+            <circle cx="69.4" cy="49.5" r="1.4" fill="#ffffff" />
+          </g>
+        </g>
+
+        <!-- closed eyes (sleeping) -->
+        <g class="fox-eyes-closed">
+          <path d="M42 51 q7 6.5 15 0" stroke="#06281c" stroke-width="2.4" fill="none" stroke-linecap="round" />
+          <path d="M63 51 q7 6.5 15 0" stroke="#06281c" stroke-width="2.4" fill="none" stroke-linecap="round" />
+        </g>
+
+        <!-- nose -->
+        <path class="fox-nose" d="M55.5 60 q4.5 5.5 9 0 q-4.5 4.5 -9 0 Z" fill="#06281c" />
+        <path d="M60 65 v4.5" stroke="#64748b" stroke-width="1.2" opacity="0.5" />
+      </g>
+    </svg>
+  </span>
+</button>
+
+<style>
+  .fox-root {
+    position: fixed;
+    right: 22px;
+    bottom: 18px;
+    z-index: 60;
+    width: 96px;
+    height: 96px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    transform: translateX(190px);
+    opacity: 0;
+    transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Scamper-in (first visit) and seated-return states both rest at translateX(0) */
+  .fox-root.is-running,
+  .fox-root.is-seated {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  .fox-root.is-seated {
+    transition: transform 0.5s ease, opacity 0.4s ease;
+  }
+  .fox-root:hover {
+    transform: translateX(0) translateY(-3px);
+  }
+
+  .fox-bob {
+    position: relative;
+    display: block;
+    transform-origin: 60% 100%;
+  }
+  .fox-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 6px 14px rgba(16, 185, 129, 0.4));
+  }
+
+  /* --- Running scamper --- */
+  .fox-root.is-running .fox-bob {
+    animation: fox-scamper 0.26s linear infinite;
+  }
+  @keyframes fox-scamper {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+      transform: translateY(-7px) rotate(2deg);
+    }
+  }
+
+  /* --- Tail wag --- */
+  .fox-tail {
+    transform-origin: 46px 84px;
+  }
+  .fox-root.is-running .fox-tail {
+    animation: fox-wag 0.26s ease-in-out infinite;
+  }
+  .fox-root.is-watching .fox-tail {
+    animation: fox-wag 1.7s ease-in-out infinite;
+  }
+  @keyframes fox-wag {
+    0%,
+    100% {
+      transform: rotate(-7deg);
+    }
+    50% {
+      transform: rotate(9deg);
+    }
+  }
+
+  /* --- Ear twitch while watching --- */
+  .fox-ear-r {
+    transform-origin: 77px 28px;
+  }
+  .fox-root.is-watching .fox-ear-r {
+    animation: fox-ear 4.5s ease-in-out infinite;
+  }
+  @keyframes fox-ear {
+    0%,
+    6%,
+    100% {
+      transform: rotate(0);
+    }
+    3% {
+      transform: rotate(-8deg);
+    }
+  }
+
+  /* --- Pupils follow the cursor (vars set from JS) --- */
+  .fox-pupils {
+    transform: translate(var(--px, 0px), var(--py, 0px));
+    transition: transform 0.12s ease-out;
+  }
+
+  /* --- Eye open / closed swap --- */
+  .fox-eyes-closed {
+    opacity: 0;
+  }
+  .fox-root.is-sleeping .fox-eyes {
+    opacity: 0;
+  }
+  .fox-root.is-sleeping .fox-eyes-closed {
+    opacity: 1;
+  }
+
+  /* --- Sleeping: gentle breathing --- */
+  .fox-root.is-sleeping .fox-bob {
+    animation: fox-breathe 3.2s ease-in-out infinite;
+  }
+  @keyframes fox-breathe {
+    0%,
+    100% {
+      transform: scale(1) translateY(0);
+    }
+    50% {
+      transform: scale(1.035) translateY(-1px);
+    }
+  }
+
+  /* --- Zzz --- */
+  .fox-zzz {
+    position: absolute;
+    top: 0;
+    right: 6px;
+    display: flex;
+    align-items: flex-end;
+    gap: 1px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .fox-zzz i {
+    font-style: normal;
+    font-weight: 700;
+    color: #6ee7b7;
+    line-height: 1;
+    opacity: 0;
+    text-shadow: 0 0 8px rgba(110, 231, 183, 0.6);
+  }
+  .fox-zzz i:nth-child(1) {
+    font-size: 9px;
+  }
+  .fox-zzz i:nth-child(2) {
+    font-size: 12px;
+  }
+  .fox-zzz i:nth-child(3) {
+    font-size: 15px;
+  }
+  .fox-root.is-sleeping .fox-zzz {
+    opacity: 1;
+  }
+  .fox-root.is-sleeping .fox-zzz i {
+    animation: fox-z 2.4s ease-in-out infinite;
+  }
+  .fox-root.is-sleeping .fox-zzz i:nth-child(2) {
+    animation-delay: 0.45s;
+  }
+  .fox-root.is-sleeping .fox-zzz i:nth-child(3) {
+    animation-delay: 0.9s;
+  }
+  @keyframes fox-z {
+    0% {
+      opacity: 0;
+      transform: translate(0, 4px) scale(0.7);
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(7px, -14px) scale(1.1);
+    }
+  }
+
+  /* --- Greeting speech bubble --- */
+  .fox-bubble {
+    position: absolute;
+    bottom: 80%;
+    right: 64%;
+    white-space: nowrap;
+    background: rgba(10, 10, 10, 0.85);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #d1fae5;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+  }
+  .fox-root.is-greeting .fox-bubble,
+  .fox-root:hover .fox-bubble {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fox-root,
+    .fox-bob,
+    .fox-tail,
+    .fox-ear-r,
+    .fox-zzz i,
+    .fox-pupils {
+      animation: none !important;
+      transition: opacity 0.2s ease !important;
+    }
+    .fox-root {
+      transform: translateX(0);
+    }
+  }
+</style>
+
+<script>
+  function initFox() {
+    const root = document.getElementById('fox-assistant');
+    if (!root || root.dataset.foxInit) return;
+    root.dataset.foxInit = '1';
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const SLEEP_AFTER = 5000;
+    const INTRO_DELAY = 3000;
+    let sleepTimer: number | undefined;
+    let greetTimer: number | undefined;
+    let awake = false;
+    let raf = 0;
+
+    const sleep = () => {
+      root.classList.remove('is-watching');
+      root.classList.add('is-sleeping');
+      awake = false;
+    };
+    const watch = () => {
+      root.classList.remove('is-sleeping');
+      root.classList.add('is-watching');
+      awake = true;
+      window.clearTimeout(sleepTimer);
+      sleepTimer = window.setTimeout(sleep, SLEEP_AFTER);
+    };
+    const greet = (ms: number) => {
+      root.classList.add('is-greeting');
+      window.clearTimeout(greetTimer);
+      greetTimer = window.setTimeout(() => root.classList.remove('is-greeting'), ms);
+    };
+    const arrive = () => {
+      root.classList.remove('is-running');
+      root.classList.add('is-seated');
+      greet(2600);
+      watch();
+    };
+
+    if (sessionStorage.getItem('rk-fox')) {
+      // Same fox returning on a new page — appear seated and wake up.
+      root.classList.add('is-seated');
+      greet(2000);
+      requestAnimationFrame(watch);
+    } else {
+      // First appearance this session — scamper in after a beat.
+      window.setTimeout(() => {
+        sessionStorage.setItem('rk-fox', '1');
+        if (reduced) return arrive();
+        root.classList.add('is-running');
+        window.setTimeout(arrive, 1150);
+      }, INTRO_DELAY);
+    }
+
+    // Eyes track the cursor while awake.
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        if (!awake || raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const r = root.getBoundingClientRect();
+          const dx = e.clientX - (r.left + r.width / 2);
+          const dy = e.clientY - (r.top + r.height * 0.42);
+          const dist = Math.hypot(dx, dy) || 1;
+          const max = 2.6;
+          root.style.setProperty('--px', `${((dx / dist) * max).toFixed(2)}px`);
+          root.style.setProperty('--py', `${((dy / dist) * max).toFixed(2)}px`);
+        });
+      },
+      { passive: true },
+    );
+
+    // Hovering or clicking wakes the fox (and previews the future chat hook).
+    root.addEventListener('pointerenter', () => {
+      if (!awake) watch();
+    });
+    root.addEventListener('click', () => {
+      watch();
+      greet(2600);
+    });
+  }
+
+  initFox();
+  document.addEventListener('astro:page-load', initFox);
+</script>
