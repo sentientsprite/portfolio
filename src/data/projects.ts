@@ -129,7 +129,7 @@ export const projectOverrides: ProjectOverride[] = [
   },
   {
     repoName: 'zephyr',
-    displayName: 'Zephyr Chief of Staff PKM',
+    displayName: 'Obsidian Based Second Brain',
     category: 'product',
     featured: true,
     screenshot: 'images/projects/zephyr-pkm.svg',

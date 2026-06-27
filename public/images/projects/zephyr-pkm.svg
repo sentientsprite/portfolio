@@ -10,8 +10,8 @@
   </defs>
   <!-- sidebar -->
   <rect x="0" y="0" width="200" height="675" fill="#0a0a0f" stroke="#ffffff" stroke-opacity="0.06"/>
-  <text x="24" y="48" fill="#67e8f9" font-family="system-ui,sans-serif" font-size="18" font-weight="600">Zephyr</text>
-  <text x="24" y="68" fill="#737373" font-family="system-ui,sans-serif" font-size="11">Chief of Staff PKM</text>
+  <text x="24" y="48" fill="#67e8f9" font-family="system-ui,sans-serif" font-size="16" font-weight="600">Obsidian Based</text>
+  <text x="24" y="68" fill="#737373" font-family="system-ui,sans-serif" font-size="11">Second Brain</text>
   <rect x="16" y="100" width="168" height="28" rx="6" fill="#22d3ee" fill-opacity="0.1"/>
   <text x="28" y="118" fill="#a5f3fc" font-family="system-ui,sans-serif" font-size="12">Dashboard</text>
   <text x="28" y="150" fill="#737373" font-family="system-ui,sans-serif" font-size="12">00-INBOX</text>
