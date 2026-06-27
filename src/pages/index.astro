@@ -105,11 +105,12 @@ const stats = [
           <span class="hidden text-sm text-neutral-200 sm:inline">{site.name}</span>
         </a>
 
-        <nav class="hidden items-center gap-7 md:flex">
+        <nav class="hidden items-center gap-7 md:flex" aria-label="Main">
+          <a href={withBase('/overview')} class="nav-link">Overview</a>
+          <a href={withBase('/work')} class="nav-link">Work</a>
           <a href="#services" class="nav-link">Services</a>
           <a href="#showcase" class="nav-link">Showcase</a>
           <a href="#about" class="nav-link">About</a>
-          <a href={withBase('/work')} class="nav-link">Work</a>
           <a href={withBase('/blog')} class="nav-link">Blog</a>
           <a href={withBase('/contact')} class="nav-link">Contact</a>
         </nav>
@@ -137,11 +138,14 @@ const stats = [
       <div
         id="mobile-menu"
         class="mx-auto mt-2 hidden max-w-6xl flex-col gap-1 rounded-2xl border border-neutral-800 bg-neutral-900/90 p-3 backdrop-blur-xl md:hidden"
+        role="navigation"
+        aria-label="Main"
       >
+        <a href={withBase('/overview')} class="mobile-link">Overview</a>
+        <a href={withBase('/work')} class="mobile-link">Work</a>
         <a href="#services" class="mobile-link">Services</a>
         <a href="#showcase" class="mobile-link">Showcase</a>
         <a href="#about" class="mobile-link">About</a>
-        <a href={withBase('/work')} class="mobile-link">Work</a>
         <a href={withBase('/blog')} class="mobile-link">Blog</a>
         <a href={withBase('/contact')} class="mobile-link">Contact</a>
         <a href="#contact" class="mobile-link text-emerald-400">Start a project</a>
@@ -283,6 +287,8 @@ const stats = [
           {showcase.map((proj, i) => (
             <a
               href={proj.href}
+              target="_blank"
+              rel="noopener noreferrer"
               data-reveal
               data-tilt
               class="tilt-card group relative overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/40 p-8 backdrop-blur-sm"
@@ -738,8 +744,27 @@ const stats = [
         scene.add(rim);
         // Bright glow sits at the "won" node so conversions feel like the payoff
         const glow = new THREE.PointLight(0x10b981, 5, 18, 2);
-        glow.position.set(startX + (layers.length - 1) * layerGap, 0, 1.5);
+        glow.position.set(endX, 0, 1.5);
         scene.add(glow);
+
+        /* --- Responsive width: full-bleed on load, contracts to content width on scroll --- */
+        let sFull = 1;
+        let sContent = 1;
+        let scrollP = 0;
+        const netW = (layers.length - 1) * layerGap || 1;
+
+        function recomputeScales() {
+          const halfH = Math.tan(THREE.MathUtils.degToRad(45) / 2) * camera.position.z;
+          const visW = 2 * halfH * camera.aspect; // visible world width at the net's depth
+          sFull = (visW * 1.22) / netW; // span the full viewport, slight edge bleed
+          const contentPx = Math.min(window.innerWidth * 0.92, 1180); // ~max-w-6xl
+          sContent = (visW * (contentPx / window.innerWidth)) / netW;
+          applyScale();
+        }
+        function applyScale() {
+          net.scale.setScalar(sFull + (sContent - sFull) * scrollP);
+        }
+        recomputeScales();
 
         /* --- Render loop --- */
         const clock = new THREE.Clock();
@@ -758,16 +783,18 @@ const stats = [
             nd.mesh.scale.setScalar(nd.base * (1 + Math.sin(t * 2 + nd.phase) * 0.12));
           });
 
-          // Flow data packets forward along edges; recycle onto a new edge at the end
+          // Flow data packets forward along the curved edges; recycle at the end
           for (let i = 0; i < packets.length; i++) {
             const p = packets[i];
             p.t += p.speed * dt;
             if (p.t >= 1) {
               p.t -= 1;
-              p.edge = (Math.random() * edgeList.length) | 0;
+              p.edge = (Math.random() * edges3.length) | 0;
             }
-            const e = edgeList[p.edge];
-            tmp.copy(e.a).lerp(e.b, p.t);
+            const pts = edges3[p.edge];
+            const f = p.t * (pts.length - 1);
+            const idx = Math.min(Math.floor(f), pts.length - 2);
+            tmp.copy(pts[idx]).lerp(pts[idx + 1], f - idx);
             packetPos[i * 3] = tmp.x;
             packetPos[i * 3 + 1] = tmp.y;
             packetPos[i * 3 + 2] = tmp.z;
@@ -793,17 +820,17 @@ const stats = [
         }
         animate();
 
-        /* --- Scroll-driven camera move (parallax depth through the page) --- */
+        /* --- Scroll-driven contraction: full-bleed network shrinks to content width --- */
         if (!prefersReduced) {
-          gsap.to(camera.position, {
-            z: 17,
-            y: 2.5,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: '#hero',
-              start: 'top top',
-              end: 'bottom top',
-              scrub: 1,
+          ScrollTrigger.create({
+            trigger: '#hero',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1,
+            onUpdate: (self) => {
+              scrollP = self.progress;
+              applyScale();
+              camera.position.y = 0.5 + self.progress * 1.6; // gentle lift for depth
             },
           });
         }
@@ -813,6 +840,7 @@ const stats = [
           camera.aspect = window.innerWidth / window.innerHeight;
           camera.updateProjectionMatrix();
           renderer.setSize(window.innerWidth, window.innerHeight);
+          recomputeScales();
         });
 
         // Pause rendering when tab is hidden (saves battery/CPU)
