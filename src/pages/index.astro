@@ -9,6 +9,7 @@ import { site } from '../config/site';
 import { getMergedProjects, fetchGitHubStats } from '../lib/github';
 import { getCollection } from 'astro:content';
 import { withBase } from '../lib/url';
+import { fetchMediumPosts } from '../lib/medium';
 
 const projects = await getMergedProjects();
 const selectedWork = projects.filter((p) => p.featured).slice(0, 3);
@@ -17,9 +18,7 @@ const stats = await fetchGitHubStats();
 const caseStudies = (await getCollection('caseStudies', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 2);
+const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
 ---
 
 <BaseLayout>
@@ -102,25 +101,32 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
   }
 
   <!-- 5. Thought Leadership -->
-  <section class="mx-auto max-w-6xl px-4 py-16">
-    <SectionHeading title="Writing" subtitle="Marketing, SEO, and automation insights" />
-    <div class="grid gap-6 sm:grid-cols-2">
-      {blogPosts.map((post) => (
-        <BlogCard
-          title={post.data.title}
-          description={post.data.description}
-          href={`blog/${post.id}`}
-          date={post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-          tags={post.data.tags}
-        />
-      ))}
-    </div>
-    <div class="mt-8 text-center">
-      <a href={withBase('/blog')} class="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
-        Read the blog &rarr;
-      </a>
-    </div>
-  </section>
+  {
+    mediumPosts.length > 0 && (
+      <section class="mx-auto max-w-6xl px-4 py-16">
+        <SectionHeading title="Writing" subtitle="Latest essays and articles on Medium" />
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {mediumPosts.map((post) => (
+            <BlogCard
+              title={post.title}
+              description={post.snippet}
+              href={post.link}
+              date={post.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+              tags={post.categories}
+              image={post.thumbnail}
+              external={true}
+              source="Medium"
+            />
+          ))}
+        </div>
+        <div class="mt-8 text-center">
+          <a href={withBase('/blog')} class="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
+            Read the blog &rarr;
+          </a>
+        </div>
+      </section>
+    )
+  }
 
   <!-- 6. GitHub Activity -->
   <section class="mx-auto max-w-6xl px-4 py-16">

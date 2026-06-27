@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-label="E-commerce landing page redesign results">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0a0a"/>
+      <stop offset="1" stop-color="#0f1714"/>
+    </linearGradient>
+    <linearGradient id="after" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#059669"/>
+      <stop offset="1" stop-color="#34d399"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#bg)"/>
+  <text x="64" y="92" fill="#f5f5f5" font-family="ui-sans-serif,system-ui,sans-serif" font-size="44" font-weight="700">E-commerce Landing Page Redesign</text>
+  <text x="64" y="136" fill="#10b981" font-family="ui-sans-serif,system-ui,sans-serif" font-size="24" font-weight="600">Themed Shopify pages · A/B tested · +45% conversions</text>
+
+  <!-- baseline -->
+  <line x1="64" y1="500" x2="1136" y2="500" stroke="#262626" stroke-width="2"/>
+
+  <!-- groups -->
+  <!-- Conversion Rate -->
+  <g font-family="ui-sans-serif,system-ui,sans-serif">
+    <rect x="120" y="380" width="90" height="120" rx="6" fill="#404040"/>
+    <rect x="230" y="304" width="90" height="196" rx="6" fill="url(#after)"/>
+    <text x="220" y="548" fill="#a3a3a3" font-size="22" text-anchor="middle">Conversion</text>
+    <text x="165" y="366" fill="#a3a3a3" font-size="20" text-anchor="middle">2.1%</text>
+    <text x="275" y="290" fill="#34d399" font-size="22" font-weight="700" text-anchor="middle">3.0%</text>
+
+    <!-- Bounce Rate (lower is better, after shorter) -->
+    <rect x="450" y="300" width="90" height="200" rx="6" fill="#404040"/>
+    <rect x="560" y="356" width="90" height="144" rx="6" fill="url(#after)"/>
+    <text x="550" y="548" fill="#a3a3a3" font-size="22" text-anchor="middle">Bounce Rate</text>
+    <text x="495" y="286" fill="#a3a3a3" font-size="20" text-anchor="middle">62%</text>
+    <text x="605" y="342" fill="#34d399" font-size="22" font-weight="700" text-anchor="middle">45%</text>
+
+    <!-- PageSpeed -->
+    <rect x="780" y="384" width="90" height="116" rx="6" fill="#404040"/>
+    <rect x="890" y="318" width="90" height="182" rx="6" fill="url(#after)"/>
+    <text x="880" y="548" fill="#a3a3a3" font-size="22" text-anchor="middle">PageSpeed</text>
+    <text x="825" y="370" fill="#a3a3a3" font-size="20" text-anchor="middle">58</text>
+    <text x="935" y="304" fill="#34d399" font-size="22" font-weight="700" text-anchor="middle">91</text>
+  </g>
+
+  <!-- legend -->
+  <g font-family="ui-sans-serif,system-ui,sans-serif" font-size="20">
+    <rect x="1040" y="372" width="20" height="20" rx="3" fill="#404040"/>
+    <text x="1068" y="389" fill="#a3a3a3">Before</text>
+    <rect x="1040" y="404" width="20" height="20" rx="3" fill="url(#after)"/>
+    <text x="1068" y="421" fill="#a3a3a3">After</text>
+  </g>
+</svg>

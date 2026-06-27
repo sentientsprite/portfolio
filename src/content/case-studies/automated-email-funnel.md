@@ -3,6 +3,7 @@ title: "Automated Email Funnel with Lead Scoring"
 description: "Zapier-HubSpot integration that automated 80% of nurture emails and boosted engagement by 35%."
 pubDate: 2024-09-05
 tags: ["Automation", "Email Marketing", "Lead Scoring"]
+heroImage: "images/case-studies/automated-email-funnel.svg"
 outcome: "80% email automation, 35% engagement boost, 40% faster response times"
 draft: false
 ---

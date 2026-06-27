@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ResumeDownload from '../components/ResumeDownload.astro';
+import LogoTile from '../components/LogoTile.astro';
+import { site } from '../config/site';
 import {
   education,
   certifications,
@@ -15,17 +17,35 @@ import {
   <div class="mx-auto max-w-3xl px-4 py-16">
     <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
       <SectionHeading title="Resume" subtitle="Experience, education, and certifications" />
-      <ResumeDownload />
+      <div class="flex flex-wrap items-center gap-3">
+        <a
+          href={site.social.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-400"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/>
+          </svg>
+          LinkedIn
+        </a>
+        <ResumeDownload />
+      </div>
     </div>
 
     <section class="mt-12">
       <h3 class="text-xl font-semibold text-neutral-100">Experience</h3>
       <div class="mt-6 space-y-8">
         {experience.map((job) => (
-          <div class="border-l-2 border-emerald-500/30 pl-6">
-            <h4 class="text-lg font-medium text-neutral-100">{job.role}</h4>
-            <p class="text-sm text-emerald-400">{job.company}</p>
-            <p class="text-sm text-neutral-500">{job.location} · {job.period}</p>
+          <div class="relative border-l-2 border-emerald-500/30 pl-6">
+            <div class="flex items-start gap-3">
+              <LogoTile domain={job.domain} monogram={job.monogram} label={job.company} />
+              <div>
+                <h4 class="text-lg font-medium text-neutral-100">{job.role}</h4>
+                <p class="text-sm text-emerald-400">{job.company}</p>
+                <p class="text-sm text-neutral-500">{job.location} · {job.period}</p>
+              </div>
+            </div>
             <ul class="mt-3 space-y-2">
               {job.highlights.map((item) => (
                 <li class="text-sm text-neutral-400 leading-relaxed">• {item}</li>
@@ -40,11 +60,14 @@ import {
       <h3 class="text-xl font-semibold text-neutral-100">Education</h3>
       <div class="mt-4 space-y-4">
         {education.map((edu) => (
-          <div>
-            <h4 class="font-medium text-neutral-200">{edu.degree}</h4>
-            <p class="text-sm text-neutral-400">{edu.school}, {edu.location}</p>
-            <p class="text-sm text-neutral-500">Graduated: {edu.graduated}</p>
-            <p class="mt-1 text-sm text-neutral-400">{edu.details}</p>
+          <div class="flex items-start gap-3 rounded-lg border border-neutral-800 bg-neutral-900/50 p-4">
+            <LogoTile domain={edu.domain} monogram={edu.monogram} label={edu.school} />
+            <div>
+              <h4 class="font-medium text-neutral-200">{edu.degree}</h4>
+              <p class="text-sm text-neutral-400">{edu.school}, {edu.location}</p>
+              <p class="text-sm text-neutral-500">Graduated: {edu.graduated}</p>
+              <p class="mt-1 text-sm text-neutral-400">{edu.details}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -54,12 +77,15 @@ import {
       <h3 class="text-xl font-semibold text-neutral-100">Certifications</h3>
       <div class="mt-4 space-y-3">
         {certifications.map((cert) => (
-          <div class="rounded-lg border border-neutral-800 bg-neutral-900/50 p-4">
-            <h4 class="font-medium text-neutral-200">{cert.name}</h4>
-            <p class="text-sm text-neutral-500">
-              {cert.issuer} · Issued: {cert.issued}
-              {cert.renewed && ` · Renewed: ${cert.renewed}`}
-            </p>
+          <div class="flex items-center gap-3 rounded-lg border border-neutral-800 bg-neutral-900/50 p-4">
+            <LogoTile domain={cert.domain} monogram={cert.monogram} label={cert.issuer} size={40} />
+            <div>
+              <h4 class="font-medium text-neutral-200">{cert.name}</h4>
+              <p class="text-sm text-neutral-500">
+                {cert.issuer} · Issued: {cert.issued}
+                {cert.renewed && ` · Renewed: ${cert.renewed}`}
+              </p>
+            </div>
           </div>
         ))}
       </div>

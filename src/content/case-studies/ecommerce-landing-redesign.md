@@ -3,6 +3,7 @@ title: "E-commerce Landing Page Redesign"
 description: "How themed Shopify landing pages increased conversions by 45% for a wellness brand."
 pubDate: 2024-11-10
 tags: ["E-commerce", "Shopify", "A/B Testing"]
+heroImage: "images/case-studies/ecommerce-landing-redesign.svg"
 outcome: "45% conversion increase, 28% bounce rate reduction"
 draft: false
 ---

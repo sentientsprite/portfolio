@@ -4,6 +4,8 @@ export const education = [
     school: 'Westminster College of Utah',
     location: 'Salt Lake City, UT',
     graduated: '2021',
+    domain: 'westminsteru.edu',
+    monogram: 'W',
     details:
       "Relevant Coursework: Digital Marketing Strategies, Consumer Behavior, Market Research, Business Analytics. Dean's List (2020–2021).",
   },
@@ -15,27 +17,37 @@ export const certifications = [
     issuer: 'Google Skillshop',
     issued: '2023',
     renewed: '2025',
+    domain: 'google.com',
+    monogram: 'G',
   },
   {
     name: 'Google Analytics Certification – Measurements',
     issuer: 'Google Skillshop',
     issued: '2022',
     renewed: '2025',
+    domain: 'google.com',
+    monogram: 'G',
   },
   {
     name: 'HubSpot Inbound Marketing Certification',
     issuer: 'HubSpot Academy',
     issued: '2022',
+    domain: 'hubspot.com',
+    monogram: 'H',
   },
   {
     name: 'SEMrush SEO Toolkit Mastery',
     issuer: 'SEMrush',
     issued: '2024',
+    domain: 'semrush.com',
+    monogram: 'S',
   },
   {
     name: 'Klaviyo Email Marketing Advanced',
     issuer: 'Klaviyo',
     issued: '2023',
+    domain: 'klaviyo.com',
+    monogram: 'K',
   },
 ];
 
@@ -45,6 +57,8 @@ export const experience = [
     role: 'Freelance Digital Marketing & Web Development Consultant',
     location: 'Salt Lake City, UT (Remote)',
     period: 'January 2025 – Present',
+    domain: 'upwork.com',
+    monogram: 'PC',
     highlights: [
       'Designed and developed custom websites and high-converting landing pages using WordPress, Shopify, and HTML/CSS frameworks, resulting in an average 25% increase in user engagement and lead generation.',
       'Implemented comprehensive SEO/SEM strategies driving a 35% uplift in search rankings and 120% growth in organic traffic for e-commerce clients.',
@@ -57,6 +71,8 @@ export const experience = [
     role: 'Digital Marketing Specialist',
     location: 'Salt Lake City, UT (Remote/Hybrid)',
     period: 'March 2024 – January 2025',
+    domain: 'epicvue.com',
+    monogram: 'G',
     highlights: [
       'Spearheaded data-driven digital marketing strategy, achieving a 300% surge in conversion rates during peak seasonal months.',
       'Directed SEO initiatives yielding improved site visibility and elevated keyword rankings for 50+ high-value terms.',
@@ -69,6 +85,8 @@ export const experience = [
     role: 'Digital Marketing Director',
     location: 'Salt Lake City, UT',
     period: 'May 2021 – December 2023',
+    domain: 'ridgecrestherbals.com',
+    monogram: 'RH',
     highlights: [
       'Led digital marketing generating over $56,000 in incremental revenue through multi-channel campaigns.',
       'Expanded email subscriber base by 4,300+ contacts with a 55% open rate and 5% conversion rate.',

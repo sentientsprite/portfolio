@@ -1,0 +1,47 @@
+---
+interface Props {
+  domain?: string;
+  monogram: string;
+  label?: string;
+  size?: number;
+}
+
+const { domain, monogram, label, size = 44 } = Astro.props;
+const logoSrc = domain
+  ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128`
+  : null;
+const px = `${size}px`;
+---
+
+<span
+  class="logo-tile inline-flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-neutral-800 bg-neutral-800/60"
+  style={`width:${px};height:${px}`}
+  role="img"
+  aria-label={label ?? monogram}
+>
+  {
+    logoSrc ? (
+      <>
+        <img
+          src={logoSrc}
+          alt={label ?? ''}
+          width={size - 16}
+          height={size - 16}
+          class="object-contain"
+          loading="lazy"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+        />
+        <span
+          class="hidden h-full w-full items-center justify-center text-sm font-bold text-emerald-400"
+          aria-hidden="true"
+        >
+          {monogram}
+        </span>
+      </>
+    ) : (
+      <span class="flex h-full w-full items-center justify-center text-sm font-bold text-emerald-400" aria-hidden="true">
+        {monogram}
+      </span>
+    )
+  }
+</span>
