@@ -146,7 +146,7 @@ export const projectOverrides: ProjectOverride[] = [
     displayName: 'Obsidian Based Second Brain',
     category: 'product',
     featured: true,
-    screenshot: 'images/projects/zephyr-pkm.svg',
+    screenshot: 'images/projects/zephyr-pkm.jpg',
     sourceUrl: '',
     description:
       'Private AI-powered second brain with Obsidian vault structure — inbox capture, daily briefs, weekly connections, graph view, and Chief of Staff chat.',
