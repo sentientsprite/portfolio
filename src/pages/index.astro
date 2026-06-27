@@ -8,6 +8,7 @@ import ContributionGraph from '../components/ContributionGraph.astro';
 import { site } from '../config/site';
 import { getMergedProjects, fetchGitHubStats } from '../lib/github';
 import { getCollection } from 'astro:content';
+import { withBase } from '../lib/url';
 
 const projects = await getMergedProjects();
 const featuredProjects = projects.filter((p) => p.featured).slice(0, 3);
@@ -20,8 +21,6 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
 const caseStudies = (await getCollection('caseStudies', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 1);
-
-const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout>
@@ -34,10 +33,10 @@ const base = import.meta.env.BASE_URL;
       {site.title}. Building fast, SEO-focused sites and growth systems that drive real results.
     </p>
     <div class="mt-8 flex flex-wrap justify-center gap-4">
-      <a href={`${base}projects`} class="rounded-lg bg-emerald-500 px-6 py-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-emerald-400">
+      <a href={withBase('/projects')} class="rounded-lg bg-emerald-500 px-6 py-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-emerald-400">
         View Projects
       </a>
-      <a href={`${base}contact`} class="rounded-lg border border-neutral-700 px-6 py-3 text-sm font-medium text-neutral-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-400">
+      <a href={withBase('/contact')} class="rounded-lg border border-neutral-700 px-6 py-3 text-sm font-medium text-neutral-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-400">
         Get in Touch
       </a>
     </div>
@@ -63,7 +62,7 @@ const base = import.meta.env.BASE_URL;
           ))}
         </div>
         <div class="mt-8 text-center">
-          <a href={`${base}projects`} class="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
+          <a href={withBase('/projects')} class="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
             View all projects &rarr;
           </a>
         </div>
@@ -108,10 +107,10 @@ const base = import.meta.env.BASE_URL;
     <h2 class="text-2xl font-bold text-neutral-100">Let's work together</h2>
     <p class="mt-3 text-neutral-400">Interested in a project or collaboration? Reach out.</p>
     <div class="mt-6 flex flex-wrap justify-center gap-4">
-      <a href={`${base}contact`} class="rounded-lg bg-emerald-500 px-6 py-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-emerald-400">
+      <a href={withBase('/contact')} class="rounded-lg bg-emerald-500 px-6 py-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-emerald-400">
         Contact Me
       </a>
-      <a href={`${base}resume`} class="rounded-lg border border-neutral-700 px-6 py-3 text-sm font-medium text-neutral-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-400">
+      <a href={withBase('/resume')} class="rounded-lg border border-neutral-700 px-6 py-3 text-sm font-medium text-neutral-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-400">
         View Resume
       </a>
     </div>

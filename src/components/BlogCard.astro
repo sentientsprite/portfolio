@@ -1,4 +1,6 @@
 ---
+import { withBase } from '../lib/url';
+
 interface Props {
   title: string;
   description: string;
@@ -9,7 +11,6 @@ interface Props {
 }
 
 const { title, description, href, date, tags = [], type = 'blog' } = Astro.props;
-const base = import.meta.env.BASE_URL;
 ---
 
 <article class="group rounded-xl border border-neutral-800 bg-neutral-900/50 p-5 transition-colors hover:border-emerald-500/30">
@@ -20,7 +21,7 @@ const base = import.meta.env.BASE_URL;
   }
   <time class="block text-xs text-neutral-500" datetime={date}>{date}</time>
   <h3 class="mt-2 text-lg font-semibold text-neutral-100 group-hover:text-emerald-400 transition-colors">
-    <a href={`${base}${href.replace(/^\//, '')}`}>{title}</a>
+    <a href={withBase(href)}>{title}</a>
   </h3>
   <p class="mt-2 text-sm text-neutral-400 line-clamp-2">{description}</p>
   {

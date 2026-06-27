@@ -1,18 +1,18 @@
 ---
 import type { Product } from '../data/products';
+import { withBase } from '../lib/url';
 
 interface Props {
   product: Product;
 }
 
 const { product } = Astro.props;
-const base = import.meta.env.BASE_URL;
 ---
 
 <article class="flex flex-col overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/50 transition-colors hover:border-emerald-500/30">
   <div class="flex h-40 items-center justify-center bg-neutral-800/50">
     <img
-      src={`${base}${product.image.replace(/^\//, '')}`}
+      src={withBase(product.image)}
       alt={product.name}
       class="h-24 w-24"
       loading="lazy"
