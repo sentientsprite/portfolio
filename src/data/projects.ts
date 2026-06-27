@@ -114,9 +114,9 @@ export const projectOverrides: ProjectOverride[] = [
     demoPath: 'demos/fieldsync-scheduler/index.html',
     sourceUrl: '',
     description:
-      'High-converting field-service scheduler with HubSpot sync, traffic-aware drive times, conflict blocking, and SMS confirmation.',
+      'Dual-view field-service scheduler: a high-converting customer booking form on the front, and a dispatch console with HubSpot sync, drive-time math, conflict blocking, and SMS confirmation on the back.',
     details:
-      'FieldSync turns a complex dispatch workflow into a simple propose-and-confirm form. Every appointment runs through a strict orchestration pipeline: load the customer from HubSpot, calculate real drive time via Google Maps, pass five conflict checks (shift hours, job overlaps, drive-block collisions), then atomically write to PostgreSQL and SMS the technician. Nothing touches the calendar silently — every event is logged to an immutable audit trail. The live demo simulates the full flow with technician timelines, pipeline steps, and YES/NO SMS replies.',
+      'FieldSync separates what customers see from what dispatch runs. The customer view is a conversion-focused booking flow — service type, address, and real available time windows with no CRM jargon exposed. Behind it, the backend dispatch console runs every appointment through a strict orchestration pipeline: load the customer from HubSpot, calculate traffic-aware drive time via Google Maps, pass five conflict checks (shift hours, job overlaps, drive-block collisions), then atomically write to PostgreSQL and SMS the technician. Customer bookings flow into the audit log and technician timeline automatically. Switch tabs to see both sides of the same system.',
     techStack: ['Node.js', 'PostgreSQL', 'HubSpot', 'Google Maps', 'Twilio'],
   },
   {

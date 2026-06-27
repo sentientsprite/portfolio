@@ -18,9 +18,20 @@ body{
   background:var(--bg);color:var(--ink);line-height:1.5;padding:28px 20px 56px;
 }
 .wrap{max-width:1100px;margin:0 auto}
-.head{text-align:center;margin-bottom:28px}
+.head{text-align:center;margin-bottom:22px}
 .head h1{font-size:30px;letter-spacing:-.02em}
-.head p{color:var(--muted);margin-top:8px;font-size:15px}
+.head p{color:var(--muted);margin-top:8px;font-size:15px;max-width:640px;margin-inline:auto}
+.view-tabs{
+  display:flex;justify-content:center;gap:8px;margin-bottom:22px;flex-wrap:wrap;
+}
+.view-tab{
+  background:var(--panel);border:1px solid var(--border);color:var(--muted);
+  padding:10px 18px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;
+}
+.view-tab:hover{border-color:var(--accent);color:var(--ink)}
+.view-tab.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.view{display:none}
+.view.active{display:block}
 .disclaimer{
   background:#422006;border:1px solid #854d0e;border-radius:12px;
   padding:12px 16px;margin-bottom:22px;font-size:13px;color:#fcd34d;line-height:1.5;
@@ -30,12 +41,12 @@ body{
 .panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px}
 .panel h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:14px}
 label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-input,select,button{font-family:inherit}
-input,select{
+input,select,button,textarea{font-family:inherit}
+input,select,textarea{
   width:100%;background:var(--panel-2);border:1px solid var(--border);border-radius:10px;
   color:var(--ink);padding:10px 12px;font-size:14px;outline:none;
 }
-input:focus,select:focus{border-color:var(--accent)}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
 .field{margin-bottom:14px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .customer-pick{
@@ -59,6 +70,11 @@ input:focus,select:focus{border-color:var(--accent)}
 }
 .btn:hover{background:#34d399}
 .btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-ghost{
+  width:auto;background:transparent;color:var(--accent);border:1px solid var(--accent);
+  padding:10px 16px;margin-top:0;
+}
+.btn-ghost:hover{background:var(--accent-soft)}
 .timeline-wrap{margin-bottom:18px}
 .timeline-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .timeline-header h3{font-size:16px;font-weight:600}
@@ -78,7 +94,6 @@ input:focus,select:focus{border-color:var(--accent)}
 .block.drive{background:var(--blue-soft);border-color:rgba(56,189,248,.35);color:#7dd3fc}
 .block.job{background:var(--accent-soft);border-color:rgba(16,185,129,.35);color:#6ee7b7}
 .block.proposed{opacity:.65;border-style:dashed}
-.block.conflict{background:var(--danger-soft);border-color:rgba(239,68,68,.4);color:#fca5a5}
 .block.preview{background:rgba(16,185,129,.22);border:2px dashed var(--accent);z-index:2}
 .pipeline{display:flex;flex-direction:column;gap:0;margin-bottom:18px}
 .step{
@@ -115,6 +130,7 @@ input:focus,select:focus{border-color:var(--accent)}
 .badge.declined{background:var(--danger-soft);color:var(--danger)}
 .badge.hubspot{background:#1e1b4b;color:#a5b4fc}
 .badge.maps{background:var(--warn-soft);color:var(--warn)}
+.badge.lead{background:var(--accent-soft);color:var(--accent)}
 .audit-time{color:var(--muted);font-size:11px}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
 .kpi{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
@@ -152,9 +168,65 @@ input:focus,select:focus{border-color:var(--accent)}
   padding:12px 24px;border-radius:10px;font-weight:700;font-size:14px;
 }
 .cta-box a:hover{background:#34d399}
+/* Customer view */
+.customer-shell{max-width:720px;margin:0 auto}
+.customer-hero{
+  text-align:center;margin-bottom:24px;padding:28px 20px;
+  background:linear-gradient(180deg,var(--panel) 0%,transparent 100%);
+  border:1px solid var(--border);border-radius:16px;
+}
+.customer-hero .tag{
+  display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:10px;
+}
+.customer-hero h2{font-size:28px;letter-spacing:-.02em;margin-bottom:8px}
+.customer-hero p{color:var(--muted);font-size:15px}
+.customer-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px}
+.trust-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.trust-item{
+  text-align:center;padding:12px 8px;background:var(--panel-2);border-radius:10px;
+  border:1px solid var(--border);font-size:12px;color:var(--muted);
+}
+.trust-item b{display:block;color:var(--accent);font-size:18px;margin-bottom:4px}
+.slots{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+.slot{
+  border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;
+  background:var(--panel-2);transition:border-color .15s,background .15s;text-align:left;
+}
+.slot:hover,.slot.active{border-color:var(--accent);background:var(--accent-soft)}
+.slot b{display:block;font-size:14px}
+.slot small{color:var(--muted);font-size:12px}
+.slot.empty{
+  grid-column:1/-1;text-align:center;color:var(--muted);cursor:default;
+  padding:16px;
+}
+.slot.empty:hover{border-color:var(--border);background:var(--panel-2)}
+.confirm-card{
+  display:none;text-align:center;padding:32px 24px;
+  background:var(--panel);border:1px solid var(--border);border-radius:16px;
+}
+.confirm-card.visible{display:block}
+.confirm-card .check{
+  width:56px;height:56px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);display:grid;place-items:center;font-size:28px;margin:0 auto 16px;
+}
+.confirm-card h3{font-size:22px;margin-bottom:8px}
+.confirm-card p{color:var(--muted);font-size:14px;margin-bottom:18px}
+.backend-link{
+  display:inline-flex;align-items:center;gap:6px;color:var(--accent);
+  font-size:13px;font-weight:600;cursor:pointer;background:none;border:0;
+  margin-top:14px;
+}
+.backend-link:hover{text-decoration:underline}
+.backend-intro{
+  background:var(--panel-2);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;margin-bottom:18px;font-size:13px;color:var(--muted);
+}
+.backend-intro strong{color:var(--ink)}
 @media(max-width:900px){
   .layout{grid-template-columns:1fr}
-  .kpis{grid-template-columns:repeat(2,1fr)}
+  .kpis,.trust-row,.slots{grid-template-columns:1fr}
+  .slots{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -162,117 +234,201 @@ input:focus,select:focus{border-color:var(--accent)}
 <div class="wrap">
   <div class="head">
     <h1>FieldSync Scheduler</h1>
-    <p>HubSpot + Google Maps + SMS confirmation — propose a job and watch the zero-mistake engine run.</p>
+    <p>Two sides of the same system — a simple customer booking flow on the front, and the dispatch engine behind it.</p>
   </div>
 
-  <div class="disclaimer" role="note">
-    <strong>Demo disclaimer:</strong> Customer data, drive times, and SMS flows are simulated for portfolio preview.
-    The production system runs on Node.js, PostgreSQL, HubSpot CRM, Google Maps Distance Matrix, and Twilio.
+  <div class="view-tabs" role="tablist" aria-label="Demo views">
+    <button type="button" class="view-tab active" data-view="customer" role="tab" aria-selected="true">Customer booking</button>
+    <button type="button" class="view-tab" data-view="backend" role="tab" aria-selected="false">Backend dispatch</button>
   </div>
 
-  <div class="layout">
-  <aside class="panel">
-    <h2>Propose appointment</h2>
-    <div class="api-card">
-      <p>Static simulation by default. Add a backend URL to call the live Node API from the zip, for example <code>?api=http://localhost:3000</code>.</p>
-      <label for="api-base">Live API URL (optional)</label>
-      <input type="url" id="api-base" placeholder="http://localhost:3000">
-      <span class="api-mode" id="api-mode">Simulation mode · no external calls</span>
-    </div>
-    <form id="schedule-form">
-      <div class="field">
-        <label>Customer (HubSpot)</label>
-        <div id="customer-list"></div>
-      </div>
-      <div class="field">
-        <label for="employee">Technician</label>
-        <select id="employee" required></select>
-      </div>
-      <div class="field">
-        <label for="job-type">Job type</label>
-        <select id="job-type" required>
-          <option value="HVAC repair">HVAC repair</option>
-          <option value="Plumbing install">Plumbing install</option>
-          <option value="Electrical inspection">Electrical inspection</option>
-          <option value="Water heater service">Water heater service</option>
-        </select>
-      </div>
-      <div class="row">
-        <div class="field">
-          <label for="job-date">Date</label>
-          <input type="date" id="job-date" required>
-        </div>
-        <div class="field">
-          <label for="job-time">Start time</label>
-          <input type="time" id="job-time" value="14:00" required>
-        </div>
-      </div>
-      <div class="field">
-        <label for="duration">Duration (minutes)</label>
-        <select id="duration">
-          <option value="60">60 min</option>
-          <option value="90" selected>90 min</option>
-          <option value="120">120 min</option>
-        </select>
-      </div>
-      <button type="submit" class="btn" id="propose-btn">Propose &amp; send SMS</button>
-    </form>
-    <div class="result-banner" id="result-banner"></div>
-    <div class="sms-mock" id="sms-mock">
-      <div class="sms-bubble" id="sms-text"></div>
-      <div class="sms-actions">
-        <button type="button" class="yes" id="sms-yes">YES — confirm</button>
-        <button type="button" class="no" id="sms-no">NO — decline</button>
-      </div>
-    </div>
-  </aside>
-
-  <main>
-    <div class="panel timeline-wrap">
-      <div class="timeline-header">
-        <h3 id="timeline-title">Technician schedule</h3>
-        <span id="shift-label"></span>
-      </div>
-      <div class="timeline" id="timeline">
-        <div class="timeline-axis" id="timeline-axis"></div>
-      </div>
+  <!-- CUSTOMER VIEW -->
+  <section class="view active" id="view-customer" role="tabpanel">
+    <div class="disclaimer" role="note">
+      <strong>Customer view:</strong> What a homeowner sees — pick a service, choose an open slot, and get instant confirmation. No CRM jargon, no technician routing exposed.
     </div>
 
-    <div class="panel" style="margin-bottom:18px">
-      <h2>Orchestration pipeline</h2>
-      <div class="pipeline" id="pipeline">
-        <div class="step pending" data-step="hubspot">
-          <div class="icon">1</div>
-          <div><h4>Load customer from HubSpot</h4><p>Sync contact address, phone, and CRM ID into local cache.</p></div>
-        </div>
-        <div class="step pending" data-step="maps">
-          <div class="icon">2</div>
-          <div><h4>Calculate drive time</h4><p>Google Maps Distance Matrix with traffic-aware departure time + 5 min buffer.</p></div>
-        </div>
-        <div class="step pending" data-step="conflict">
-          <div class="icon">3</div>
-          <div><h4>Run conflict engine</h4><p>Shift hours, job overlaps, and drive-block collisions — all must pass.</p></div>
-        </div>
-        <div class="step pending" data-step="sms">
-          <div class="icon">4</div>
-          <div><h4>Write + SMS employee</h4><p>Atomic DB transaction. SMS expires in 30 min if no reply.</p></div>
+    <div class="customer-shell">
+      <div class="customer-hero">
+        <span class="tag">Same-day &amp; next-day available</span>
+        <h2>Schedule your service visit</h2>
+        <p>Tell us what you need. We match the nearest available technician and confirm your window.</p>
+      </div>
+
+      <div class="customer-card" id="customer-form-card">
+        <form id="customer-form">
+          <div class="field">
+            <label for="cust-name">Full name</label>
+            <input type="text" id="cust-name" placeholder="James Whitfield" required>
+          </div>
+          <div class="field">
+            <label for="cust-address">Service address</label>
+            <input type="text" id="cust-address" placeholder="8801 W Colfax Ave, Lakewood, CO" required>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="cust-phone">Phone</label>
+              <input type="tel" id="cust-phone" placeholder="(303) 555-0199" required>
+            </div>
+            <div class="field">
+              <label for="cust-service">Service needed</label>
+              <select id="cust-service" required>
+                <option value="HVAC repair">HVAC repair</option>
+                <option value="Plumbing install">Plumbing install</option>
+                <option value="Electrical inspection">Electrical inspection</option>
+                <option value="Water heater service">Water heater service</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="cust-date">Preferred date</label>
+            <input type="date" id="cust-date" required>
+          </div>
+          <div class="field">
+            <label>Available time windows</label>
+            <div class="slots" id="slot-list">
+              <div class="slot empty">Enter your address and date to see open slots.</div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="cust-notes">Notes (optional)</label>
+            <textarea id="cust-notes" rows="2" placeholder="Gate code, pets, parking instructions…"></textarea>
+          </div>
+          <button type="submit" class="btn" id="customer-book-btn" disabled>Book appointment</button>
+        </form>
+        <div class="trust-row">
+          <div class="trust-item"><b>2h</b>avg response</div>
+          <div class="trust-item"><b>4.9</b>customer rating</div>
+          <div class="trust-item"><b>0</b>double-bookings</div>
         </div>
       </div>
+
+      <div class="confirm-card" id="customer-confirm">
+        <div class="check">✓</div>
+        <h3>You're booked!</h3>
+        <p id="confirm-copy">Your technician is confirmed. You'll get a text reminder 1 hour before arrival.</p>
+        <p style="font-size:13px;color:var(--muted)">Confirmation <strong id="confirm-id" style="color:var(--accent)">#FS-200</strong></p>
+        <button type="button" class="btn btn-ghost" id="see-backend-btn">See what happens in dispatch →</button>
+        <br>
+        <button type="button" class="backend-link" id="book-another-btn">Book another appointment</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BACKEND VIEW -->
+  <section class="view" id="view-backend" role="tabpanel">
+    <div class="disclaimer" role="note">
+      <strong>Backend view:</strong> What dispatch sees — HubSpot sync, drive-time math, conflict blocking, SMS to technicians, and an immutable audit trail. Customer bookings from the other tab flow in here automatically.
     </div>
 
-    <div class="panel">
-      <h2>Audit log</h2>
-      <div class="audit" id="audit-log"></div>
+    <div class="backend-intro">
+      <strong>Dispatch console.</strong> Managers can also propose jobs manually. Every action runs through the orchestration pipeline before anything hits the calendar.
     </div>
-  </main>
-  </div>
 
-  <div class="kpis">
-    <div class="kpi"><b>0</b><span>Double-bookings</span></div>
-    <div class="kpi"><b>28m</b><span>Avg SMS confirm</span></div>
-    <div class="kpi"><b>94%</b><span>First-slot accept</span></div>
-    <div class="kpi"><b>100%</b><span>Events logged</span></div>
-  </div>
+    <div class="layout">
+      <aside class="panel">
+        <h2>Propose appointment</h2>
+        <div class="api-card">
+          <p>Static simulation by default. Add a backend URL to call the live Node API, for example <code>?api=http://localhost:3000</code>.</p>
+          <label for="api-base">Live API URL (optional)</label>
+          <input type="url" id="api-base" placeholder="http://localhost:3000">
+          <span class="api-mode" id="api-mode">Simulation mode · no external calls</span>
+        </div>
+        <form id="schedule-form">
+          <div class="field">
+            <label>Customer (HubSpot)</label>
+            <div id="customer-list"></div>
+          </div>
+          <div class="field">
+            <label for="employee">Technician</label>
+            <select id="employee" required></select>
+          </div>
+          <div class="field">
+            <label for="job-type">Job type</label>
+            <select id="job-type" required>
+              <option value="HVAC repair">HVAC repair</option>
+              <option value="Plumbing install">Plumbing install</option>
+              <option value="Electrical inspection">Electrical inspection</option>
+              <option value="Water heater service">Water heater service</option>
+            </select>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="job-date">Date</label>
+              <input type="date" id="job-date" required>
+            </div>
+            <div class="field">
+              <label for="job-time">Start time</label>
+              <input type="time" id="job-time" value="14:00" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="duration">Duration (minutes)</label>
+            <select id="duration">
+              <option value="60">60 min</option>
+              <option value="90" selected>90 min</option>
+              <option value="120">120 min</option>
+            </select>
+          </div>
+          <button type="submit" class="btn" id="propose-btn">Propose &amp; send SMS</button>
+        </form>
+        <div class="result-banner" id="result-banner"></div>
+        <div class="sms-mock" id="sms-mock">
+          <div class="sms-bubble" id="sms-text"></div>
+          <div class="sms-actions">
+            <button type="button" class="yes" id="sms-yes">YES — confirm</button>
+            <button type="button" class="no" id="sms-no">NO — decline</button>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+        <div class="panel timeline-wrap">
+          <div class="timeline-header">
+            <h3 id="timeline-title">Technician schedule</h3>
+            <span id="shift-label"></span>
+          </div>
+          <div class="timeline" id="timeline">
+            <div class="timeline-axis" id="timeline-axis"></div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-bottom:18px">
+          <h2>Orchestration pipeline</h2>
+          <div class="pipeline" id="pipeline">
+            <div class="step pending" data-step="hubspot">
+              <div class="icon">1</div>
+              <div><h4>Load customer from HubSpot</h4><p>Sync contact address, phone, and CRM ID into local cache.</p></div>
+            </div>
+            <div class="step pending" data-step="maps">
+              <div class="icon">2</div>
+              <div><h4>Calculate drive time</h4><p>Google Maps Distance Matrix with traffic-aware departure time + 5 min buffer.</p></div>
+            </div>
+            <div class="step pending" data-step="conflict">
+              <div class="icon">3</div>
+              <div><h4>Run conflict engine</h4><p>Shift hours, job overlaps, and drive-block collisions — all must pass.</p></div>
+            </div>
+            <div class="step pending" data-step="sms">
+              <div class="icon">4</div>
+              <div><h4>Write + SMS employee</h4><p>Atomic DB transaction. SMS expires in 30 min if no reply.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Audit log</h2>
+          <div class="audit" id="audit-log"></div>
+        </div>
+      </main>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><b>0</b><span>Double-bookings</span></div>
+      <div class="kpi"><b>28m</b><span>Avg SMS confirm</span></div>
+      <div class="kpi"><b>94%</b><span>First-slot accept</span></div>
+      <div class="kpi"><b>100%</b><span>Events logged</span></div>
+    </div>
+  </section>
 
   <div class="cta-box">
     <p>Need real HubSpot sync, live drive times, and Twilio SMS for your field team?</p>
@@ -282,22 +438,18 @@ input:focus,select:focus{border-color:var(--accent)}
 
 <script>
 (function () {
-  const TZ = 'America/Denver';
-  const SHIFT_START = 8;
-  const SHIFT_END = 17;
-  const TIMELINE_HOURS = SHIFT_END - SHIFT_START;
-
   const CUSTOMERS = [
-    { hubspotId: 'hs-1042', name: 'Amy Torres', address: '1420 Oak St, Denver, CO' },
-    { hubspotId: 'hs-2088', name: 'James Whitfield', address: '8801 W Colfax Ave, Lakewood, CO' },
-    { hubspotId: 'hs-3115', name: 'Linda Park', address: '3150 S University Blvd, Denver, CO' },
-    { hubspotId: 'hs-4201', name: 'Roberto Vega', address: '5990 E Hampden Ave, Denver, CO' },
+    { hubspotId: 'hs-1042', name: 'Amy Torres', address: '1420 Oak St, Denver, CO', phone: '(303) 555-0141' },
+    { hubspotId: 'hs-2088', name: 'James Whitfield', address: '8801 W Colfax Ave, Lakewood, CO', phone: '(303) 555-0199' },
+    { hubspotId: 'hs-3115', name: 'Linda Park', address: '3150 S University Blvd, Denver, CO', phone: '(303) 555-0177' },
+    { hubspotId: 'hs-4201', name: 'Roberto Vega', address: '5990 E Hampden Ave, Denver, CO', phone: '(303) 555-0188' },
   ];
 
   const EMPLOYEES = [
     {
       id: 1, name: 'Marcus Chen', phone: '+1 303-555-0142',
       shiftStart: '08:00', shiftEnd: '17:00', specialty: 'HVAC',
+      services: ['HVAC repair', 'Water heater service'],
       homeBase: '2200 Blake St, Denver, CO',
       appointments: [
         {
@@ -310,6 +462,7 @@ input:focus,select:focus{border-color:var(--accent)}
     {
       id: 2, name: 'Priya Sharma', phone: '+1 303-555-0198',
       shiftStart: '08:00', shiftEnd: '17:00', specialty: 'Plumbing',
+      services: ['Plumbing install', 'Water heater service'],
       homeBase: '4500 E Evans Ave, Denver, CO',
       appointments: [
         {
@@ -322,6 +475,7 @@ input:focus,select:focus{border-color:var(--accent)}
     {
       id: 3, name: 'Danny Ruiz', phone: '+1 303-555-0167',
       shiftStart: '07:00', shiftEnd: '16:00', specialty: 'Electrical',
+      services: ['Electrical inspection'],
       homeBase: '1600 Glenarm Pl, Denver, CO',
       appointments: [],
     },
@@ -334,8 +488,14 @@ input:focus,select:focus{border-color:var(--accent)}
     '1600 Glenarm Pl, Denver, CO': { '1420 Oak St, Denver, CO': 17, '8801 W Colfax Ave, Lakewood, CO': 22, '3150 S University Blvd, Denver, CO': 16, '5990 E Hampden Ave, Denver, CO': 20, '2100 S Broadway, Denver, CO': 14 },
   };
 
+  const SLOT_TIMES = [
+    [10, 0], [11, 30], [13, 0], [14, 30], [16, 0],
+  ];
+
+  let activeView = 'customer';
   let selectedCustomer = CUSTOMERS[1];
   let selectedEmployeeId = 1;
+  let selectedSlot = null;
   let pendingProposal = null;
   let auditEvents = [
     { type: 'hubspot', label: 'HUBSPOT_SYNC', detail: 'Cached 4 contacts from HubSpot CRM', time: minsAgo(42) },
@@ -355,6 +515,7 @@ input:focus,select:focus{border-color:var(--accent)}
   const resultBanner = $('#result-banner');
   const apiBaseInput = $('#api-base');
   const apiMode = $('#api-mode');
+  const slotList = $('#slot-list');
 
   function minsAgo(m) {
     const d = new Date();
@@ -411,6 +572,19 @@ input:focus,select:focus{border-color:var(--accent)}
     return Math.max(1.5, (durationMins / window) * 100);
   }
 
+  function setView(view) {
+    activeView = view;
+    document.querySelectorAll('.view-tab').forEach((tab) => {
+      const on = tab.dataset.view === view;
+      tab.classList.toggle('active', on);
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    document.querySelectorAll('.view').forEach((panel) => {
+      panel.classList.toggle('active', panel.id === 'view-' + view);
+    });
+    if (view === 'backend') renderTimeline();
+  }
+
   function renderCustomers() {
     customerList.innerHTML = CUSTOMERS.map((c) =>
       '<div class="customer-pick' + (c.hubspotId === selectedCustomer.hubspotId ? ' active' : '') + '" data-id="' + c.hubspotId + '">' +
@@ -433,6 +607,7 @@ input:focus,select:focus{border-color:var(--accent)}
 
   function renderTimeline(preview) {
     const emp = getEmployee(selectedEmployeeId);
+    if (!emp) return;
     const shiftStartMins = parseShift(emp.shiftStart);
     const shiftEndMins = parseShift(emp.shiftEnd);
     const startH = Math.floor(shiftStartMins / 60);
@@ -495,6 +670,7 @@ input:focus,select:focus{border-color:var(--accent)}
         : ev.type === 'hubspot' ? 'hubspot'
         : ev.type === 'maps' ? 'maps'
         : ev.type === 'declined' ? 'declined'
+        : ev.type === 'lead' ? 'lead'
         : 'confirmed';
       return '<div class="audit-item">' +
         '<span class="badge ' + badgeClass + '">' + ev.label + '</span>' +
@@ -505,7 +681,7 @@ input:focus,select:focus{border-color:var(--accent)}
 
   function setStep(name, state) {
     const el = pipeline.querySelector('[data-step="' + name + '"]');
-    el.className = 'step ' + state;
+    if (el) el.className = 'step ' + state;
   }
 
   function resetPipeline() {
@@ -533,31 +709,6 @@ input:focus,select:focus{border-color:var(--accent)}
     apiMode.className = 'api-mode' + (apiBase ? ' live' : '');
   }
 
-  async function submitLiveProposal(data, jobStartIso, origin) {
-    const apiBase = getApiBase();
-    if (!apiBase) return null;
-
-    const response = await fetch(apiBase + '/api/appointments/propose', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        employeeId: data.employeeId,
-        hubspotId: data.customer.hubspotId,
-        jobStart: jobStartIso,
-        durationMins: data.duration,
-        jobType: data.jobType,
-        createdBy: 'portfolio-demo',
-        originAddress: origin,
-      }),
-    });
-
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok || payload.ok === false) {
-      throw new Error(payload.error || 'Live API rejected the proposal.');
-    }
-    return payload;
-  }
-
   function checkConflicts(employee, jobStartMins, jobEndMins, driveStartMins) {
     const shiftStartMins = parseShift(employee.shiftStart);
     const shiftEndMins = parseShift(employee.shiftEnd);
@@ -575,16 +726,12 @@ input:focus,select:focus{border-color:var(--accent)}
       const aJobStart = appt.jobStart[0] * 60 + appt.jobStart[1];
       const aJobEnd = aJobStart + appt.duration;
       const aDriveStart = aJobStart - appt.driveMins - 5;
-      const aDriveEnd = aJobStart;
-      const windowStart = driveStartMins;
-      const windowEnd = jobEndMins;
-
       const overlaps = (s1, e1, s2, e2) => s1 < e2 && e1 > s2;
 
-      if (overlaps(windowStart, windowEnd, aJobStart, aJobEnd)) {
+      if (overlaps(driveStartMins, jobEndMins, aJobStart, aJobEnd)) {
         errors.push('Overlaps ' + appt.status + ' job at ' + appt.customer + ' (' + fmtTime(appt.jobStart[0], appt.jobStart[1]) + ').');
       }
-      if (overlaps(windowStart, windowEnd, aDriveStart, aDriveEnd)) {
+      if (overlaps(driveStartMins, jobEndMins, aDriveStart, aJobStart)) {
         errors.push('Overlaps drive block for ' + appt.customer + '.');
       }
     }
@@ -592,12 +739,92 @@ input:focus,select:focus{border-color:var(--accent)}
     return errors;
   }
 
-  async function runProposal(data) {
+  function findAvailableSlots(service, address, duration) {
+    const slots = [];
+    for (const employee of EMPLOYEES) {
+      if (!employee.services.includes(service)) continue;
+      for (const [h, m] of SLOT_TIMES) {
+        const jobStartMins = h * 60 + m;
+        const jobEndMins = jobStartMins + duration;
+        const origin = getOriginBefore(employee, jobStartMins);
+        const driveMins = lookupDrive(origin, address) + 5;
+        const driveStartMins = jobStartMins - driveMins;
+        const errors = checkConflicts(employee, jobStartMins, jobEndMins, driveStartMins);
+        if (!errors.length) {
+          slots.push({ employeeId: employee.id, employeeName: employee.name, h, m, driveMins });
+        }
+      }
+    }
+    return slots.sort((a, b) => (a.h * 60 + a.m) - (b.h * 60 + b.m));
+  }
+
+  function renderSlots() {
+    const address = $('#cust-address').value.trim();
+    const service = $('#cust-service').value;
+    const duration = 90;
+    selectedSlot = null;
+    $('#customer-book-btn').disabled = true;
+
+    if (!address) {
+      slotList.innerHTML = '<div class="slot empty">Enter your address to see open slots.</div>';
+      return;
+    }
+
+    const slots = findAvailableSlots(service, address, duration);
+    if (!slots.length) {
+      slotList.innerHTML = '<div class="slot empty">No open windows for this service today. Try another date or service.</div>';
+      return;
+    }
+
+    slotList.innerHTML = slots.slice(0, 6).map((slot, i) =>
+      '<button type="button" class="slot" data-index="' + i + '">' +
+      '<b>' + fmtTime(slot.h, slot.m) + ' – ' + fmtTime(Math.floor((slot.h * 60 + slot.m + duration) / 60), (slot.h * 60 + slot.m + duration) % 60) + '</b>' +
+      '<small>Technician assigned after booking</small></button>'
+    ).join('');
+
+    slotList._slots = slots.slice(0, 6);
+    slotList.querySelectorAll('.slot').forEach((el) => {
+      el.addEventListener('click', () => {
+        slotList.querySelectorAll('.slot').forEach((s) => s.classList.remove('active'));
+        el.classList.add('active');
+        selectedSlot = slotList._slots[parseInt(el.dataset.index, 10)];
+        $('#customer-book-btn').disabled = false;
+      });
+    });
+  }
+
+  async function submitLiveProposal(data, jobStartIso, origin) {
+    const apiBase = getApiBase();
+    if (!apiBase) return null;
+
+    const response = await fetch(apiBase + '/api/appointments/propose', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        employeeId: data.employeeId,
+        hubspotId: data.customer.hubspotId,
+        jobStart: jobStartIso,
+        durationMins: data.duration,
+        jobType: data.jobType,
+        createdBy: data.createdBy || 'portfolio-demo',
+        originAddress: origin,
+      }),
+    });
+
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || payload.ok === false) {
+      throw new Error(payload.error || 'Live API rejected the proposal.');
+    }
+    return payload;
+  }
+
+  async function runProposal(data, options) {
+    const opts = options || {};
     resetPipeline();
     resultBanner.className = 'result-banner';
     smsMock.classList.remove('visible');
     pendingProposal = null;
-    $('#propose-btn').disabled = true;
+    if (!opts.silent) $('#propose-btn').disabled = true;
 
     const employee = getEmployee(data.employeeId);
     const [h, m] = data.time.split(':').map(Number);
@@ -605,13 +832,19 @@ input:focus,select:focus{border-color:var(--accent)}
     const jobEndMins = jobStartMins + data.duration;
     const jobStartIso = new Date(data.date + 'T' + data.time + ':00').toISOString();
 
+    selectedEmployeeId = data.employeeId;
+    if (employeeSelect) employeeSelect.value = String(data.employeeId);
+    if ($('#job-type')) $('#job-type').value = data.jobType;
+    if ($('#job-date')) $('#job-date').value = data.date;
+    if ($('#job-time')) $('#job-time').value = data.time;
+
     setStep('hubspot', 'running');
-    await sleep(500);
+    await sleep(opts.fast ? 200 : 500);
     setStep('hubspot', 'ok');
     pushAudit('hubspot', 'HUBSPOT_SYNC', 'Loaded ' + data.customer.name + ' (' + data.customer.hubspotId + ')');
 
     setStep('maps', 'running');
-    await sleep(600);
+    await sleep(opts.fast ? 250 : 600);
     const origin = getOriginBefore(employee, jobStartMins);
     const driveMins = lookupDrive(origin, data.customer.address);
     const driveBuffered = driveMins + 5;
@@ -620,7 +853,7 @@ input:focus,select:focus{border-color:var(--accent)}
     pushAudit('maps', 'MAPS_CALC', driveBuffered + ' min drive from ' + origin.split(',')[0] + ' (traffic-aware)');
 
     setStep('conflict', 'running');
-    await sleep(500);
+    await sleep(opts.fast ? 200 : 500);
     const errors = checkConflicts(employee, jobStartMins, jobEndMins, driveStartMins);
 
     renderTimeline({
@@ -631,27 +864,31 @@ input:focus,select:focus{border-color:var(--accent)}
     if (errors.length) {
       setStep('conflict', 'fail');
       pushAudit('conflict', 'CONFLICT_BLOCKED', errors[0]);
-      resultBanner.textContent = errors.join(' ');
-      resultBanner.className = 'result-banner visible err';
-      $('#propose-btn').disabled = false;
-      return;
+      if (!opts.silent) {
+        resultBanner.textContent = errors.join(' ');
+        resultBanner.className = 'result-banner visible err';
+        $('#propose-btn').disabled = false;
+      }
+      return { ok: false, errors };
     }
 
     setStep('conflict', 'ok');
-    await sleep(400);
+    await sleep(opts.fast ? 150 : 400);
 
     setStep('sms', 'running');
-    await sleep(700);
+    await sleep(opts.fast ? 250 : 700);
     let liveResult = null;
     try {
       liveResult = await submitLiveProposal(data, jobStartIso, origin);
     } catch (err) {
       setStep('sms', 'fail');
       pushAudit('conflict', 'API_ERROR', err.message);
-      resultBanner.textContent = 'Live API call failed: ' + err.message;
-      resultBanner.className = 'result-banner visible err';
-      $('#propose-btn').disabled = false;
-      return;
+      if (!opts.silent) {
+        resultBanner.textContent = 'Live API call failed: ' + err.message;
+        resultBanner.className = 'result-banner visible err';
+        $('#propose-btn').disabled = false;
+      }
+      return { ok: false, errors: [err.message] };
     }
     setStep('sms', 'ok');
 
@@ -667,6 +904,7 @@ input:focus,select:focus{border-color:var(--accent)}
       driveMins: confirmedDriveMins,
       status: 'proposed',
       address: data.customer.address,
+      fromCustomer: !!opts.fromCustomer,
     };
 
     pushAudit('sms', 'PROPOSED', 'Appt #' + apptId + ' proposed' + (liveResult ? ' via live API' : '') + ' — SMS sent to ' + employee.name);
@@ -679,10 +917,29 @@ input:focus,select:focus{border-color:var(--accent)}
       '. Drive: ' + confirmedDriveMins + ' min. Reply YES to confirm or NO to decline.';
 
     $('#sms-text').textContent = smsText;
-    smsMock.classList.add('visible');
-    resultBanner.textContent = 'Proposal #' + apptId + ' created. Waiting for employee SMS reply…';
-    resultBanner.className = 'result-banner visible ok';
-    $('#propose-btn').disabled = false;
+    if (!opts.fromCustomer) smsMock.classList.add('visible');
+    if (!opts.silent) {
+      resultBanner.textContent = 'Proposal #' + apptId + ' created. Waiting for employee SMS reply…';
+      resultBanner.className = 'result-banner visible ok';
+      $('#propose-btn').disabled = false;
+    }
+
+    if (opts.fromCustomer) {
+      employee.appointments.push({
+        id: apptId,
+        status: 'confirmed',
+        customer: data.customer.name,
+        address: data.customer.address,
+        jobType: data.jobType,
+        jobStart: [h, m],
+        duration: data.duration,
+        driveMins: confirmedDriveMins,
+      });
+      pushAudit('confirmed', 'CONFIRMED', employee.name + ' auto-assigned for ' + data.customer.name);
+      pendingProposal = null;
+    }
+
+    return { ok: true, apptId, employee };
   }
 
   function resolveSms(reply) {
@@ -691,7 +948,6 @@ input:focus,select:focus{border-color:var(--accent)}
     smsMock.classList.remove('visible');
 
     if (reply === 'YES') {
-      p.status = 'confirmed';
       p.employee.appointments.push({
         id: p.id,
         status: 'confirmed',
@@ -715,17 +971,94 @@ input:focus,select:focus{border-color:var(--accent)}
     renderTimeline();
   }
 
+  function upsertLeadCustomer(name, address, phone) {
+    let customer = CUSTOMERS.find((c) => c.name.toLowerCase() === name.toLowerCase());
+    if (!customer) {
+      customer = {
+        hubspotId: 'hs-lead-' + (CUSTOMERS.length + 1),
+        name,
+        address,
+        phone,
+      };
+      CUSTOMERS.push(customer);
+      renderCustomers();
+    } else {
+      customer.address = address;
+      customer.phone = phone;
+    }
+    selectedCustomer = customer;
+    renderCustomers();
+    return customer;
+  }
+
+  async function handleCustomerBooking(e) {
+    e.preventDefault();
+    if (!selectedSlot) return;
+
+    const name = $('#cust-name').value.trim();
+    const address = $('#cust-address').value.trim();
+    const phone = $('#cust-phone').value.trim();
+    const service = $('#cust-service').value;
+    const date = $('#cust-date').value;
+    const time = String(selectedSlot.h).padStart(2, '0') + ':' + String(selectedSlot.m).padStart(2, '0');
+
+    $('#customer-book-btn').disabled = true;
+    pushAudit('lead', 'LEAD_CAPTURED', name + ' requested ' + service + ' at ' + address.split(',')[0]);
+
+    const customer = upsertLeadCustomer(name, address, phone);
+    const result = await runProposal({
+      employeeId: selectedSlot.employeeId,
+      customer,
+      jobType: service,
+      date,
+      time,
+      duration: 90,
+      createdBy: 'customer-portal',
+    }, { fromCustomer: true, fast: true, silent: true });
+
+    if (!result.ok) {
+      $('#customer-book-btn').disabled = false;
+      alert('That slot was just taken. Please choose another time.');
+      renderSlots();
+      return;
+    }
+
+    $('#customer-form-card').style.display = 'none';
+    $('#customer-confirm').classList.add('visible');
+    $('#confirm-id').textContent = '#FS-' + result.apptId;
+    $('#confirm-copy').textContent =
+      fmtTime(selectedSlot.h, selectedSlot.m) + ' window confirmed. ' +
+      result.employee.name + ' is assigned — you will get a text reminder 1 hour before arrival.';
+  }
+
+  function resetCustomerForm() {
+    $('#customer-form-card').style.display = 'block';
+    $('#customer-confirm').classList.remove('visible');
+    $('#customer-form').reset();
+    $('#cust-date').value = new Date().toISOString().slice(0, 10);
+    selectedSlot = null;
+    renderSlots();
+  }
+
   const today = new Date();
   $('#job-date').value = today.toISOString().slice(0, 10);
+  $('#cust-date').value = today.toISOString().slice(0, 10);
 
   const apiParam = new URLSearchParams(window.location.search).get('api');
   if (apiParam) apiBaseInput.value = apiParam;
-  updateApiMode();
+  const viewParam = new URLSearchParams(window.location.search).get('view');
+  if (viewParam === 'backend') setView('backend');
 
+  updateApiMode();
   renderCustomers();
   renderEmployees();
   renderTimeline();
   renderAudit();
+  renderSlots();
+
+  document.querySelectorAll('.view-tab').forEach((tab) => {
+    tab.addEventListener('click', () => setView(tab.dataset.view));
+  });
 
   employeeSelect.addEventListener('change', () => {
     selectedEmployeeId = parseInt(employeeSelect.value, 10);
@@ -741,8 +1074,16 @@ input:focus,select:focus{border-color:var(--accent)}
       date: $('#job-date').value,
       time: $('#job-time').value,
       duration: parseInt($('#duration').value, 10),
+      createdBy: 'dispatch-manager',
     });
   });
+
+  $('#customer-form').addEventListener('submit', handleCustomerBooking);
+  $('#cust-address').addEventListener('input', renderSlots);
+  $('#cust-service').addEventListener('change', renderSlots);
+  $('#cust-date').addEventListener('change', renderSlots);
+  $('#see-backend-btn').addEventListener('click', () => setView('backend'));
+  $('#book-another-btn').addEventListener('click', resetCustomerForm);
 
   apiBaseInput.addEventListener('input', updateApiMode);
   $('#sms-yes').addEventListener('click', () => resolveSms('YES'));
