@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ROI Attribution Dashboard — Demo</title>
+<style>
+:root {
+  --bg:#0a0a0a;--panel:#141414;--panel-2:#111113;--border:#262626;
+  --ink:#f5f5f5;--muted:#a3a3a3;--accent:#10b981;--accent-soft:rgba(16,185,129,.12);
+  --warn:#f59e0b;--blue:#38bdf8;--blue-soft:rgba(56,189,248,.12);
+  --red:#f87171;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding:28px 20px 56px}
+.wrap{max-width:1100px;margin:0 auto}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.top h1{font-size:24px;letter-spacing:-.02em}
+.top p{color:var(--muted);font-size:14px;margin-top:6px;max-width:520px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.controls select,.controls button{
+  background:var(--panel);border:1px solid var(--border);color:var(--muted);
+  padding:8px 14px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;
+}
+.controls select:hover,.controls button:hover,.controls button.active{border-color:var(--accent);color:var(--accent)}
+.sources{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.source{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);background:var(--panel);border:1px solid var(--border);padding:6px 12px;border-radius:999px}
+.source .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card .label{font-size:12px;color:var(--muted)}
+.card .value{font-size:26px;font-weight:800;margin:6px 0 2px}
+.card .sub{font-size:12px;font-weight:600}
+.sub.up{color:var(--accent)}.sub.down{color:var(--red)}
+.grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px}
+.panel h2{font-size:14px;margin-bottom:14px}
+.chart{display:flex;align-items:flex-end;gap:10px;height:200px;padding-top:8px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+.bar{width:100%;border-radius:6px 6px 0 0;transition:height .5s ease;position:relative;cursor:pointer}
+.bar.spend{background:linear-gradient(180deg,#525252,#404040)}
+.bar.rev{background:linear-gradient(180deg,#34d399,var(--accent))}
+.bar:hover::after{content:attr(data-v);position:absolute;top:-24px;left:50%;transform:translateX(-50%);background:#000;color:var(--accent);font-size:10px;padding:3px 7px;border-radius:4px;white-space:nowrap;z-index:2}
+.bar-col span{font-size:10px;color:var(--muted);text-align:center;line-height:1.2}
+.legend{display:flex;gap:14px;margin-bottom:12px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:10px 8px;font-size:13px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.roas{display:inline-block;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:700}
+.roas.high{background:var(--accent-soft);color:var(--accent)}
+.roas.mid{background:var(--blue-soft);color:var(--blue)}
+.roas.low{background:rgba(248,113,113,.12);color:var(--red)}
+.funnel{display:flex;flex-direction:column;gap:0}
+.funnel-row{display:grid;grid-template-columns:100px 1fr 56px;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.funnel-row:last-child{border-bottom:0}
+.funnel-row .name{font-size:12px;color:var(--muted)}
+.funnel-bar{height:8px;background:#0a0a0a;border-radius:999px;overflow:hidden}
+.funnel-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#34d399);border-radius:999px;transition:width .5s}
+.funnel-row .pct{font-size:12px;text-align:right;color:var(--ink);font-weight:600}
+.disclaimer{margin-top:20px;padding:14px 16px;border:1px dashed var(--border);border-radius:12px;font-size:12px;color:var(--muted);background:var(--panel-2)}
+.disclaimer strong{color:var(--warn)}
+@media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>ROI Attribution Dashboard</h1>
+      <p>Channel-level spend, leads, and CRM revenue in one view — powered by GA4, HubSpot, and ad platforms.</p>
+    </div>
+    <div class="controls">
+      <select id="range">
+        <option value="30">Last 30 days</option>
+        <option value="90">Last 90 days</option>
+      </select>
+      <button type="button" class="active" data-model="last">Last click</button>
+      <button type="button" data-model="first">First touch</button>
+    </div>
+  </div>
+
+  <div class="sources">
+    <span class="source"><span class="dot"></span> Google Analytics 4</span>
+    <span class="source"><span class="dot" style="background:var(--blue)"></span> HubSpot CRM</span>
+    <span class="source"><span class="dot" style="background:var(--warn)"></span> Google Ads</span>
+    <span class="source"><span class="dot" style="background:#a78bfa"></span> Meta Ads</span>
+  </div>
+
+  <div class="cards" id="summary-cards"></div>
+
+  <div class="grid">
+    <div class="panel">
+      <h2>Spend vs attributed revenue by channel</h2>
+      <div class="legend">
+        <span><i style="background:#525252"></i> Ad spend</span>
+        <span><i style="background:var(--accent)"></i> CRM revenue</span>
+      </div>
+      <div class="chart" id="channel-chart"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Conversion funnel (all channels)</h2>
+      <div class="funnel" id="funnel"></div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:16px">
+    <h2>Channel performance</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Channel</th>
+          <th class="num">Spend</th>
+          <th class="num">Sessions</th>
+          <th class="num">Leads</th>
+          <th class="num">Revenue</th>
+          <th class="num">ROAS</th>
+          <th class="num">CPL</th>
+        </tr>
+      </thead>
+      <tbody id="channel-table"></tbody>
+    </table>
+  </div>
+
+  <div class="disclaimer">
+    <strong>Simulated demo data.</strong> Production builds connect live GA4, HubSpot (or your CRM), and ad platform APIs with UTM + campaign mapping. Numbers shown here are illustrative for the portfolio showcase.
+  </div>
+</div>
+
+<script>
+(function () {
+  const DATA = {
+    last: {
+      summary: { spend: 8420, revenue: 38400, roas: 4.56, leads: 218, cpl: 38.62 },
+      channels: [
+        { name: 'Organic SEO', spend: 0, sessions: 2140, leads: 98, revenue: 18200 },
+        { name: 'Google Ads', spend: 4200, sessions: 680, leads: 62, revenue: 12400 },
+        { name: 'Meta Ads', spend: 3100, sessions: 420, leads: 34, revenue: 4800 },
+        { name: 'Email', spend: 320, sessions: 890, leads: 18, revenue: 2200 },
+        { name: 'Direct', spend: 0, sessions: 290, leads: 6, revenue: 800 },
+      ],
+      funnel: [
+        { stage: 'Sessions', pct: 100, val: 3420 },
+        { stage: 'Leads', pct: 6.4, val: 218 },
+        { stage: 'Opportunities', pct: 2.1, val: 72 },
+        { stage: 'Closed won', pct: 0.9, val: 31 },
+      ],
+    },
+    first: {
+      summary: { spend: 8420, revenue: 41200, roas: 4.89, leads: 218, cpl: 38.62 },
+      channels: [
+        { name: 'Organic SEO', spend: 0, sessions: 2140, leads: 112, revenue: 20800 },
+        { name: 'Google Ads', spend: 4200, sessions: 680, leads: 48, revenue: 9800 },
+        { name: 'Meta Ads', spend: 3100, sessions: 420, leads: 38, revenue: 6200 },
+        { name: 'Email', spend: 320, sessions: 890, leads: 14, revenue: 3400 },
+        { name: 'Direct', spend: 0, sessions: 290, leads: 6, revenue: 1000 },
+      ],
+      funnel: [
+        { stage: 'Sessions', pct: 100, val: 3420 },
+        { stage: 'Leads', pct: 6.4, val: 218 },
+        { stage: 'Opportunities', pct: 2.3, val: 78 },
+        { stage: 'Closed won', pct: 1.0, val: 34 },
+      ],
+    },
+  };
+
+  let model = 'last';
+
+  function fmt(n, prefix) {
+    if (n >= 1000) return (prefix || '') + (n / 1000).toFixed(1) + 'k';
+    return (prefix || '') + n.toLocaleString();
+  }
+
+  function roasClass(r) {
+    if (r >= 3) return 'high';
+    if (r >= 1.5) return 'mid';
+    return 'low';
+  }
+
+  function render() {
+    const d = DATA[model];
+    const maxRev = Math.max(...d.channels.map((c) => c.revenue), 1);
+    const maxSpend = Math.max(...d.channels.map((c) => c.spend), 1);
+
+    document.getElementById('summary-cards').innerHTML =
+      '<div class="card"><div class="label">Total ad spend</div><div class="value">' + fmt(d.summary.spend, '$') + '</div><div class="sub">Across Google + Meta</div></div>' +
+      '<div class="card"><div class="label">Attributed revenue</div><div class="value">' + fmt(d.summary.revenue, '$') + '</div><div class="sub up">CRM closed-won</div></div>' +
+      '<div class="card"><div class="label">Blended ROAS</div><div class="value">' + d.summary.roas.toFixed(2) + 'x</div><div class="sub up">Spend → revenue</div></div>' +
+      '<div class="card"><div class="label">Leads captured</div><div class="value">' + d.summary.leads + '</div><div class="sub">GA4 + form events</div></div>' +
+      '<div class="card"><div class="label">Cost per lead</div><div class="value">$' + d.summary.cpl.toFixed(0) + '</div><div class="sub">Paid channels only</div></div>';
+
+    document.getElementById('channel-chart').innerHTML = d.channels.map((c) => {
+      const spendH = c.spend ? Math.max(12, (c.spend / maxSpend) * 160) : 0;
+      const revH = Math.max(12, (c.revenue / maxRev) * 160);
+      const short = c.name.replace('Organic ', '').replace(' Ads', '');
+      return '<div class="bar-col">' +
+        (c.spend ? '<div class="bar spend" style="height:' + spendH + 'px" data-v="$' + c.spend.toLocaleString() + '"></div>' : '<div style="height:4px"></div>') +
+        '<div class="bar rev" style="height:' + revH + 'px" data-v="$' + c.revenue.toLocaleString() + '"></div>' +
+        '<span>' + short + '</span></div>';
+    }).join('');
+
+    document.getElementById('funnel').innerHTML = d.funnel.map((f) =>
+      '<div class="funnel-row"><span class="name">' + f.stage + '</span>' +
+      '<div class="funnel-bar"><i style="width:' + Math.min(100, f.pct) + '%"></i></div>' +
+      '<span class="pct">' + f.val.toLocaleString() + '</span></div>'
+    ).join('');
+
+    document.getElementById('channel-table').innerHTML = d.channels.map((c) => {
+      const roas = c.spend ? (c.revenue / c.spend) : null;
+      const cpl = c.spend && c.leads ? (c.spend / c.leads) : null;
+      return '<tr><td>' + c.name + '</td>' +
+        '<td class="num">' + (c.spend ? '$' + c.spend.toLocaleString() : '—') + '</td>' +
+        '<td class="num">' + c.sessions.toLocaleString() + '</td>' +
+        '<td class="num">' + c.leads + '</td>' +
+        '<td class="num">$' + c.revenue.toLocaleString() + '</td>' +
+        '<td class="num">' + (roas ? '<span class="roas ' + roasClass(roas) + '">' + roas.toFixed(2) + 'x</span>' : '<span class="roas high">∞</span>') + '</td>' +
+        '<td class="num">' + (cpl ? '$' + cpl.toFixed(0) : '—') + '</td></tr>';
+    }).join('');
+  }
+
+  document.querySelectorAll('.controls button[data-model]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.controls button[data-model]').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      model = btn.dataset.model;
+      render();
+    });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

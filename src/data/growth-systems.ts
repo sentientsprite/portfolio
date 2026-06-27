@@ -30,9 +30,9 @@ export const growthSystems: GrowthSystem[] = [
     name: 'Lead-to-Revenue Growth System',
     tagline: 'From click to customer — tracked, automated, and measurable.',
     pitch:
-      'A full-stack growth stack for business owners who need more than a website. Capture intent on a conversion landing page, score and route leads automatically, book appointments without phone tag, nurture prospects who are not ready yet, and audit new opportunities with data — all connected through CRM sync and attribution tracking.',
+      'A full-stack growth stack for business owners who need more than a website. Capture intent on a conversion landing page, score and route leads automatically, book appointments without phone tag, nurture prospects who are not ready yet, audit new opportunities with data, and measure ROI across every channel in one attribution dashboard — all connected through CRM sync and analytics.',
     salesPitch:
-      'More than a website — a system that turns clicks into booked revenue. Capture leads, book appointments, and follow up automatically, all tracked end to end.',
+      'More than a website — a system that turns clicks into booked revenue, then proves which channels actually pay off with GA4, CRM, and ad spend in one ROI view.',
     demoPath: 'demos/growth-system/index.html',
     modules: [
       {
@@ -58,6 +58,12 @@ export const growthSystems: GrowthSystem[] = [
         role: 'prospect',
         stageLabel: 'Prioritize prospects',
         ownerBenefit: 'Lead audits and scoring that tell sales who to call first.',
+      },
+      {
+        repoName: 'roi-attribution-dashboard',
+        role: 'measure',
+        stageLabel: 'Measure ROI',
+        ownerBenefit: 'One dashboard tying Google Analytics, CRM revenue, and ad spend to channel-level ROI.',
       },
     ],
     outcomes: [

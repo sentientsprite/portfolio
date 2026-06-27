@@ -40,10 +40,10 @@ export const projectOverrides: ProjectOverride[] = [
     demoPath: 'demos/growth-system/index.html',
     sourceUrl: '',
     description:
-      'Full-stack growth infrastructure: landing page capture, lead scoring, scheduler booking, nurture automation, and prospect audits — all tracked from click to revenue.',
+      'Full-stack growth infrastructure: landing page capture, lead scoring, scheduler booking, nurture automation, prospect audits, and ROI attribution — all tracked from click to revenue.',
     details:
-      'This is the integrated story behind the individual demos. A business owner gets one connected system instead of disconnected tools: traffic lands on a conversion page, forms sync to the CRM with source attribution, high-intent leads book instantly through the scheduler, lower-intent leads enter automated nurture flows, and sales gets scored prospect audits to prioritize outreach. Every step is logged and measurable. Open the interactive showcase to walk the customer journey, owner dashboard, and tech stack in one visual pitch.',
-    techStack: ['Landing Pages', 'HubSpot', 'Scheduling', 'Email Automation', 'Lead Scoring'],
+      'This is the integrated story behind the individual demos. A business owner gets one connected system instead of disconnected tools: traffic lands on a conversion page, forms sync to the CRM with source attribution, high-intent leads book instantly through the scheduler, lower-intent leads enter automated nurture flows, sales gets scored prospect audits to prioritize outreach, and the ROI Attribution Dashboard closes the loop — tying Google Analytics, CRM revenue, and ad spend to channel-level ROI. Open the interactive showcase to walk the full customer journey, owner view, and tech stack.',
+    techStack: ['Landing Pages', 'HubSpot', 'Scheduling', 'Email Automation', 'ROI Attribution'],
   },
   {
     repoName: 'landing-page-template',
@@ -99,6 +99,20 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'Spryte helps sales and marketing prioritize who to pursue. It evaluates prospect websites, surfaces gaps, and outputs a scored opportunity with outreach angles. In the growth system, it complements inbound capture by giving outbound teams the same data-driven rigor.',
     techStack: ['Next.js', 'AI Audit', 'Lead Scoring', 'SEO', 'Zod'],
+  },
+  {
+    repoName: 'roi-attribution-dashboard',
+    displayName: 'ROI Attribution Dashboard',
+    category: 'product',
+    growthSystemId: 'lead-to-revenue',
+    growthSystemStage: 'Measure ROI',
+    demoPath: 'demos/roi-attribution-dashboard/index.html',
+    sourceUrl: '',
+    description:
+      'Channel-level ROI dashboard that unifies Google Analytics, CRM revenue, and ad spend so owners see what actually drives profit.',
+    details:
+      'The measurement layer of the Lead-to-Revenue stack. This dashboard pulls session and conversion data from Google Analytics, closed-won revenue from the CRM, and spend from Google Ads and Meta into one view. Owners compare ROAS, cost per lead, and attributed revenue by channel — organic, paid search, paid social, email, and direct — without juggling five separate tools. Simulated demo data; production builds wire live GA4, HubSpot, and ad platform APIs.',
+    techStack: ['Google Analytics', 'HubSpot CRM', 'Google Ads', 'Meta Ads', 'Attribution'],
   },
   {
     repoName: 'feedback-board',
@@ -174,7 +188,7 @@ export const projectOverrides: ProjectOverride[] = [
     description:
       'A clean reporting dashboard surfacing organic traffic, rankings, and conversion trends.',
     details:
-      'A client-facing SEO dashboard that turns raw analytics into a story: organic growth, keyword movement, top pages, and conversion impact. Pairs naturally with the growth system as the measurement layer for organic traffic.',
+      'A client-facing SEO dashboard that turns raw analytics into a story: organic growth, keyword movement, top pages, and conversion impact. Standalone reporting tool — separate from the ROI Attribution Dashboard in the growth system.',
     techStack: ['Analytics', 'SEMrush', 'Data Viz'],
   },
   {
