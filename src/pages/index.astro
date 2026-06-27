@@ -7,6 +7,7 @@
  * Classic portfolio home lives at /overview.
  */
 import '../styles/global.css';
+import FoxAssistant from '../components/FoxAssistant.astro';
 import { site } from '../config/site';
 import { withBase } from '../lib/url';
 import { resolveDemoUrl, slugify } from '../lib/url';
@@ -487,6 +488,9 @@ const stats = [
       </footer>
       </div>
     </main>
+
+    <!-- Persistent chat-assistant mascot (placeholder for the AI-FAQ widget) -->
+    <FoxAssistant />
 
     <!-- ===================== STYLES ===================== -->
     <style>
