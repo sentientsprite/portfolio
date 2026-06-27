@@ -34,12 +34,19 @@ const detailUrl = withBase(`/work/${systemProject.slug}`);
       }
     </div>
 
-    <div class="mt-6 flex flex-col gap-2.5">
+    <div class="mt-6 flex flex-col gap-3">
       <a
         href={detailUrl}
-        class="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400"
+        class="growth-cta group relative flex items-center justify-between gap-3 overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 px-5 py-4 font-semibold text-neutral-950 shadow-lg shadow-emerald-500/25"
       >
-        See the full growth system &rarr;
+        <span class="growth-cta-shine"></span>
+        <span class="relative flex flex-col">
+          <span class="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-950/70">Explore the system</span>
+          <span class="text-base font-bold leading-tight">See the full growth stack</span>
+        </span>
+        <span class="relative grid h-9 w-9 shrink-0 place-items-center rounded-full bg-neutral-950/15 text-lg transition-transform duration-300 group-hover:translate-x-1">
+          &rarr;
+        </span>
       </a>
       {
         demoUrl && (
@@ -47,8 +54,9 @@ const detailUrl = withBase(`/work/${systemProject.slug}`);
             href={demoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center justify-center gap-2 rounded-lg border border-neutral-700 px-5 py-3 text-sm font-medium text-neutral-300 transition hover:border-emerald-500/30 hover:text-emerald-400"
+            class="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/5 px-5 py-3 text-sm font-medium text-emerald-300 transition hover:bg-emerald-500/10"
           >
+            <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
             Open live demo &nearr;
           </a>
         )
@@ -162,3 +170,40 @@ const detailUrl = withBase(`/work/${systemProject.slug}`);
     </section>
   )
 }
+
+<style>
+  .growth-cta {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .growth-cta:active {
+    transform: scale(0.98);
+  }
+  .growth-cta-shine {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      110deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.45) 50%,
+      transparent 70%
+    );
+    transform: translateX(-120%);
+    animation: growth-cta-sweep 3.2s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes growth-cta-sweep {
+    0%,
+    60% {
+      transform: translateX(-120%);
+    }
+    100% {
+      transform: translateX(120%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .growth-cta-shine {
+      animation: none;
+      display: none;
+    }
+  }
+</style>
