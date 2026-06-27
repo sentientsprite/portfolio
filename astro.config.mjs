@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://github.com/sentientsprite',
+  site: 'https://sentientsprite.github.io',
   base: '/portfolio',
   output: 'static',
   vite: {

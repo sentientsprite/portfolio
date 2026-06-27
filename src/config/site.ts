@@ -3,7 +3,7 @@ export const site = {
   title: 'Digital Marketing & Web Development Consultant',
   description:
     'SEO-focused websites, automation systems, and growth marketing projects.',
-  githubUsername: 'yourusername',
+  githubUsername: 'sentientsprite',
   email: 'raymondking.mktg@gmail.com',
   social: {
     github: 'https://github.com/sentientsprite',
