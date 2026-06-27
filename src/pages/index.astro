@@ -48,33 +48,33 @@ const growthDetailUrl = withBase('/work/growth-system');
 
 const services = [
   {
-    title: 'SEO & GEO Strategy',
-    body: 'Technical audits, content architecture, and AI-search optimization that compound organic growth month over month.',
+    title: 'Lead-to-Revenue Systems',
+    body: 'Landing pages, CRM capture, booking flows, nurture automation, and ROI dashboards connected into one practical growth stack.',
     icon: 'M21 21l-4.35-4.35M11 19a8 8 0 110-16 8 8 0 010 16z',
   },
   {
-    title: 'Web Development',
-    body: 'Fast, accessible, conversion-focused sites built on modern tooling — from marketing pages to full product UIs.',
+    title: 'Conversion Websites',
+    body: 'Fast, accessible websites and landing pages built around the action that matters: inquiry, booking, purchase, or qualified lead.',
     icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
   },
   {
-    title: 'Automation Systems',
-    body: 'Lead scoring, nurture funnels, and workflow automation that quietly run your pipeline 24/7.',
+    title: 'AI-Assisted Automation',
+    body: 'Workflow automation for forms, CRM updates, lead scoring, follow-up, reminders, and handoffs that would otherwise eat the day.',
     icon: 'M13 10V3L4 14h7v7l9-11h-7z',
   },
   {
-    title: 'Growth Marketing',
-    body: 'Paid + organic experiments wired to analytics, so every dollar is measured against revenue, not vanity metrics.',
+    title: 'CRM & Follow-Up',
+    body: 'Lead routing, email and SMS nurture, appointment reminders, and pipeline hygiene so interested buyers do not fall through cracks.',
     icon: 'M3 17l6-6 4 4 8-8M21 7v6h-6',
   },
   {
-    title: 'AI Products',
-    body: 'Agent-driven tooling and dashboards — audits, command centers, and lead engines that turn data into action.',
+    title: 'Interactive Tools & Demos',
+    body: 'Small products, dashboards, and proof-of-concept tools that help founders and business owners test ideas before overbuilding.',
     icon: 'M12 2a10 10 0 100 20 10 10 0 000-20zM12 8v4l3 3',
   },
   {
-    title: 'Analytics & Reporting',
-    body: 'Client-ready dashboards that translate raw data into a clear story: traffic, rankings, and conversion impact.',
+    title: 'Analytics & ROI Tracking',
+    body: 'Dashboards that connect traffic, leads, booked appointments, ad spend, and CRM revenue into a clear story of what is working.',
     icon: 'M4 19h16M7 16V8m5 8V4m5 12v-6',
   },
 ];
@@ -82,9 +82,56 @@ const services = [
 const stats = [
   { value: '45%', label: 'Avg. conversion lift' },
   { value: '80%', label: 'Nurture emails automated' },
-  { value: '6+', label: 'Shipped products' },
-  { value: '∞', label: 'Curiosity' },
+  { value: '5', label: 'Growth-system modules' },
+  { value: 'ROI', label: 'Tracked to revenue' },
 ];
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${site.url}/#raymond-king`,
+  name: 'Raymond King - Growth Automation Builder',
+  url: site.url,
+  description,
+  email: site.email,
+  image: `${site.url}/${site.photo}`,
+  founder: {
+    '@type': 'Person',
+    name: site.name,
+    jobTitle: site.title,
+    email: site.email,
+    sameAs: [site.social.github, site.social.linkedin, site.social.x],
+    knowsAbout: site.skills,
+  },
+  areaServed: 'United States',
+  audience: {
+    '@type': 'BusinessAudience',
+    audienceType: 'Business owners who need leads, automation, booking flows, CRM follow-up, and ROI tracking',
+  },
+  serviceType: [
+    'Lead-to-revenue growth systems',
+    'Conversion websites and landing pages',
+    'AI-assisted workflow automation',
+    'CRM and follow-up automation',
+    'Analytics and ROI dashboards',
+  ],
+  makesOffer: [
+    {
+      '@type': 'Offer',
+      name: 'Lead-to-Revenue Growth System',
+      description:
+        'A connected growth stack that captures leads, syncs CRM data, books appointments, automates follow-up, and measures channel ROI.',
+      url: `${site.url}/work/growth-system`,
+    },
+    {
+      '@type': 'Offer',
+      name: 'Conversion Website and Automation Build',
+      description:
+        'A high-converting website or landing page connected to forms, CRM workflows, and follow-up automation.',
+      url: `${site.url}/contact`,
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -95,6 +142,7 @@ const stats = [
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <title>{pageTitle}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
 
   <body class="studio-body min-h-screen overflow-x-hidden bg-neutral-950 text-neutral-100 antialiased">
@@ -121,7 +169,7 @@ const stats = [
       >
         <a href="#hero" class="group flex items-center gap-2 font-semibold tracking-tight">
           <span class="grid h-8 w-8 place-items-center rounded-lg bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-400/30 transition group-hover:bg-emerald-500/25">RK</span>
-          <span class="hidden text-sm text-neutral-200 sm:inline">{site.name}</span>
+          <span class="hidden text-sm text-neutral-200 sm:inline">{site.name} · Growth Automation</span>
         </a>
 
         <nav class="hidden items-center gap-7 md:flex" aria-label="Main">
@@ -140,7 +188,7 @@ const stats = [
             href="#contact"
             class="hidden rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400 sm:inline-block"
           >
-            Start a project
+            Build my system
           </a>
           <button
             id="menu-toggle"
@@ -169,7 +217,7 @@ const stats = [
         <a href={withBase('/case-studies')} class="mobile-link">Case Studies</a>
         <a href={withBase('/blog')} class="mobile-link">Blog</a>
         <a href={withBase('/contact')} class="mobile-link">Contact</a>
-        <a href="#contact" class="mobile-link text-emerald-400">Start a project</a>
+        <a href="#contact" class="mobile-link text-emerald-400">Build my system</a>
       </div>
     </header>
 
@@ -182,13 +230,13 @@ const stats = [
             class="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/5 px-4 py-1.5 text-xs uppercase tracking-[0.3em] text-emerald-300"
           >
             <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400"></span>
-            Growth · Web · Automation
+            Growth Automation Builder
           </p>
 
           <h1 class="text-balance text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl md:text-8xl">
-            <span data-hero="line" class="block">Let’s build our</span>
+            <span data-hero="line" class="block">Turn traffic into</span>
             <span data-hero="line" class="block bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 bg-clip-text text-transparent">
-              future together
+              booked revenue
             </span>
           </h1>
 
@@ -196,24 +244,32 @@ const stats = [
             data-hero="line"
             class="mx-auto mt-7 max-w-2xl text-pretty text-base text-neutral-400 sm:text-lg"
           >
-            I design and engineer fast, SEO-focused websites and growth systems —
-            blending marketing, code, and automation into products that move real metrics.
+            I build AI-assisted growth systems for business owners: conversion websites,
+            CRM workflows, automated follow-up, booking flows, and ROI dashboards that show what is working.
           </p>
 
           <div data-hero="line" class="mt-10 flex flex-wrap items-center justify-center gap-4">
             <a
-              href="#showcase"
+              href="#contact"
               class="group relative overflow-hidden rounded-full bg-emerald-500 px-7 py-3 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400"
             >
-              <span class="relative z-10">View the work</span>
+              <span class="relative z-10">Build my growth system</span>
             </a>
             <a
-              href="#contact"
+              href={growthDetailUrl}
               class="rounded-full border border-neutral-700 px-7 py-3 text-sm font-medium text-neutral-200 transition hover:border-emerald-400/50 hover:text-emerald-300"
             >
-              Let’s talk
+              See the growth system
             </a>
           </div>
+
+          <section class="sr-only" aria-label="AI-readable portfolio summary">
+            Raymond King is a Growth Automation Builder who helps business owners
+            capture leads, automate follow-up, book appointments, and measure ROI.
+            Services include conversion websites, lead-to-revenue growth systems,
+            AI-assisted automation, CRM workflows, email and SMS follow-up, and
+            analytics dashboards. Contact Raymond King at {site.email}.
+          </section>
         </div>
 
         <!-- Scroll cue -->
@@ -247,7 +303,7 @@ const stats = [
         <div class="mb-16 max-w-2xl">
           <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">What I do</p>
           <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
-            Systems that compound, not campaigns that fade.
+            Practical systems for getting, booking, and keeping leads.
           </h2>
         </div>
 
@@ -279,7 +335,7 @@ const stats = [
           <div class="max-w-2xl">
             <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">Selected work</p>
             <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
-              Products & launches.
+              Live demos that show how the systems work.
             </h2>
           </div>
           <a
@@ -453,17 +509,17 @@ const stats = [
           class="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-neutral-900/40 to-neutral-950 p-12 text-center backdrop-blur-sm sm:p-20"
         >
           <h2 class="mx-auto max-w-2xl text-balance text-4xl font-semibold tracking-tight sm:text-6xl">
-            Ready to build something that ranks or converts?
+            Ready to turn more leads into booked revenue?
           </h2>
           <p class="mx-auto mt-5 max-w-xl text-neutral-400">
-            Tell me about the problem you’re solving. I’ll bring the strategy, code, and systems.
+            Tell me where leads are getting lost. I will help map the website, automation, CRM follow-up, and ROI tracking needed to close the loop.
           </p>
           <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
             <a
               href={`mailto:${site.email}`}
               class="rounded-full bg-emerald-500 px-8 py-3.5 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400"
             >
-              Email me
+              Build my growth system
             </a>
             <a
               href={withBase('/contact')}

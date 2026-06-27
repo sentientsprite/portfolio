@@ -116,7 +116,7 @@ export function buildChatbotConfig(): ChatbotConfig {
           'what can you help with',
           'what do you specialize in',
         ],
-        response: `Raymond builds full-stack growth systems — not one-off campaigns. Typical engagements cover:\n\n• SEO & GEO strategy — technical audits, content architecture, AI-search optimization\n• Web development — fast, conversion-focused sites on modern tooling\n• Automation — lead scoring, nurture funnels, Zapier/HubSpot workflows\n• Growth marketing — paid + organic experiments tied to revenue metrics\n• AI products — command centers, audit tools, agent-driven dashboards\n• Analytics & reporting — client-ready dashboards that tell a clear story`,
+        response: `Raymond builds AI-assisted growth systems for business owners who need more leads, cleaner follow-up, booked appointments, and ROI visibility. Typical engagements cover:\n\n• Lead-to-revenue systems — landing page, CRM capture, scheduler, nurture, and ROI dashboard\n• Conversion websites — fast pages built around inquiry, booking, purchase, or qualified lead capture\n• AI-assisted automation — forms, CRM updates, lead scoring, reminders, and handoffs\n• CRM and follow-up — email/SMS nurture, lead routing, appointment reminders, and pipeline hygiene\n• Analytics and ROI tracking — dashboards that connect traffic, ad spend, leads, bookings, and CRM revenue\n• Interactive tools and demos — practical proof-of-concepts for founders and business owners`,
         links: [
           { label: 'Services section', href: withBase('/#services') },
           { label: 'Work showroom', href: withBase('/work') },

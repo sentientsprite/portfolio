@@ -24,10 +24,10 @@ const caseStudies = (await getCollection('caseStudies', ({ data }) => !data.draf
 const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
 ---
 
-<BaseLayout title="Overview" description="Portfolio overview — case studies, selected work, writing, and GitHub activity.">
+<BaseLayout title="Overview" description="Portfolio overview for Raymond King, Growth Automation Builder: case studies, selected work, writing, and proof of practical business systems.">
   <!-- 1. Hero -->
   <section class="mx-auto max-w-6xl px-4 py-24 text-center">
-    <p class="eyebrow justify-center" data-animate>Digital Marketing &amp; Web Development</p>
+    <p class="eyebrow justify-center" data-animate>Growth Automation Builder</p>
     <h1
       class="mt-4 text-5xl font-bold tracking-tight sm:text-6xl"
       data-animate
@@ -37,7 +37,7 @@ const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
       </span>
     </h1>
     <p class="mx-auto mt-6 max-w-2xl text-lg text-neutral-400" data-animate>
-      {site.title}. I build fast, SEO-focused sites and growth systems that drive measurable results.
+      {site.title}. I build AI-assisted websites, CRM workflows, follow-up automation, and dashboards that help businesses turn leads into measurable revenue.
     </p>
     <div class="mt-8 flex flex-wrap justify-center gap-4" data-animate>
       <a href={withBase('/case-studies')} class="btn btn-primary">See Results</a>

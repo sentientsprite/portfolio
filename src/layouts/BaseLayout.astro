@@ -17,6 +17,36 @@ const {
 } = Astro.props;
 
 const pageTitle = title === site.name ? site.name : `${title} | ${site.name}`;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${site.url}/#raymond-king`,
+  name: 'Raymond King - Growth Automation Builder',
+  url: site.url,
+  description: site.description,
+  email: site.email,
+  image: `${site.url}/${site.photo}`,
+  founder: {
+    '@type': 'Person',
+    name: site.name,
+    jobTitle: site.title,
+    email: site.email,
+    sameAs: [site.social.github, site.social.linkedin, site.social.x],
+    knowsAbout: site.skills,
+  },
+  areaServed: 'United States',
+  audience: {
+    '@type': 'BusinessAudience',
+    audienceType: 'Business owners who need leads, automation, booking flows, CRM follow-up, and ROI tracking',
+  },
+  serviceType: [
+    'Lead-to-revenue growth systems',
+    'Conversion websites and landing pages',
+    'AI-assisted workflow automation',
+    'CRM and follow-up automation',
+    'Analytics and ROI dashboards',
+  ],
+};
 ---
 
 <!doctype html>
@@ -27,6 +57,7 @@ const pageTitle = title === site.name ? site.name : `${title} | ${site.name}`;
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <title>{pageTitle}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     <!-- Add `js` class ASAP so reveal animations only hide when JS is available -->
     <script is:inline>
       document.documentElement.classList.add('js');

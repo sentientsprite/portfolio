@@ -1,9 +1,10 @@
 export const site = {
   name: 'Raymond King',
-  title: 'Digital Marketing & Web Development Consultant',
+  title: 'Growth Automation Builder',
+  url: 'https://sentientsprite.github.io/portfolio',
   photo: 'images/raymond-king.png',
   description:
-    'Full-stack growth systems that turn traffic into tracked leads, booked appointments, and measurable revenue.',
+    'Raymond King builds AI-assisted growth systems that help businesses capture leads, automate follow-up, book appointments, and measure ROI.',
   githubUsername: 'sentientsprite',
   email: 'raymondtheking@proton.me',
   social: {
@@ -15,15 +16,16 @@ export const site = {
   /** Public intake for Zephyr portfolio suggestions (API only — not the full app). */
   zephyrSuggestApi: 'https://zephyr-lyart-beta.vercel.app/api/suggest',
   skills: [
-    'SEO & SEM',
-    'Google Ads',
+    'Growth Automation',
+    'Lead-to-Revenue Systems',
+    'Conversion Websites',
+    'CRM Workflows',
+    'Email & SMS Automation',
     'Google Analytics',
-    'Shopify',
-    'WordPress',
-    'Email & SMS',
-    'Automation',
-    'HTML/CSS/JS',
-    'Python',
+    'Google Ads',
+    'ROI Dashboards',
+    'AI-Assisted Tools',
+    'SEO & SEM',
   ],
-  bio: `I build fast, SEO-focused websites and growth systems for small businesses and startups. With experience across digital marketing, web development, and automation, I help clients increase engagement, generate leads, and streamline operations through data-driven strategies.`,
+  bio: `I build AI-assisted growth systems for business owners who need more than a website. My work connects conversion pages, CRM workflows, email follow-up, booking flows, and ROI dashboards so leads are captured, nurtured, booked, and measured.`,
 } as const;
