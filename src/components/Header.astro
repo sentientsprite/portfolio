@@ -1,0 +1,54 @@
+---
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/case-studies', label: 'Case Studies' },
+  { href: '/resume', label: 'Resume' },
+  { href: '/store', label: 'Store' },
+  { href: '/contact', label: 'Contact' },
+];
+
+const base = import.meta.env.BASE_URL;
+---
+
+<header class="sticky top-0 z-50 border-b border-neutral-800 bg-neutral-950/80 backdrop-blur-md">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+    <a href={base} class="text-lg font-semibold text-neutral-100 hover:text-emerald-400 transition-colors">
+      RK
+    </a>
+
+    <nav class="hidden md:flex items-center gap-6">
+      {
+        navLinks.map((link) => (
+          <a
+            href={`${base}${link.href === '/' ? '' : link.href.slice(1)}`}
+            class="text-sm text-neutral-400 hover:text-emerald-400 transition-colors"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <details class="md:hidden relative">
+      <summary class="cursor-pointer list-none text-neutral-400 hover:text-emerald-400 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </summary>
+      <nav class="absolute right-0 mt-2 w-48 rounded-lg border border-neutral-800 bg-neutral-900 py-2 shadow-xl">
+        {
+          navLinks.map((link) => (
+            <a
+              href={`${base}${link.href === '/' ? '' : link.href.slice(1)}`}
+              class="block px-4 py-2 text-sm text-neutral-400 hover:bg-neutral-800 hover:text-emerald-400 transition-colors"
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </nav>
+    </details>
+  </div>
+</header>

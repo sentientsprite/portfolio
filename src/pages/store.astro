@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { products } from '../data/products';
+---
+
+<BaseLayout title="Store" description="Digital products and templates.">
+  <div class="mx-auto max-w-6xl px-4 py-16">
+    <SectionHeading
+      title="Store"
+      subtitle="Digital products and templates for marketers and developers"
+    />
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {products.map((product) => (
+        <ProductCard product={product} />
+      ))}
+    </div>
+    <p class="mt-8 text-center text-sm text-neutral-500">
+      Checkout links coming soon. Update product URLs in <code>src/data/products.ts</code>.
+    </p>
+  </div>
+</BaseLayout>

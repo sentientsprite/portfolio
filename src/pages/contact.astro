@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import SocialFeeds from '../components/SocialFeeds.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout title="Contact" description="Get in touch for projects and collaborations.">
+  <div class="mx-auto max-w-6xl px-4 py-16">
+    <SectionHeading title="Contact" subtitle="Let's connect" />
+    <p class="max-w-2xl text-neutral-400">
+      Interested in working together? Reach out via email or connect on social media.
+    </p>
+
+    <div class="mt-8">
+      <SocialLinks />
+    </div>
+
+    <div class="mt-12 rounded-xl border border-neutral-800 bg-neutral-900/50 p-8 text-center">
+      <h3 class="text-lg font-semibold text-neutral-100">Send an email</h3>
+      <p class="mt-2 text-neutral-400">The fastest way to reach me for project inquiries.</p>
+      <a
+        href={`mailto:${site.email}`}
+        class="mt-4 inline-flex rounded-lg bg-emerald-500 px-6 py-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-emerald-400"
+      >
+        {site.email}
+      </a>
+    </div>
+
+    <div class="mt-12">
+      <SocialFeeds />
+    </div>
+  </div>
+</BaseLayout>

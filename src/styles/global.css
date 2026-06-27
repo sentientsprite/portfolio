@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-neutral-950 text-neutral-100 antialiased;
+}
+
+.prose {
+  @apply max-w-none text-neutral-300;
+}
+
+.prose h1,
+.prose h2,
+.prose h3 {
+  @apply text-neutral-100;
+}
+
+.prose a {
+  @apply text-emerald-400 hover:text-emerald-300;
+}
+
+.prose code {
+  @apply rounded bg-neutral-800 px-1.5 py-0.5 text-emerald-300;
+}
+
+.prose pre {
+  @apply rounded-lg border border-neutral-800 bg-neutral-900;
+}

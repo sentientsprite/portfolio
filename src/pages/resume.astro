@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ResumeDownload from '../components/ResumeDownload.astro';
+import {
+  education,
+  certifications,
+  experience,
+  skillGroups,
+  portfolioHighlights,
+} from '../data/resume';
+---
+
+<BaseLayout title="Resume" description="Professional experience, education, and skills.">
+  <div class="mx-auto max-w-3xl px-4 py-16">
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+      <SectionHeading title="Resume" subtitle="Experience, education, and certifications" />
+      <ResumeDownload />
+    </div>
+
+    <section class="mt-12">
+      <h3 class="text-xl font-semibold text-neutral-100">Experience</h3>
+      <div class="mt-6 space-y-8">
+        {experience.map((job) => (
+          <div class="border-l-2 border-emerald-500/30 pl-6">
+            <h4 class="text-lg font-medium text-neutral-100">{job.role}</h4>
+            <p class="text-sm text-emerald-400">{job.company}</p>
+            <p class="text-sm text-neutral-500">{job.location} · {job.period}</p>
+            <ul class="mt-3 space-y-2">
+              {job.highlights.map((item) => (
+                <li class="text-sm text-neutral-400 leading-relaxed">• {item}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-12">
+      <h3 class="text-xl font-semibold text-neutral-100">Education</h3>
+      <div class="mt-4 space-y-4">
+        {education.map((edu) => (
+          <div>
+            <h4 class="font-medium text-neutral-200">{edu.degree}</h4>
+            <p class="text-sm text-neutral-400">{edu.school}, {edu.location}</p>
+            <p class="text-sm text-neutral-500">Graduated: {edu.graduated}</p>
+            <p class="mt-1 text-sm text-neutral-400">{edu.details}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-12">
+      <h3 class="text-xl font-semibold text-neutral-100">Certifications</h3>
+      <div class="mt-4 space-y-3">
+        {certifications.map((cert) => (
+          <div class="rounded-lg border border-neutral-800 bg-neutral-900/50 p-4">
+            <h4 class="font-medium text-neutral-200">{cert.name}</h4>
+            <p class="text-sm text-neutral-500">
+              {cert.issuer} · Issued: {cert.issued}
+              {cert.renewed && ` · Renewed: ${cert.renewed}`}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-12">
+      <h3 class="text-xl font-semibold text-neutral-100">Skills</h3>
+      <div class="mt-4 grid gap-4 sm:grid-cols-2">
+        {skillGroups.map((group) => (
+          <div class="rounded-lg border border-neutral-800 bg-neutral-900/50 p-4">
+            <h4 class="font-medium text-emerald-400">{group.category}</h4>
+            <div class="mt-2 flex flex-wrap gap-1.5">
+              {group.skills.map((skill) => (
+                <span class="rounded bg-neutral-800 px-2 py-0.5 text-xs text-neutral-400">{skill}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-12">
+      <h3 class="text-xl font-semibold text-neutral-100">Portfolio Highlights</h3>
+      <div class="mt-4 space-y-4">
+        {portfolioHighlights.map((item) => (
+          <div class="rounded-lg border border-neutral-800 bg-neutral-900/50 p-4">
+            <h4 class="font-medium text-neutral-200">{item.title}</h4>
+            <p class="mt-1 text-sm text-neutral-400">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

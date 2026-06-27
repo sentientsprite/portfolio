@@ -1,0 +1,57 @@
+---
+import { site } from '../config/site';
+---
+
+<div class="grid gap-6 md:grid-cols-2">
+  <div class="rounded-xl border border-neutral-800 bg-neutral-900/50 p-6">
+    <h3 class="mb-4 text-lg font-semibold text-neutral-100">GitHub Activity</h3>
+    <a
+      href={site.social.github}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="block"
+    >
+      <img
+        src={`https://ghchart.rshah.org/${site.githubUsername}`}
+        alt="GitHub contribution chart"
+        class="w-full"
+        loading="lazy"
+      />
+    </a>
+  </div>
+  <div class="rounded-xl border border-neutral-800 bg-neutral-900/50 p-6">
+    <h3 class="mb-4 text-lg font-semibold text-neutral-100">Connect</h3>
+    <p class="text-sm text-neutral-400">
+      Follow along on social media for updates on projects, marketing insights, and web development tips.
+    </p>
+    <div class="mt-4 space-y-3">
+      <a
+        href={site.social.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center gap-3 rounded-lg border border-neutral-800 p-3 text-sm text-neutral-400 transition-colors hover:border-emerald-500/30 hover:text-emerald-400"
+      >
+        <span class="font-medium text-neutral-200">GitHub</span>
+        <span class="ml-auto">&rarr;</span>
+      </a>
+      <a
+        href={site.social.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center gap-3 rounded-lg border border-neutral-800 p-3 text-sm text-neutral-400 transition-colors hover:border-emerald-500/30 hover:text-emerald-400"
+      >
+        <span class="font-medium text-neutral-200">LinkedIn</span>
+        <span class="ml-auto">&rarr;</span>
+      </a>
+      <a
+        href={site.social.x}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center gap-3 rounded-lg border border-neutral-800 p-3 text-sm text-neutral-400 transition-colors hover:border-emerald-500/30 hover:text-emerald-400"
+      >
+        <span class="font-medium text-neutral-200">X / Twitter</span>
+        <span class="ml-auto">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</div>
