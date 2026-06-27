@@ -69,6 +69,18 @@ export const projectOverrides: ProjectOverride[] = [
     techStack: ['Next.js', 'AI Audit', 'Lead Scoring', 'SEO', 'Zod'],
   },
   {
+    repoName: 'NEMO-APP-v.1',
+    displayName: 'NEMO Agent Workspace',
+    category: 'product',
+    featured: false,
+    demoUrl: 'https://nemo-app-v-1.vercel.app',
+    description:
+      'Live agent workspace and dashboard for experimenting with AI operations, memory, and marketing workflows.',
+    details:
+      'NEMO is a working public demo that can stay in the showroom because it has a deployed interface. Related repos such as autoagent, nemo-workspace, and nemo-agent are better treated as supporting infrastructure or rebuildable scaffolds, not standalone portfolio pieces.',
+    techStack: ['Next.js', 'Agents', 'Dashboard', 'Vercel'],
+  },
+  {
     repoName: 'landing-page-template',
     displayName: 'Wellness Landing Page',
     category: 'marketing',

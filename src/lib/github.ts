@@ -93,55 +93,37 @@ export async function fetchGitHubStats(): Promise<GitHubStats> {
 
 export async function getMergedProjects(): Promise<MergedProject[]> {
   const repos = await fetchRepos();
-  const overrideMap = new Map(
-    projectOverrides.map((o) => [o.repoName, o]),
-  );
+  const repoMap = new Map(repos.map((repo) => [repo.name, repo]));
 
-  const merged: MergedProject[] = [];
+  // The Work page is an intentional showroom, not a raw GitHub repo dump.
+  // Repos only appear when they have a curated override with a strong demo,
+  // case-study angle, or explicit reason to be shown.
+  const merged: MergedProject[] = projectOverrides
+    .filter((override) => !override.hidden)
+    .map((override) => {
+      const repo = repoMap.get(override.repoName);
 
-  for (const repo of repos) {
-    const override = overrideMap.get(repo.name);
-    if (override?.hidden) continue;
-
-    merged.push({
-      name: repo.name,
-      slug: slugify(repo.name),
-      displayName: override?.displayName ?? repo.name,
-      category: override?.category ?? 'development',
-      description:
-        override?.description ?? repo.description ?? 'No description available.',
-      details: override?.details ?? null,
-      htmlUrl: override?.sourceUrl === undefined ? repo.html_url : override.sourceUrl || null,
-      demoUrl: override?.demoUrl ?? repo.homepage ?? null,
-      demoPath: override?.demoPath ?? null,
-      stars: repo.stargazers_count,
-      language: repo.language,
-      screenshot: override?.screenshot ?? null,
-      techStack: override?.techStack ?? (repo.language ? [repo.language] : []),
-      featured: override?.featured ?? false,
-    });
-  }
-
-  for (const override of projectOverrides) {
-    if (!repos.find((r) => r.name === override.repoName) && !override.hidden) {
-      merged.push({
+      return {
         name: override.repoName,
         slug: slugify(override.repoName),
         displayName: override.displayName ?? override.repoName,
         category: override.category ?? 'development',
-        description: override.description ?? 'Curated project.',
+        description:
+          override.description ?? repo?.description ?? 'Curated project.',
         details: override.details ?? null,
-        htmlUrl: override.sourceUrl === undefined ? `https://github.com/${site.githubUsername}/${override.repoName}` : override.sourceUrl || null,
-        demoUrl: override.demoUrl ?? null,
+        htmlUrl:
+          override.sourceUrl === undefined
+            ? repo?.html_url ?? `https://github.com/${site.githubUsername}/${override.repoName}`
+            : override.sourceUrl || null,
+        demoUrl: override.demoUrl ?? repo?.homepage ?? null,
         demoPath: override.demoPath ?? null,
-        stars: 0,
-        language: override.techStack?.[0] ?? null,
+        stars: repo?.stargazers_count ?? 0,
+        language: repo?.language ?? override.techStack?.[0] ?? null,
         screenshot: override.screenshot ?? null,
-        techStack: override.techStack ?? [],
+        techStack: override.techStack ?? (repo?.language ? [repo.language] : []),
         featured: override.featured ?? false,
-      });
-    }
-  }
+      };
+    });
 
   const categoryOrder: WorkCategory[] = ['product', 'marketing', 'development', 'automation', 'meta'];
 
