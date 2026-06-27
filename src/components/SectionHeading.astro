@@ -2,12 +2,16 @@
 interface Props {
   title: string;
   subtitle?: string;
+  eyebrow?: string;
 }
 
-const { title, subtitle } = Astro.props;
+const { title, subtitle, eyebrow } = Astro.props;
 ---
 
 <div class="mb-10">
-  <h2 class="text-3xl font-bold tracking-tight text-neutral-100">{title}</h2>
-  {subtitle && <p class="mt-2 text-neutral-400">{subtitle}</p>}
+  {eyebrow && <p class="eyebrow" data-animate>{eyebrow}</p>}
+  <h2 class="text-3xl font-bold tracking-tight text-neutral-100 sm:text-4xl" data-animate>
+    {title}
+  </h2>
+  {subtitle && <p class="mt-3 max-w-2xl text-neutral-400" data-animate>{subtitle}</p>}
 </div>

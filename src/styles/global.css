@@ -12,6 +12,152 @@ body {
   @apply bg-neutral-950 text-neutral-100 antialiased;
 }
 
+/* ===========================================================================
+   Design system — dark futuristic theme shared across the whole site.
+   =========================================================================== */
+
+/* --- Ambient page background (fixed, sits behind all content) --- */
+.site-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 50% -5%, rgba(16, 185, 129, 0.1), transparent 70%),
+    radial-gradient(45% 45% at 85% 12%, rgba(20, 184, 166, 0.07), transparent 70%),
+    radial-gradient(55% 55% at 8% 92%, rgba(16, 185, 129, 0.05), transparent 70%),
+    #0a0a0a;
+}
+/* Subtle perspective grid, faded out toward the edges */
+.site-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 25%, transparent 75%);
+  mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 25%, transparent 75%);
+}
+
+/* --- Eyebrow / section label --- */
+.eyebrow {
+  @apply mb-3 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.3em] text-emerald-400;
+}
+.eyebrow::before {
+  content: "";
+  @apply h-1.5 w-1.5 rounded-full bg-emerald-400;
+}
+
+/* --- Buttons --- */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition;
+}
+.btn-primary {
+  @apply bg-emerald-500 text-neutral-950;
+}
+.btn-primary:hover {
+  @apply bg-emerald-400;
+  box-shadow: 0 14px 40px -14px rgba(16, 185, 129, 0.7);
+}
+.btn-ghost {
+  @apply border border-neutral-700 text-neutral-200;
+}
+.btn-ghost:hover {
+  @apply border-emerald-400/50 text-emerald-300;
+}
+
+/* --- Glass surface --- */
+.surface {
+  @apply rounded-2xl border border-neutral-800 bg-neutral-900/40 backdrop-blur-sm;
+}
+
+/* --- Glow + lift card (pointer-tracked radial glow) --- */
+.glow-card {
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+.glow-card:hover {
+  transform: translateY(-4px);
+}
+.glow-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    rgba(16, 185, 129, 0.14),
+    transparent 45%
+  );
+  transition: opacity 0.3s ease;
+}
+.glow-card:hover::after {
+  opacity: 1;
+}
+
+/* --- Floating glassmorphism navbar (Header.astro) --- */
+.site-nav {
+  border: 1px solid transparent;
+  background: transparent;
+}
+#site-header.scrolled .site-nav {
+  border-color: rgba(38, 38, 38, 0.9);
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 40px -20px rgba(0, 0, 0, 0.8);
+}
+.nav-link {
+  @apply text-sm text-neutral-400 transition-colors;
+}
+.nav-link:hover,
+.nav-link[aria-current="page"] {
+  @apply text-emerald-400;
+}
+
+/* --- Scroll-reveal (progressive enhancement; only hides when JS is active) --- */
+.js [data-animate] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.js [data-animate].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Accessibility: visible focus rings --- */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid rgb(52, 211, 153);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js [data-animate] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .glow-card:hover {
+    transform: none;
+  }
+}
+
+/* ===========================================================================
+   Prose (markdown content)
+   =========================================================================== */
 .prose {
   @apply max-w-none text-neutral-300;
 }

@@ -23,6 +23,7 @@ const categoryOrder: WorkCategory[] = ['product', 'marketing', 'development', 'a
 <BaseLayout title="Work" description="Curated marketing, development, and automation work.">
   <div class="mx-auto max-w-6xl px-4 py-16">
     <SectionHeading
+      eyebrow="Portfolio"
       title="Work"
       subtitle="A curated showroom of product systems, demos, and case-study-ready work — not a raw repo dump"
     />
@@ -30,7 +31,7 @@ const categoryOrder: WorkCategory[] = ['product', 'marketing', 'development', 'a
     {
       featured.length > 0 && (
         <section class="mb-16">
-          <h3 class="mb-6 text-xl font-semibold text-neutral-100">Selected Work</h3>
+          <h3 class="mb-6 text-xl font-semibold text-neutral-100" data-animate>Selected Work</h3>
           <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featured.map((project) => (
               <ProjectCard project={project} />
@@ -46,7 +47,7 @@ const categoryOrder: WorkCategory[] = ['product', 'marketing', 'development', 'a
         if (!items?.length) return null;
         return (
           <section class="mb-16">
-            <h3 class="mb-6 text-xl font-semibold text-neutral-100">{categoryLabels[category]}</h3>
+            <h3 class="mb-6 text-xl font-semibold text-neutral-100" data-animate>{categoryLabels[category]}</h3>
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((project) => (
                 <ProjectCard project={project} />

@@ -26,12 +26,74 @@ const pageTitle = title === site.name ? site.name : `${title} | ${site.name}`;
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <title>{pageTitle}</title>
+    <!-- Add `js` class ASAP so reveal animations only hide when JS is available -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
   </head>
   <body class="min-h-screen flex flex-col">
+    <!-- Ambient futuristic background (shared across every page) -->
+    <div class="site-bg" aria-hidden="true"></div>
+
     <Header />
     <main class="flex-1">
       <slot />
     </main>
     <Footer />
+
+    <!-- Shared UX enhancements: nav scroll state, scroll reveals, card glow -->
+    <script>
+      function initEnhancements() {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isTouch = window.matchMedia('(hover: none)').matches;
+
+        // 1. Glass navbar on scroll
+        const header = document.getElementById('site-header');
+        const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 24);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        // 2. Scroll-reveal via IntersectionObserver
+        const revealEls = document.querySelectorAll('[data-animate]');
+        if (prefersReduced || !('IntersectionObserver' in window)) {
+          revealEls.forEach((el) => el.classList.add('is-visible'));
+        } else {
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry, i) => {
+                if (!entry.isIntersecting) return;
+                const el = entry.target as HTMLElement;
+                // Stagger siblings revealed together for a nicer cascade
+                el.style.transitionDelay = `${Math.min(i * 60, 240)}ms`;
+                el.classList.add('is-visible');
+                io.unobserve(el);
+              });
+            },
+            { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+          );
+          revealEls.forEach((el) => io.observe(el));
+        }
+
+        // 3. Pointer-tracked glow on cards
+        if (!isTouch) {
+          document.querySelectorAll<HTMLElement>('.glow-card').forEach((card) => {
+            card.addEventListener('pointermove', (e) => {
+              const r = card.getBoundingClientRect();
+              card.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+              card.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
+            });
+          });
+        }
+
+        // 4. Mobile menu toggle (declarative <details> handles most; this closes on nav)
+        const menu = document.getElementById('mobile-menu');
+        menu?.querySelectorAll('a').forEach((a) =>
+          a.addEventListener('click', () => menu.removeAttribute('open')),
+        );
+      }
+
+      initEnhancements();
+      document.addEventListener('astro:page-load', initEnhancements);
+    </script>
   </body>
 </html>

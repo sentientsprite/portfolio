@@ -24,33 +24,32 @@ const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
 <BaseLayout title="Overview" description="Portfolio overview — case studies, selected work, writing, and GitHub activity.">
   <!-- 1. Hero -->
   <section class="mx-auto max-w-6xl px-4 py-24 text-center">
-    <p class="text-sm font-medium text-emerald-400">Digital Marketing & Web Development</p>
-    <h1 class="mt-4 text-5xl font-bold tracking-tight text-neutral-100 sm:text-6xl">
-      {site.name}
+    <p class="eyebrow justify-center" data-animate>Digital Marketing &amp; Web Development</p>
+    <h1
+      class="mt-4 text-5xl font-bold tracking-tight sm:text-6xl"
+      data-animate
+    >
+      <span class="bg-gradient-to-r from-neutral-100 via-neutral-100 to-emerald-300 bg-clip-text text-transparent">
+        {site.name}
+      </span>
     </h1>
-    <p class="mx-auto mt-6 max-w-2xl text-lg text-neutral-400">
+    <p class="mx-auto mt-6 max-w-2xl text-lg text-neutral-400" data-animate>
       {site.title}. I build fast, SEO-focused sites and growth systems that drive measurable results.
     </p>
-    <div class="mt-8 flex flex-wrap justify-center gap-4">
-      <a href={withBase('/case-studies')} class="rounded-lg bg-emerald-500 px-6 py-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-emerald-400">
-        See Results
-      </a>
-      <a href={withBase('/work')} class="rounded-lg border border-neutral-700 px-6 py-3 text-sm font-medium text-neutral-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-400">
-        View Work
-      </a>
-      <a href={withBase('/contact')} class="rounded-lg border border-neutral-700 px-6 py-3 text-sm font-medium text-neutral-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-400">
-        Get in Touch
-      </a>
+    <div class="mt-8 flex flex-wrap justify-center gap-4" data-animate>
+      <a href={withBase('/case-studies')} class="btn btn-primary">See Results</a>
+      <a href={withBase('/work')} class="btn btn-ghost">View Work</a>
+      <a href={withBase('/contact')} class="btn btn-ghost">Get in Touch</a>
     </div>
   </section>
 
   <!-- 2. About -->
   <section class="mx-auto max-w-6xl px-4 py-16">
-    <SectionHeading title="About" subtitle="Who I am and what I do" />
-    <p class="max-w-3xl text-neutral-400 leading-relaxed">{site.bio}</p>
-    <div class="mt-6 flex flex-wrap gap-2">
+    <SectionHeading eyebrow="About" title="Who I am and what I do" />
+    <p class="max-w-3xl leading-relaxed text-neutral-400" data-animate>{site.bio}</p>
+    <div class="mt-6 flex flex-wrap gap-2" data-animate>
       {site.skills.map((skill) => (
-        <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-sm text-emerald-400">{skill}</span>
+        <span class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-sm text-emerald-400">{skill}</span>
       ))}
     </div>
   </section>
@@ -59,7 +58,7 @@ const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
   {
     caseStudies.length > 0 && (
       <section class="mx-auto max-w-6xl px-4 py-16">
-        <SectionHeading title="Proof of Results" subtitle="Case studies with measurable outcomes" />
+        <SectionHeading eyebrow="Proof of results" title="Case studies with measurable outcomes" />
         <div class="grid gap-6 sm:grid-cols-2">
           {caseStudies.map((study) => (
             <BlogCard
@@ -85,7 +84,7 @@ const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
   {
     selectedWork.length > 0 && (
       <section class="mx-auto max-w-6xl px-4 py-16">
-        <SectionHeading title="Selected Work" subtitle="Builds, templates, and systems" />
+        <SectionHeading eyebrow="Selected work" title="Builds, templates, and systems" />
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {selectedWork.map((project) => (
             <ProjectCard project={project} />
@@ -104,7 +103,7 @@ const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
   {
     mediumPosts.length > 0 && (
       <section class="mx-auto max-w-6xl px-4 py-16">
-        <SectionHeading title="Writing" subtitle="Latest essays and articles on Medium" />
+        <SectionHeading eyebrow="Writing" title="Latest essays and articles on Medium" />
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {mediumPosts.map((post) => (
             <BlogCard
@@ -130,7 +129,7 @@ const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
 
   <!-- 6. GitHub Activity -->
   <section class="mx-auto max-w-6xl px-4 py-16">
-    <SectionHeading title="GitHub Activity" subtitle="Open source and ongoing builds" />
+    <SectionHeading eyebrow="GitHub activity" title="Open source and ongoing builds" />
     <GitHubStats stats={stats} />
     <div class="mt-8">
       <ContributionGraph />
@@ -138,16 +137,19 @@ const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
   </section>
 
   <!-- 7. CTA -->
-  <section class="mx-auto max-w-6xl px-4 py-16 text-center">
-    <h2 class="text-2xl font-bold text-neutral-100">Let's work together</h2>
-    <p class="mt-3 text-neutral-400">Need a site, funnel, or growth system? Let's talk.</p>
-    <div class="mt-6 flex flex-wrap justify-center gap-4">
-      <a href={withBase('/contact')} class="rounded-lg bg-emerald-500 px-6 py-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-emerald-400">
-        Contact Me
-      </a>
-      <a href={withBase('/resume')} class="rounded-lg border border-neutral-700 px-6 py-3 text-sm font-medium text-neutral-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-400">
-        View Resume
-      </a>
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <div
+      class="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-neutral-900/40 to-neutral-950 p-12 text-center backdrop-blur-sm sm:p-16"
+      data-animate
+    >
+      <h2 class="text-3xl font-bold tracking-tight text-neutral-100 sm:text-4xl">Let's work together</h2>
+      <p class="mx-auto mt-3 max-w-xl text-neutral-400">
+        Need a site, funnel, or growth system? Let's talk.
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <a href={withBase('/contact')} class="btn btn-primary">Contact Me</a>
+        <a href={withBase('/resume')} class="btn btn-ghost">View Resume</a>
+      </div>
     </div>
   </section>
 </BaseLayout>

@@ -1,4 +1,7 @@
 ---
+import { withBase } from '../lib/url';
+import { site } from '../config/site';
+
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/overview', label: 'Overview' },
@@ -7,24 +10,39 @@ const navLinks = [
   { href: '/case-studies', label: 'Case Studies' },
   { href: '/resume', label: 'Resume' },
   { href: '/store', label: 'Store' },
-  { href: '/contact', label: 'Contact' },
 ];
 
-import { withBase } from '../lib/url';
+// Normalize the current path (strip base + trailing slash) for active matching.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const current = Astro.url.pathname.replace(base, '').replace(/\/$/, '') || '/';
+const isActive = (href: string) =>
+  href === '/' ? current === '/' : current === href || current.startsWith(`${href}/`);
 ---
 
-<header class="sticky top-0 z-50 border-b border-neutral-800 bg-neutral-950/80 backdrop-blur-md">
-  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-    <a href={withBase('/')} class="text-lg font-semibold text-neutral-100 hover:text-emerald-400 transition-colors">
-      RK
+<header id="site-header" class="sticky top-4 z-50 mt-4 px-4">
+  <div
+    class="site-nav mx-auto flex max-w-6xl items-center justify-between rounded-2xl px-5 py-3 transition-all duration-500"
+  >
+    <a
+      href={withBase('/')}
+      class="group flex items-center gap-2 font-semibold tracking-tight"
+      aria-label={`${site.name} — home`}
+    >
+      <span
+        class="grid h-8 w-8 place-items-center rounded-lg bg-emerald-500/15 text-sm text-emerald-400 ring-1 ring-emerald-400/30 transition group-hover:bg-emerald-500/25"
+      >
+        RK
+      </span>
+      <span class="hidden text-sm text-neutral-200 sm:inline">{site.name}</span>
     </a>
 
-    <nav class="hidden md:flex items-center gap-6">
+    <nav class="hidden items-center gap-6 md:flex">
       {
         navLinks.map((link) => (
           <a
             href={withBase(link.href)}
-            class="text-sm text-neutral-400 hover:text-emerald-400 transition-colors"
+            class="nav-link"
+            aria-current={isActive(link.href) ? 'page' : undefined}
           >
             {link.label}
           </a>
@@ -32,24 +50,37 @@ import { withBase } from '../lib/url';
       }
     </nav>
 
-    <details class="md:hidden relative">
-      <summary class="cursor-pointer list-none text-neutral-400 hover:text-emerald-400 transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </summary>
-      <nav class="absolute right-0 mt-2 w-48 rounded-lg border border-neutral-800 bg-neutral-900 py-2 shadow-xl">
-        {
-          navLinks.map((link) => (
-            <a
-              href={withBase(link.href)}
-              class="block px-4 py-2 text-sm text-neutral-400 hover:bg-neutral-800 hover:text-emerald-400 transition-colors"
-            >
-              {link.label}
-            </a>
-          ))
-        }
-      </nav>
-    </details>
+    <div class="flex items-center gap-3">
+      <a href={withBase('/contact')} class="hidden rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400 sm:inline-block">
+        Get in touch
+      </a>
+
+      <details id="mobile-menu" class="relative md:hidden">
+        <summary class="grid h-9 w-9 cursor-pointer list-none place-items-center rounded-lg text-neutral-300 ring-1 ring-neutral-700 transition hover:text-emerald-400">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </summary>
+        <nav class="absolute right-0 mt-3 w-52 rounded-2xl border border-neutral-800 bg-neutral-900/95 p-2 shadow-xl backdrop-blur-xl">
+          {
+            navLinks.map((link) => (
+              <a
+                href={withBase(link.href)}
+                class="block rounded-lg px-4 py-2.5 text-sm text-neutral-300 transition hover:bg-neutral-800 hover:text-emerald-400"
+                aria-current={isActive(link.href) ? 'page' : undefined}
+              >
+                {link.label}
+              </a>
+            ))
+          }
+          <a
+            href={withBase('/contact')}
+            class="mt-1 block rounded-lg bg-emerald-500/10 px-4 py-2.5 text-sm font-medium text-emerald-400 transition hover:bg-emerald-500/20"
+          >
+            Get in touch
+          </a>
+        </nav>
+      </details>
+    </div>
   </div>
 </header>

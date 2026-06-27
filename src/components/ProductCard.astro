@@ -9,24 +9,27 @@ interface Props {
 const { product } = Astro.props;
 ---
 
-<article class="flex flex-col overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/50 transition-colors hover:border-emerald-500/30">
-  <div class="flex h-40 items-center justify-center bg-neutral-800/50">
+<article
+  class="glow-card group flex flex-col overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/40 backdrop-blur-sm hover:border-emerald-500/30"
+  data-animate
+>
+  <div class="flex h-40 items-center justify-center border-b border-neutral-800/60 bg-gradient-to-br from-neutral-900 to-neutral-950">
     <img
       src={withBase(product.image)}
       alt={product.name}
-      class="h-24 w-24"
+      class="h-24 w-24 transition-transform duration-300 group-hover:scale-110"
       loading="lazy"
     />
   </div>
-  <div class="flex flex-1 flex-col p-5">
+  <div class="flex flex-1 flex-col p-6">
     <div class="flex items-start justify-between gap-2">
       <h3 class="text-lg font-semibold text-neutral-100">{product.name}</h3>
       <span class="text-lg font-bold text-emerald-400">{product.price}</span>
     </div>
-    <p class="mt-2 flex-1 text-sm text-neutral-400">{product.description}</p>
+    <p class="mt-2 flex-1 text-sm leading-relaxed text-neutral-400">{product.description}</p>
     <a
       href={product.checkoutUrl}
-      class="mt-4 inline-flex items-center justify-center rounded-lg bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-colors hover:bg-emerald-500/20"
+      class="mt-5 inline-flex items-center justify-center rounded-full bg-emerald-500/10 px-4 py-2.5 text-sm font-medium text-emerald-400 transition-colors hover:bg-emerald-500/20"
     >
       Buy Now
     </a>

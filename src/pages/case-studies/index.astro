@@ -12,7 +12,7 @@ const studies = (await getCollection('caseStudies', ({ data }) => !data.draft)).
 
 <BaseLayout title="Case Studies" description="In-depth research and project case studies.">
   <div class="mx-auto max-w-6xl px-4 py-16">
-    <SectionHeading title="Case Studies" subtitle="In-depth breakdowns with measurable outcomes" />
+    <SectionHeading eyebrow="Proof of results" title="Case Studies" subtitle="In-depth breakdowns with measurable outcomes" />
     <div class="grid gap-6 sm:grid-cols-2">
       {studies.map((study) => (
         <BlogCard

@@ -31,7 +31,10 @@ const linkAttrs = external
   : {};
 ---
 
-<article class="group flex flex-col overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/50 transition-colors hover:border-emerald-500/30">
+<article
+  class="glow-card group flex flex-col overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/40 backdrop-blur-sm hover:border-emerald-500/30"
+  data-animate
+>
   {
     image && (
       <a href={linkHref} {...linkAttrs} class="block h-40 w-full overflow-hidden bg-neutral-800/50">
