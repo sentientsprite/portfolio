@@ -1,0 +1,32 @@
+---
+description: Portfolio showroom conventions and demo safety
+alwaysApply: true
+---
+
+# Portfolio Showroom Conventions
+
+This is a public Astro site deployed to GitHub Pages (base `/portfolio`). The
+Work page is a curated showroom driven by `projectOverrides` in
+`src/data/projects.ts` — not a raw GitHub repo dump.
+
+## Adding / editing a project
+
+Each entry needs:
+- `displayName`, `category`, `description`, `techStack`
+- a demo target: internal `demoPath` (under `public/demos/...`) OR external
+  `demoUrl` (full https). Use `#` / omit for no demo.
+- `sourceUrl: ''` for private/local work (hides the GitHub link).
+
+## Demo safety (critical)
+
+- External `demoUrl`s must point at PUBLIC, browser-safe demos only.
+- Never link to a local dev server, a tunnel URL (cloudflared/ngrok), or any
+  app connected to private/local data. Those are not stable or safe to expose.
+- The hover-preview iframe loads `demoUrl` live — confirm the target is meant
+  to be embedded publicly.
+
+## Build & ship
+
+- `npm run build` must pass before pushing.
+- Pushing to `main` triggers the GitHub Pages deploy — treat it as production.
+- Internal links must use `withBase(...)`; external demos pass through as-is.
