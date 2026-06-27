@@ -708,14 +708,14 @@ const stats = [
         net.add(edges);
 
         // Data packets: bright dots flowing forward along the curved edges
-        const packetCount = isMobile ? 34 : 110;
+        const packetCount = isMobile ? 12 : 34;
         const packetPos = new Float32Array(packetCount * 3);
         const packets: { edge: number; t: number; speed: number }[] = [];
         for (let i = 0; i < packetCount; i++) {
           packets.push({
             edge: (Math.random() * edges3.length) | 0,
             t: Math.random(),
-            speed: 0.25 + Math.random() * 0.6,
+            speed: 0.1 + Math.random() * 0.18,
           });
         }
         const packetGeo = new THREE.BufferGeometry();
