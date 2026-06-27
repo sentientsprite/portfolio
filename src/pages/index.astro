@@ -224,8 +224,11 @@ const stats = [
         </div>
       </section>
 
+      <!-- Frosted glass sheet over the fixed 3D backdrop: spans the full page width
+           and runs the whole length of the content below the hero. -->
+      <div class="relative bg-neutral-950/40 backdrop-blur-sm">
       <!-- ===================== STATS STRIP ===================== -->
-      <section class="border-y border-neutral-900/80 bg-neutral-950/40 backdrop-blur-sm">
+      <section class="border-y border-neutral-900/80">
         <div class="mx-auto grid max-w-6xl grid-cols-2 gap-px md:grid-cols-4">
           {stats.map((s) => (
             <div data-reveal class="px-6 py-10 text-center">
@@ -403,6 +406,7 @@ const stats = [
           </div>
         </div>
       </footer>
+      </div>
     </main>
 
     <!-- ===================== STYLES ===================== -->
@@ -780,14 +784,33 @@ const stats = [
         let sFull = 1;
         let sContent = 1;
         let scrollP = 0;
+        let portrait = false;
         const netW = (layers.length - 1) * layerGap || 1;
 
         function recomputeScales() {
+          // On portrait/vertical viewports, stand the pipeline upright (90° CCW) so
+          // it reads bottom-to-top (Leads → Won) and fits a phone screen.
+          portrait = window.innerHeight > window.innerWidth;
+          net.rotation.z = portrait ? Math.PI / 2 : 0;
+          // Keep the "won" payoff glow at the funnel's end (top in portrait, right otherwise).
+          if (portrait) glow.position.set(0, netW * 0.42, 1.5);
+          else glow.position.set(endX, 0, 1.5);
+
           const halfH = Math.tan(THREE.MathUtils.degToRad(45) / 2) * camera.position.z;
-          const visW = 2 * halfH * camera.aspect; // visible world width at the net's depth
-          sFull = (visW * 1.22) / netW; // span the full viewport, slight edge bleed
-          const contentPx = Math.min(window.innerWidth * 0.92, 1180); // ~max-w-6xl
-          sContent = (visW * (contentPx / window.innerWidth)) / netW;
+          const visH = 2 * halfH; // visible world height at the net's depth
+          const visW = visH * camera.aspect; // visible world width at the net's depth
+
+          if (portrait) {
+            // Rotated upright: the long axis (netW) now runs vertically, so fit it
+            // to the viewport height instead of its width.
+            sFull = (visH * 1.08) / netW; // fill the screen height, slight bleed
+            const contentPx = Math.min(window.innerHeight * 0.92, 1180);
+            sContent = (visH * (contentPx / window.innerHeight)) / netW;
+          } else {
+            sFull = (visW * 1.22) / netW; // span the full viewport, slight edge bleed
+            const contentPx = Math.min(window.innerWidth * 0.92, 1180); // ~max-w-6xl
+            sContent = (visW * (contentPx / window.innerWidth)) / netW;
+          }
           applyScale();
         }
         function applyScale() {
