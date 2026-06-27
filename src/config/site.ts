@@ -1,6 +1,7 @@
 export const site = {
   name: 'Raymond King',
   title: 'Digital Marketing & Web Development Consultant',
+  photo: 'images/raymond-king.png',
   description:
     'SEO-focused websites, automation systems, and growth marketing projects.',
   githubUsername: 'sentientsprite',
