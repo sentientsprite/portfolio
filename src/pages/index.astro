@@ -200,19 +200,6 @@ const stats = [
           </div>
         </div>
 
-        <!-- Pipeline stage labels — vertical axis matching the upright funnel (Won → Leads) -->
-        <div
-          data-hero="line"
-          class="pointer-events-none absolute inset-y-0 left-4 hidden flex-col items-start justify-center gap-12 text-[10px] font-medium uppercase tracking-[0.25em] text-emerald-400/40 sm:left-8 md:flex"
-          aria-hidden="true"
-        >
-          <span class="text-emerald-300/70">Won</span>
-          <span>Negotiation</span>
-          <span>Proposal</span>
-          <span>Qualified</span>
-          <span>Leads</span>
-        </div>
-
         <!-- Scroll cue -->
         <div data-hero="line" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-neutral-500">
           <div class="flex flex-col items-center gap-2">
@@ -778,30 +765,22 @@ const stats = [
         glow.position.set(endX, 0, 1.5);
         scene.add(glow);
 
-        /* --- Responsive width: full-bleed on load, contracts to content width on scroll --- */
-        let sFull = 1;
-        let sContent = 1;
-        let scrollP = 0;
+        /* --- Stable size: upright pipeline held at content width on every viewport --- */
         const netW = (layers.length - 1) * layerGap || 1;
 
         function recomputeScales() {
           // Stand the pipeline upright (90° CCW) on every viewport so it reads
-          // bottom-to-top (Leads → Won); the long axis now runs vertically.
+          // bottom-to-top (Leads → Won); the long axis runs vertically.
           net.rotation.z = Math.PI / 2;
           glow.position.set(0, netW * 0.42, 1.5); // payoff glow at the top (Won)
 
           const halfH = Math.tan(THREE.MathUtils.degToRad(45) / 2) * camera.position.z;
           const visH = 2 * halfH; // visible world height at the net's depth
 
-          // Fit the long axis (netW) to the viewport height: full-height on load,
-          // contracting toward content height on scroll.
-          sFull = (visH * 1.08) / netW; // fill the screen height, slight bleed
+          // Fit the long axis (netW) to ~content height and keep it there — no
+          // full-bleed or scroll-driven contraction.
           const contentPx = Math.min(window.innerHeight * 0.92, 1180);
-          sContent = (visH * (contentPx / window.innerHeight)) / netW;
-          applyScale();
-        }
-        function applyScale() {
-          net.scale.setScalar(sFull + (sContent - sFull) * scrollP);
+          net.scale.setScalar((visH * (contentPx / window.innerHeight)) / netW);
         }
         recomputeScales();
 
@@ -858,21 +837,6 @@ const stats = [
           renderer.render(scene, camera);
         }
         animate();
-
-        /* --- Scroll-driven contraction: full-bleed network shrinks to content width --- */
-        if (!prefersReduced) {
-          ScrollTrigger.create({
-            trigger: '#hero',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 1,
-            onUpdate: (self) => {
-              scrollP = self.progress;
-              applyScale();
-              camera.position.y = 0.5 + self.progress * 1.6; // gentle lift for depth
-            },
-          });
-        }
 
         /* --- Resize --- */
         window.addEventListener('resize', () => {
