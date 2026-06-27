@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getMergedProjects } from '../lib/github';
+import { categoryLabels, type WorkCategory } from '../data/projects';
+
+const projects = await getMergedProjects();
+const featured = projects.filter((p) => p.featured);
+const showroom = projects.filter((p) => !p.featured && p.category !== 'meta');
+const meta = projects.filter((p) => p.category === 'meta');
+
+const grouped = showroom.reduce<Record<string, typeof showroom>>((acc, project) => {
+  const key = project.category;
+  acc[key] = acc[key] ?? [];
+  acc[key].push(project);
+  return acc;
+}, {});
+
+const categoryOrder: WorkCategory[] = ['marketing', 'development', 'automation'];
+---
+
+<BaseLayout title="Work" description="Curated marketing, development, and automation work.">
+  <div class="mx-auto max-w-6xl px-4 py-16">
+    <SectionHeading
+      title="Work"
+      subtitle="A curated showroom of client results, builds, and experiments — not just a raw repo dump"
+    />
+
+    {
+      featured.length > 0 && (
+        <section class="mb-16">
+          <h3 class="mb-6 text-xl font-semibold text-neutral-100">Selected Work</h3>
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((project) => (
+              <ProjectCard project={project} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      categoryOrder.map((category) => {
+        const items = grouped[category];
+        if (!items?.length) return null;
+        return (
+          <section class="mb-16">
+            <h3 class="mb-6 text-xl font-semibold text-neutral-100">{categoryLabels[category]}</h3>
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {items.map((project) => (
+                <ProjectCard project={project} />
+              ))}
+            </div>
+          </section>
+        );
+      })
+    }
+
+    {
+      meta.length > 0 && (
+        <section class="border-t border-neutral-800 pt-12">
+          <h3 class="mb-2 text-lg font-semibold text-neutral-100">Behind the Showroom</h3>
+          <p class="mb-6 text-sm text-neutral-500">
+            The site itself is open source — browse the live demo or view the code.
+          </p>
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {meta.map((project) => (
+              <ProjectCard project={project} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      projects.length === 0 && (
+        <p class="text-neutral-400">
+          No work items found yet. Add curated entries in <code>src/data/projects.ts</code> or connect your GitHub username in <code>src/config/site.ts</code>.
+        </p>
+      )
+    }
+  </div>
+</BaseLayout>

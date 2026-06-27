@@ -1,5 +1,6 @@
 ---
 import type { MergedProject } from '../lib/github';
+import { categoryLabels } from '../data/projects';
 import { withBase } from '../lib/url';
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const { project } = Astro.props;
+const title = project.displayName;
 ---
 
 <article class="group flex flex-col overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/50 transition-colors hover:border-emerald-500/30">
@@ -14,21 +16,24 @@ const { project } = Astro.props;
     project.screenshot ? (
       <img
         src={withBase(project.screenshot)}
-        alt={`Screenshot of ${project.name}`}
+        alt={`Screenshot of ${title}`}
         class="h-48 w-full object-cover"
         loading="lazy"
       />
     ) : (
       <div class="flex h-48 items-center justify-center bg-neutral-800/50">
-        <span class="text-4xl font-bold text-neutral-700">{project.name.charAt(0).toUpperCase()}</span>
+        <span class="text-4xl font-bold text-neutral-700">{title.charAt(0).toUpperCase()}</span>
       </div>
     )
   }
   <div class="flex flex-1 flex-col p-5">
     <div class="flex items-start justify-between gap-2">
-      <h3 class="text-lg font-semibold text-neutral-100 group-hover:text-emerald-400 transition-colors">
-        {project.name}
-      </h3>
+      <div>
+        <span class="text-xs font-medium text-emerald-400">{categoryLabels[project.category]}</span>
+        <h3 class="mt-1 text-lg font-semibold text-neutral-100 group-hover:text-emerald-400 transition-colors">
+          {title}
+        </h3>
+      </div>
       {
         project.stars > 0 && (
           <span class="flex items-center gap-1 text-xs text-neutral-500">
@@ -49,14 +54,18 @@ const { project } = Astro.props;
       )
     }
     <div class="mt-4 flex gap-3">
-      <a
-        href={project.htmlUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
-      >
-        GitHub &rarr;
-      </a>
+      {
+        project.category !== 'meta' && (
+          <a
+            href={project.htmlUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
+          >
+            GitHub &rarr;
+          </a>
+        )
+      }
       {
         project.demoUrl && project.demoUrl !== '#' && (
           <a
@@ -65,7 +74,19 @@ const { project } = Astro.props;
             rel="noopener noreferrer"
             class="text-sm font-medium text-neutral-400 hover:text-emerald-400 transition-colors"
           >
-            Live Demo &rarr;
+            {project.category === 'meta' ? 'Live Site' : 'Live Demo'} &rarr;
+          </a>
+        )
+      }
+      {
+        project.category === 'meta' && (
+          <a
+            href={project.htmlUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
+          >
+            View Source &rarr;
           </a>
         )
       }

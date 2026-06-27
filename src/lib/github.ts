@@ -1,5 +1,5 @@
 import { site } from '../config/site';
-import { projectOverrides } from '../data/projects';
+import { projectOverrides, type WorkCategory } from '../data/projects';
 
 export interface GitHubRepo {
   name: string;
@@ -14,6 +14,8 @@ export interface GitHubRepo {
 
 export interface MergedProject {
   name: string;
+  displayName: string;
+  category: WorkCategory;
   description: string;
   htmlUrl: string;
   demoUrl: string | null;
@@ -99,6 +101,8 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
 
     merged.push({
       name: repo.name,
+      displayName: override?.displayName ?? repo.name,
+      category: override?.category ?? 'development',
       description:
         override?.description ?? repo.description ?? 'No description available.',
       htmlUrl: repo.html_url,
@@ -115,6 +119,8 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
     if (!repos.find((r) => r.name === override.repoName) && !override.hidden) {
       merged.push({
         name: override.repoName,
+        displayName: override.displayName ?? override.repoName,
+        category: override.category ?? 'development',
         description: override.description ?? 'Curated project.',
         htmlUrl: `https://github.com/${site.githubUsername}/${override.repoName}`,
         demoUrl: override.demoUrl ?? null,
@@ -127,8 +133,13 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
     }
   }
 
+  const categoryOrder: WorkCategory[] = ['marketing', 'development', 'automation', 'meta'];
+
   return merged.sort((a, b) => {
     if (a.featured !== b.featured) return a.featured ? -1 : 1;
+    const catA = categoryOrder.indexOf(a.category);
+    const catB = categoryOrder.indexOf(b.category);
+    if (catA !== catB) return catA - catB;
     return b.stars - a.stars;
   });
 }
