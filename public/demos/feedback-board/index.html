@@ -31,11 +31,12 @@
     min-height:500px;
   }
   .disclaimer{
-    background:#422006;border:1px solid #854d0e;border-radius:12px;
-    padding:10px 14px;margin-bottom:14px;font-size:12px;color:#fcd34d;line-height:1.5;
+    background:#052e2b;border:1px solid #0f766e;border-radius:12px;
+    padding:10px 14px;margin-bottom:14px;font-size:12px;color:#99f6e4;line-height:1.5;
   }
-  .disclaimer strong{color:#fde68a}
-  .header{margin-bottom:14px;}
+  .disclaimer strong{color:#ccfbf1}
+  .header{margin-bottom:14px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;}
+  .header-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
   h1{font-size:22px;font-weight:600;margin:0 0 4px;letter-spacing:-.02em;}
   .sub{color:var(--muted);font-size:14px;margin:0;}
   .anon-badge{
@@ -43,6 +44,12 @@
     background:rgba(16,185,129,.12);color:var(--accent);
     font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;margin:10px 0 0;
   }
+  .room-pill{
+    display:inline-flex;align-items:center;gap:6px;
+    background:#0e0f12;border:1px solid var(--border);color:var(--muted);
+    font-size:11px;padding:6px 10px;border-radius:999px;max-width:220px;
+  }
+  .room-pill strong{color:var(--text);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .chat-window{
     flex:1;overflow-y:auto;background:var(--panel);
     border:1px solid var(--border);border-radius:14px;
@@ -83,22 +90,41 @@
     background:var(--accent);color:#03130d;border:none;border-radius:10px;
     padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;
   }
+  .share-btn{background:#f5f5f5;color:#0a0a0a;padding:9px 14px;}
+  .share-btn:hover{background:#d4d4d8;}
   button:hover{background:var(--accent-hover);}
   button:disabled{background:#3a3d45;color:#888;cursor:not-allowed;}
   .footnote{text-align:center;font-size:11px;color:var(--muted);margin-top:10px;}
+  .mode{font-size:11px;color:var(--muted);text-align:right;}
+  .mode.live{color:var(--accent);}
+  .mode.local{color:#fcd34d;}
+  @media(max-width:640px){
+    .header{display:block;}
+    .header-actions{align-items:stretch;margin-top:12px;}
+    .room-pill{max-width:none;justify-content:center;}
+    .share-btn{width:100%;}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="disclaimer" role="note">
-    <strong>Demo disclaimer:</strong> Messages persist in your browser only for this preview.
-    A production board uses shared real-time storage so every team member sees the same thread.
+    <strong>Live room:</strong> Share this board with a coworker and posts will appear in the
+    same thread when Supabase Realtime is connected. If the realtime service is unavailable,
+    this demo falls back to browser-only storage.
   </div>
 
   <div class="header">
-    <h1>Anonymous Feedback Board</h1>
-    <p class="sub">One running thread. Everyone sees everything. No names attached.</p>
-    <div class="anon-badge">100% anonymous</div>
+    <div>
+      <h1>Anonymous Feedback Board</h1>
+      <p class="sub">One running thread. Everyone sees everything. No names attached.</p>
+      <div class="anon-badge">100% anonymous</div>
+    </div>
+    <div class="header-actions">
+      <div class="room-pill">Room <strong id="roomLabel">loading</strong></div>
+      <button class="share-btn" id="shareBtn" type="button">Share room</button>
+      <div class="mode" id="modeLabel">Connecting...</div>
+    </div>
   </div>
 
   <div class="chat-window" id="chatWindow">
@@ -115,9 +141,11 @@
   <p class="footnote">Posts are never linked to any identity — honest signal for teams and business owners.</p>
 </div>
 
-<script>
-(function () {
-  const STORAGE_KEY = 'feedback-board-demo';
+<script type="module">
+(async function () {
+  const SUPABASE_URL = 'https://bhedzgbrndsrnvwkmqbp.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_ZXrcB1YrzWht5m78CCdFFg_6aItAwsf';
+  const TABLE = 'feedback_messages';
 
   const COLORS = [
     { bg:'#2a1f3d', border:'#6d4fd1', text:'#c9b6ff' },
@@ -140,11 +168,46 @@
   ].map((entry, i) => ({ ...entry, color: COLORS[i % COLORS.length] }));
 
   let allFeedback = [];
+  let supabase = null;
+  let isLive = false;
+  let channel = null;
 
   const feedbackInput = document.getElementById('feedbackInput');
   const charCount = document.getElementById('charCount');
   const submitBtn = document.getElementById('submitBtn');
   const chatWindow = document.getElementById('chatWindow');
+  const shareBtn = document.getElementById('shareBtn');
+  const roomLabel = document.getElementById('roomLabel');
+  const modeLabel = document.getElementById('modeLabel');
+
+  function normalizeRoom(value) {
+    return String(value || '')
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 64);
+  }
+
+  function getRoomId() {
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl = normalizeRoom(params.get('room'));
+    if (fromUrl.length >= 3) return fromUrl;
+
+    const stored = normalizeRoom(localStorage.getItem('feedback-board-room'));
+    if (stored.length >= 3) return stored;
+
+    const fresh = 'room-' + Math.random().toString(36).slice(2, 8);
+    localStorage.setItem('feedback-board-room', fresh);
+    const next = new URL(window.location.href);
+    next.searchParams.set('room', fresh);
+    window.history.replaceState({}, '', next.toString());
+    return fresh;
+  }
+
+  const roomId = getRoomId();
+  const STORAGE_KEY = 'feedback-board-demo:' + roomId;
+  roomLabel.textContent = roomId;
 
   function randomColor() {
     return COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -164,23 +227,93 @@
     return Math.floor(diff / 86400) + 'd ago';
   }
 
+  function setMode(mode, text) {
+    modeLabel.className = 'mode ' + mode;
+    modeLabel.textContent = text;
+  }
+
+  function toUiMessage(row) {
+    return {
+      id: row.id,
+      text: row.body,
+      ts: new Date(row.created_at).getTime(),
+      color: row.color || randomColor(),
+    };
+  }
+
   async function loadFeedback() {
+    if (await connectRealtime()) {
+      return;
+    }
+
+    loadLocalFeedback();
+  }
+
+  function loadLocalFeedback() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        allFeedback = JSON.parse(raw);
-      } else {
-        allFeedback = SEED.slice();
-        await saveFeedback();
-      }
+      allFeedback = raw ? JSON.parse(raw) : SEED.slice();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(allFeedback));
     } catch {
       allFeedback = SEED.slice();
     }
+    setMode('local', 'Local preview mode');
     render(true);
   }
 
   async function saveFeedback() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(allFeedback));
+  }
+
+  async function connectRealtime() {
+    try {
+      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+      supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      const { data, error } = await supabase
+        .from(TABLE)
+        .select('id, body, color, created_at')
+        .eq('room_id', roomId)
+        .order('created_at', { ascending: true })
+        .limit(100);
+
+      if (error) throw error;
+
+      isLive = true;
+      allFeedback = (data || []).map(toUiMessage);
+      setMode('live', 'Live shared room');
+      render(true);
+
+      channel = supabase
+        .channel('feedback-room-' + roomId)
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: TABLE,
+            filter: 'room_id=eq.' + roomId,
+          },
+          (payload) => {
+            const msg = toUiMessage(payload.new);
+            if (!allFeedback.some((m) => m.id === msg.id)) {
+              allFeedback.push(msg);
+              render(true);
+            }
+          },
+        )
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED') setMode('live', 'Live shared room');
+          if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+            setMode('local', 'Realtime interrupted');
+          }
+        });
+
+      return true;
+    } catch (error) {
+      console.warn('Realtime unavailable; falling back to local storage.', error);
+      return false;
+    }
   }
 
   function render(autoScroll) {
@@ -223,14 +356,59 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Posting…';
 
-    allFeedback.push({ text, ts: Date.now(), color: randomColor() });
-    await saveFeedback();
+    const color = randomColor();
+    if (isLive && supabase) {
+      const { error } = await supabase.from(TABLE).insert({
+        room_id: roomId,
+        body: text,
+        color,
+      });
+      if (error) {
+        console.warn('Live post failed; saving locally.', error);
+        allFeedback.push({ text, ts: Date.now(), color });
+        await saveFeedback();
+        setMode('local', 'Saved locally');
+      }
+    } else {
+      allFeedback.push({ text, ts: Date.now(), color });
+      await saveFeedback();
+      render(true);
+    }
 
     feedbackInput.value = '';
     charCount.textContent = '0 / 1000';
     submitBtn.disabled = false;
     submitBtn.textContent = 'Post anonymously';
-    render(true);
+  });
+
+  shareBtn.addEventListener('click', async () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('room', roomId);
+    const shareUrl = url.toString();
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Anonymous Feedback Board',
+          text: 'Join this anonymous feedback room.',
+          url: shareUrl,
+        });
+        shareBtn.textContent = 'Shared';
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl);
+        shareBtn.textContent = 'Link copied';
+      } else {
+        window.prompt('Copy this room link:', shareUrl);
+        shareBtn.textContent = 'Copy link';
+      }
+    } catch {
+      shareBtn.textContent = 'Share room';
+      return;
+    }
+
+    setTimeout(() => {
+      shareBtn.textContent = 'Share room';
+    }, 1800);
   });
 
   loadFeedback();
