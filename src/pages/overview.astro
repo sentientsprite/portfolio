@@ -12,7 +12,10 @@ import { withBase } from '../lib/url';
 import { fetchMediumPosts } from '../lib/medium';
 
 const projects = await getMergedProjects();
-const selectedWork = projects.filter((p) => p.featured).slice(0, 3);
+const growthSystem = projects.find((p) => p.slug === 'growth-system');
+const selectedWork = growthSystem
+  ? [growthSystem, ...projects.filter((p) => p.featured && p.slug !== 'growth-system').slice(0, 2)]
+  : projects.filter((p) => p.featured).slice(0, 3);
 const stats = await fetchGitHubStats();
 
 const caseStudies = (await getCollection('caseStudies', ({ data }) => !data.draft))
@@ -84,7 +87,7 @@ const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
   {
     selectedWork.length > 0 && (
       <section class="mx-auto max-w-6xl px-4 py-16">
-        <SectionHeading eyebrow="Selected work" title="Builds, templates, and systems" />
+        <SectionHeading eyebrow="Selected work" title="Growth systems and product builds" />
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {selectedWork.map((project) => (
             <ProjectCard project={project} />

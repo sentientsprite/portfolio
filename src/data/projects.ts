@@ -17,6 +17,10 @@ export interface ProjectOverride {
   hidden?: boolean;
   description?: string;
   techStack?: string[];
+  /** When set, this project appears as a module inside the named growth system. */
+  growthSystemId?: string;
+  /** Short label for the module's role in the growth system flow. */
+  growthSystemStage?: string;
 }
 
 export const categoryLabels: Record<WorkCategory, string> = {
@@ -29,6 +33,74 @@ export const categoryLabels: Record<WorkCategory, string> = {
 
 export const projectOverrides: ProjectOverride[] = [
   {
+    repoName: 'growth-system',
+    displayName: 'Lead-to-Revenue Growth System',
+    category: 'product',
+    featured: true,
+    demoPath: 'demos/growth-system/index.html',
+    sourceUrl: '',
+    description:
+      'Full-stack growth infrastructure: landing page capture, lead scoring, scheduler booking, nurture automation, and prospect audits — all tracked from click to revenue.',
+    details:
+      'This is the integrated story behind the individual demos. A business owner gets one connected system instead of disconnected tools: traffic lands on a conversion page, forms sync to the CRM with source attribution, high-intent leads book instantly through the scheduler, lower-intent leads enter automated nurture flows, and sales gets scored prospect audits to prioritize outreach. Every step is logged and measurable. Open the interactive showcase to walk the customer journey, owner dashboard, and tech stack in one visual pitch.',
+    techStack: ['Landing Pages', 'HubSpot', 'Scheduling', 'Email Automation', 'Lead Scoring'],
+  },
+  {
+    repoName: 'landing-page-template',
+    displayName: 'Wellness Landing Page',
+    category: 'marketing',
+    growthSystemId: 'lead-to-revenue',
+    growthSystemStage: 'Capture intent',
+    demoPath: 'demos/landing-page/index.html',
+    description:
+      'High-converting, SEO-optimized landing page for a wellness brand — built for speed and conversions.',
+    details:
+      'A fully responsive landing page template designed around conversion best practices: a benefit-driven hero, social proof, clear pricing, and a focused call-to-action. A/B tested copy and visuals drove a 45% lift in conversions for the original client. This is the top of the Lead-to-Revenue stack — where paid and organic traffic becomes a tracked lead.',
+    techStack: ['HTML', 'CSS', 'JavaScript', 'SEO'],
+  },
+  {
+    repoName: 'fieldsync-scheduler',
+    displayName: 'FieldSync Scheduler',
+    category: 'product',
+    growthSystemId: 'lead-to-revenue',
+    growthSystemStage: 'Book instantly',
+    screenshot: 'images/projects/fieldsync-scheduler.png',
+    demoPath: 'demos/fieldsync-scheduler/index.html',
+    sourceUrl: '',
+    description:
+      'Dual-view scheduler: a customer booking form on the front, dispatch console with conflict blocking and SMS confirmation on the back.',
+    details:
+      'FieldSync converts interest into booked appointments. The customer view is a conversion-focused booking flow; the backend runs HubSpot sync, traffic-aware drive times, conflict checks, and technician SMS confirmation. In the full growth system, scheduler bookings are attributed back to the landing page and campaign that sourced the lead.',
+    techStack: ['Node.js', 'PostgreSQL', 'HubSpot', 'Google Maps', 'Twilio'],
+  },
+  {
+    repoName: 'email-automation',
+    displayName: 'Email Automation Funnel',
+    category: 'automation',
+    growthSystemId: 'lead-to-revenue',
+    growthSystemStage: 'Nurture automatically',
+    demoPath: 'demos/email-funnel/index.html',
+    description:
+      'Interactive Zapier-HubSpot lead-scoring funnel that automated 80% of nurture emails.',
+    details:
+      'Leads who are not ready to book enter segmented nurture sequences scored on behavior. High-intent contacts route to sales; everyone else gets automated follow-up. In the integrated stack, this layer keeps pipeline warm while the scheduler handles ready-to-buy leads.',
+    techStack: ['Zapier', 'HubSpot', 'Klaviyo', 'Python'],
+  },
+  {
+    repoName: 'spryte',
+    displayName: 'Spryte Lead Audit Tool',
+    category: 'product',
+    growthSystemId: 'lead-to-revenue',
+    growthSystemStage: 'Prioritize prospects',
+    demoPath: 'demos/spryte-audit/index.html',
+    sourceUrl: '',
+    description:
+      'AI-assisted lead audit tool for turning prospect websites into scored opportunities and prioritized outreach recommendations.',
+    details:
+      'Spryte helps sales and marketing prioritize who to pursue. It evaluates prospect websites, surfaces gaps, and outputs a scored opportunity with outreach angles. In the growth system, it complements inbound capture by giving outbound teams the same data-driven rigor.',
+    techStack: ['Next.js', 'AI Audit', 'Lead Scoring', 'SEO', 'Zod'],
+  },
+  {
     repoName: 'prana',
     displayName: 'Prana AI CMO Terminal',
     category: 'product',
@@ -37,9 +109,9 @@ export const projectOverrides: ProjectOverride[] = [
     demoPath: 'demos/prana-command-center/index.html',
     sourceUrl: '',
     description:
-      'AI-powered CMO command center for local businesses: audits, competitor research, SEO/GEO recommendations, content workflows, and lead-opportunity feeds. Demo uses Summit Valley Landscaping as an example client with simulated metrics.',
+      'AI-powered CMO command center for local businesses: audits, competitor research, SEO/GEO recommendations, content workflows, and lead-opportunity feeds.',
     details:
-      'Prana brings marketing operations into one terminal-style workspace. It combines product information, competitor analysis, brand voice, AI chat, SEO/GEO recommendations, article workflows, Reddit/Hacker News opportunity feeds, and analytics into a single operating room for local growth. The desktop/iOS shell wraps the dashboard with Tauri, notification support, and a Mac Mini connection flow.',
+      'Prana brings marketing operations into one terminal-style workspace. It combines product information, competitor analysis, brand voice, AI chat, SEO/GEO recommendations, article workflows, Reddit/Hacker News opportunity feeds, and analytics into a single operating room for local growth.',
     techStack: ['AI Agents', 'Next.js', 'Tauri', 'SEO/GEO', 'Analytics'],
   },
   {
@@ -53,21 +125,8 @@ export const projectOverrides: ProjectOverride[] = [
     description:
       'Agent orchestration dashboard for managing AI task fleets, workflows, skills, logs, costs, schedules, and quality gates.',
     details:
-      'Mission Control is the infrastructure layer behind multi-agent operations. It is designed as a single pane of glass for tasks, agents, sessions, memory, logs, cost tracking, cron schedules, security, webhooks, skills, and Aegis-style quality gates. Kept off the public showroom — Prana CMO Terminal is the client-facing product.',
+      'Mission Control is the infrastructure layer behind multi-agent operations. Kept off the public showroom — Prana CMO Terminal is the client-facing product.',
     techStack: ['Next.js 16', 'React 19', 'SQLite', 'WebSockets', 'Agent Ops'],
-  },
-  {
-    repoName: 'spryte',
-    displayName: 'Spryte Lead Audit Tool',
-    category: 'product',
-    featured: true,
-    demoPath: 'demos/spryte-audit/index.html',
-    sourceUrl: '',
-    description:
-      'AI-assisted lead audit tool for turning prospect websites into scored opportunities and prioritized outreach recommendations.',
-    details:
-      'Spryte fits as a lightweight prospecting and audit product: it evaluates lead websites, surfaces SEO/performance issues, and turns the result into a practical sales conversation. It supports the same positioning as Prana: growth systems that connect analysis, automation, and client acquisition.',
-    techStack: ['Next.js', 'AI Audit', 'Lead Scoring', 'SEO', 'Zod'],
   },
   {
     repoName: 'NEMO-APP-v.1',
@@ -75,49 +134,9 @@ export const projectOverrides: ProjectOverride[] = [
     category: 'product',
     featured: false,
     hidden: true,
-    description:
-      'Private sales pipeline and agent workspace — not shown publicly.',
-    details:
-      'Internal tooling for sales pipeline management. Kept off the public showroom.',
+    description: 'Private sales pipeline and agent workspace — not shown publicly.',
+    details: 'Internal tooling for sales pipeline management. Kept off the public showroom.',
     techStack: ['Next.js', 'Agents', 'Dashboard', 'Vercel'],
-  },
-  {
-    repoName: 'landing-page-template',
-    displayName: 'Wellness Landing Page',
-    category: 'marketing',
-    featured: false,
-    demoPath: 'demos/landing-page/index.html',
-    description:
-      'High-converting, SEO-optimized landing page for a wellness brand — built for speed and conversions.',
-    details:
-      'A fully responsive landing page template designed around conversion best practices: a benefit-driven hero, social proof, clear pricing, and a focused call-to-action. A/B tested copy and visuals drove a 45% lift in conversions for the original client. Explore the live demo to scroll through the full experience.',
-    techStack: ['HTML', 'CSS', 'JavaScript', 'SEO'],
-  },
-  {
-    repoName: 'email-automation',
-    displayName: 'Email Automation Funnel',
-    category: 'automation',
-    featured: false,
-    demoPath: 'demos/email-funnel/index.html',
-    description:
-      'Interactive Zapier-HubSpot lead-scoring funnel that automated 80% of nurture emails.',
-    details:
-      'A visual walkthrough of an automated lead-nurture system. Leads are scored on behavior, then routed to sales or into segmented nurture sequences. The interactive diagram lets you hover each stage to see what happens and the metrics it moved.',
-    techStack: ['Zapier', 'HubSpot', 'Klaviyo', 'Python'],
-  },
-  {
-    repoName: 'fieldsync-scheduler',
-    displayName: 'FieldSync Scheduler',
-    category: 'product',
-    featured: true,
-    screenshot: 'images/projects/fieldsync-scheduler.png',
-    demoPath: 'demos/fieldsync-scheduler/index.html',
-    sourceUrl: '',
-    description:
-      'Dual-view field-service scheduler: a high-converting customer booking form on the front, and a dispatch console with HubSpot sync, drive-time math, conflict blocking, and SMS confirmation on the back.',
-    details:
-      'FieldSync separates what customers see from what dispatch runs. The customer view is a conversion-focused booking flow — service type, address, and real available time windows with no CRM jargon exposed. Behind it, the backend dispatch console runs every appointment through a strict orchestration pipeline: load the customer from HubSpot, calculate traffic-aware drive time via Google Maps, pass five conflict checks (shift hours, job overlaps, drive-block collisions), then atomically write to PostgreSQL and SMS the technician. Customer bookings flow into the audit log and technician timeline automatically. Switch tabs to see both sides of the same system.',
-    techStack: ['Node.js', 'PostgreSQL', 'HubSpot', 'Google Maps', 'Twilio'],
   },
   {
     repoName: 'seo-dashboard',
@@ -128,7 +147,7 @@ export const projectOverrides: ProjectOverride[] = [
     description:
       'A clean reporting dashboard surfacing organic traffic, rankings, and conversion trends.',
     details:
-      'A client-facing SEO dashboard that turns raw analytics into a story: organic growth, keyword movement, top pages, and conversion impact. Explore the live demo to interact with the metric cards and charts.',
+      'A client-facing SEO dashboard that turns raw analytics into a story: organic growth, keyword movement, top pages, and conversion impact. Pairs naturally with the growth system as the measurement layer for organic traffic.',
     techStack: ['Analytics', 'SEMrush', 'Data Viz'],
   },
   {
@@ -140,7 +159,7 @@ export const projectOverrides: ProjectOverride[] = [
     description:
       'The live showroom you are browsing — built with Astro and Tailwind CSS, deployed to GitHub Pages.',
     details:
-      'This site is open source. It uses Astro for static, near-zero-JS pages, Tailwind for styling, Markdown content collections for writing, and a build-time GitHub API integration for stats. Deployed automatically to GitHub Pages on every push.',
+      'This site is open source. It uses Astro for static, near-zero-JS pages, Tailwind for styling, Markdown content collections for writing, and a build-time GitHub API integration for stats.',
     techStack: ['Astro', 'Tailwind CSS', 'TypeScript'],
   },
 ];

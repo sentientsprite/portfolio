@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getMergedProjects, type MergedProject } from '../../lib/github';
 import { categoryLabels } from '../../data/projects';
+import { growthSystemById } from '../../data/growth-systems';
 import { withBase, resolveDemoUrl } from '../../lib/url';
 
 export async function getStaticPaths() {
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const { project } = Astro.props;
+const allProjects = await getMergedProjects();
 const demoUrl = resolveDemoUrl({ demoPath: project.demoPath, demoUrl: project.demoUrl });
 const hasDemo = Boolean(demoUrl);
 const isMeta = project.category === 'meta';
@@ -24,6 +26,12 @@ const hasSource = Boolean(project.htmlUrl);
 const displayUrl = demoUrl
   ? demoUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')
   : '';
+
+const growthSystem = project.growthSystemId ? growthSystemById[project.growthSystemId] : null;
+const systemModules = project.growthSystemId
+  ? allProjects.filter((p) => p.growthSystemId === project.growthSystemId)
+  : [];
+const isGrowthSystemHub = project.slug === 'growth-system';
 ---
 
 <BaseLayout title={project.displayName} description={project.description}>
@@ -36,6 +44,18 @@ const displayUrl = demoUrl
     </a>
 
     <header class="mt-6">
+      {
+        growthSystem && !isGrowthSystemHub && (
+          <a
+            href={withBase('/work/growth-system')}
+            class="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400 transition hover:border-emerald-500/40"
+          >
+            Part of {growthSystem.name}
+            {project.growthSystemStage ? ` · ${project.growthSystemStage}` : ''}
+            &rarr;
+          </a>
+        )
+      }
       <span class="text-sm font-medium text-emerald-400">{categoryLabels[project.category]}</span>
       <h1 class="mt-2 text-4xl font-bold tracking-tight text-neutral-100">{project.displayName}</h1>
       <p class="mt-3 max-w-2xl text-lg text-neutral-400">{project.description}</p>
@@ -120,6 +140,31 @@ const displayUrl = demoUrl
         <section class="mt-10 max-w-3xl">
           <h2 class="text-xl font-semibold text-neutral-100">About this project</h2>
           <p class="mt-3 leading-relaxed text-neutral-400">{project.details}</p>
+        </section>
+      )
+    }
+
+    {
+      isGrowthSystemHub && systemModules.length > 0 && (
+        <section class="mt-10">
+          <h2 class="text-xl font-semibold text-neutral-100">System modules</h2>
+          <p class="mt-2 max-w-2xl text-sm text-neutral-500">
+            Each module is a live demo. Together they form the full lead-to-revenue stack.
+          </p>
+          <div class="mt-6 grid gap-4 sm:grid-cols-2">
+            {
+              systemModules.map((mod) => (
+                <a
+                  href={withBase(`/work/${mod.slug}`)}
+                  class="rounded-xl border border-neutral-800 bg-neutral-900/40 p-5 transition hover:border-emerald-500/30 hover:bg-emerald-500/5"
+                >
+                  <span class="text-xs font-medium text-emerald-400">{mod.growthSystemStage}</span>
+                  <h3 class="mt-1 font-semibold text-neutral-100">{mod.displayName}</h3>
+                  <p class="mt-2 text-sm text-neutral-500 line-clamp-2">{mod.description}</p>
+                </a>
+              ))
+            }
+          </div>
         </section>
       )
     }

@@ -2,12 +2,23 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import GrowthSystemShowcase from '../components/GrowthSystemShowcase.astro';
 import { getMergedProjects } from '../lib/github';
 import { categoryLabels, type WorkCategory } from '../data/projects';
 
 const projects = await getMergedProjects();
-const featured = projects.filter((p) => p.featured);
-const showroom = projects.filter((p) => !p.featured && p.category !== 'meta');
+const growthSystemProject = projects.find((p) => p.slug === 'growth-system');
+const growthModules = projects.filter((p) => p.growthSystemId === 'lead-to-revenue');
+const growthModuleSlugs = new Set(growthModules.map((p) => p.slug));
+
+const featured = projects.filter(
+  (p) => p.featured && p.slug !== 'growth-system' && !growthModuleSlugs.has(p.slug),
+);
+
+const showroom = projects.filter(
+  (p) => !p.featured && !p.growthSystemId && p.category !== 'meta',
+);
+
 const meta = projects.filter((p) => p.category === 'meta');
 
 const grouped = showroom.reduce<Record<string, typeof showroom>>((acc, project) => {
@@ -20,18 +31,31 @@ const grouped = showroom.reduce<Record<string, typeof showroom>>((acc, project) 
 const categoryOrder: WorkCategory[] = ['product', 'marketing', 'development', 'automation'];
 ---
 
-<BaseLayout title="Work" description="Curated marketing, development, and automation work.">
+<BaseLayout
+  title="Work"
+  description="Curated growth systems, product demos, and measurable marketing work."
+>
   <div class="mx-auto max-w-6xl px-4 py-16">
     <SectionHeading
       eyebrow="Portfolio"
       title="Work"
-      subtitle="A curated showroom of product systems, demos, and case-study-ready work — not a raw repo dump"
+      subtitle="Full-stack growth systems and the live demos behind them — organized by business outcome, not tech stack"
     />
+
+  {
+    growthSystemProject && (
+      <GrowthSystemShowcase
+        systemId="lead-to-revenue"
+        systemProject={growthSystemProject}
+        modules={growthModules}
+      />
+    )
+  }
 
     {
       featured.length > 0 && (
         <section class="mb-16">
-          <h3 class="mb-6 text-xl font-semibold text-neutral-100" data-animate>Selected Work</h3>
+          <h3 class="mb-6 text-xl font-semibold text-neutral-100" data-animate>More Product Systems</h3>
           <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featured.map((project) => (
               <ProjectCard project={project} />
@@ -77,7 +101,7 @@ const categoryOrder: WorkCategory[] = ['product', 'marketing', 'development', 'a
     {
       projects.length === 0 && (
         <p class="text-neutral-400">
-          No work items found yet. Add curated entries in <code>src/data/projects.ts</code> or connect your GitHub username in <code>src/config/site.ts</code>.
+          No work items found yet. Add curated entries in <code>src/data/projects.ts</code>.
         </p>
       )
     }

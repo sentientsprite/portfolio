@@ -159,23 +159,90 @@ summary:focus-visible {
    Prose (markdown content)
    =========================================================================== */
 .prose {
-  @apply max-w-none text-neutral-300;
+  @apply max-w-none leading-relaxed text-neutral-300;
 }
 
-.prose h1,
-.prose h2,
+.prose > * + * {
+  @apply mt-5;
+}
+
+.prose h2 {
+  @apply mt-12 mb-4 text-2xl font-semibold tracking-tight text-neutral-100;
+}
+
 .prose h3 {
-  @apply text-neutral-100;
+  @apply mt-8 mb-3 text-xl font-semibold tracking-tight text-neutral-100;
+}
+
+.prose h1 {
+  @apply text-3xl font-bold tracking-tight text-neutral-100;
+}
+
+.prose p {
+  @apply text-neutral-300;
 }
 
 .prose a {
-  @apply text-emerald-400 hover:text-emerald-300;
+  @apply font-medium text-emerald-400 underline-offset-4 hover:text-emerald-300 hover:underline;
+}
+
+.prose strong {
+  @apply font-semibold text-neutral-100;
+}
+
+.prose ul {
+  @apply my-5 list-disc space-y-2 pl-6 marker:text-emerald-400;
+}
+
+.prose ol {
+  @apply my-5 list-decimal space-y-2 pl-6 marker:text-neutral-500;
+}
+
+.prose li {
+  @apply text-neutral-300;
+}
+
+.prose li::marker {
+  @apply text-emerald-400;
+}
+
+.prose blockquote {
+  @apply my-6 border-l-2 border-emerald-500/40 pl-4 italic text-neutral-400;
+}
+
+.prose hr {
+  @apply my-10 border-neutral-800;
 }
 
 .prose code {
-  @apply rounded bg-neutral-800 px-1.5 py-0.5 text-emerald-300;
+  @apply rounded bg-neutral-800 px-1.5 py-0.5 text-sm text-emerald-300;
 }
 
 .prose pre {
-  @apply rounded-lg border border-neutral-800 bg-neutral-900;
+  @apply my-6 overflow-x-auto rounded-lg border border-neutral-800 bg-neutral-900 p-4;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0 text-neutral-300;
+}
+
+/* Tables — used heavily in case study results */
+.prose table {
+  @apply my-7 w-full border-collapse overflow-hidden rounded-lg text-left text-sm;
+}
+
+.prose thead {
+  @apply border-b border-neutral-700;
+}
+
+.prose th {
+  @apply bg-neutral-900/60 px-4 py-3 font-semibold text-neutral-100;
+}
+
+.prose td {
+  @apply border-b border-neutral-800/70 px-4 py-3 text-neutral-300;
+}
+
+.prose tbody tr:hover {
+  @apply bg-neutral-900/40;
 }

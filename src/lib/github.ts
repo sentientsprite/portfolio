@@ -28,6 +28,9 @@ export interface MergedProject {
   screenshot: string | null;
   techStack: string[];
   featured: boolean;
+  sortOrder: number;
+  growthSystemId: string | null;
+  growthSystemStage: string | null;
 }
 
 export interface GitHubStats {
@@ -100,7 +103,7 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
   // case-study angle, or explicit reason to be shown.
   const merged: MergedProject[] = projectOverrides
     .filter((override) => !override.hidden)
-    .map((override) => {
+    .map((override, sortOrder) => {
       const repo = repoMap.get(override.repoName);
 
       return {
@@ -122,6 +125,9 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
         screenshot: override.screenshot ?? null,
         techStack: override.techStack ?? (repo?.language ? [repo.language] : []),
         featured: override.featured ?? false,
+        sortOrder,
+        growthSystemId: override.growthSystemId ?? null,
+        growthSystemStage: override.growthSystemStage ?? null,
       };
     });
 
@@ -132,7 +138,7 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
     const catA = categoryOrder.indexOf(a.category);
     const catB = categoryOrder.indexOf(b.category);
     if (catA !== catB) return catA - catB;
-    return b.stars - a.stars;
+    return a.sortOrder - b.sortOrder;
   });
 }
 

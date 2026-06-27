@@ -37,11 +37,15 @@ const linkAttrs = external
 >
   {
     image && (
-      <a href={linkHref} {...linkAttrs} class="block h-40 w-full overflow-hidden bg-neutral-800/50">
+      <a
+        href={linkHref}
+        {...linkAttrs}
+        class="block w-full overflow-hidden border-b border-neutral-800 bg-neutral-950"
+      >
         <img
           src={image}
           alt={title}
-          class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          class="aspect-[1200/630] w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           loading="lazy"
         />
       </a>

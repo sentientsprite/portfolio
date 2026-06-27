@@ -15,10 +15,14 @@ import { projectOverrides } from '../data/projects';
 const pageTitle = site.name;
 const description = site.description;
 
-// Reuse real featured work for the showcase grid.
-const showcase = projectOverrides
-  .filter((p) => p.featured && !p.hidden)
-  .map((p) => ({
+// Reuse real featured work for the showcase grid — growth system first.
+const showcase = (() => {
+  const growth = projectOverrides.find((p) => p.repoName === 'growth-system' && !p.hidden);
+  const others = projectOverrides
+    .filter((p) => p.featured && !p.hidden && p.repoName !== 'growth-system')
+    .slice(0, 2);
+  const items = growth ? [growth, ...others] : others;
+  return items.map((p) => ({
     name: p.displayName ?? p.repoName,
     description: p.description ?? '',
     tech: p.techStack ?? [],
@@ -26,6 +30,7 @@ const showcase = projectOverrides
       resolveDemoUrl({ demoPath: p.demoPath, demoUrl: p.demoUrl }) ??
       withBase(`/work/${slugify(p.displayName ?? p.repoName)}`),
   }));
+})();
 
 const services = [
   {

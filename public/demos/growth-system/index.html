@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lead-to-Revenue Growth System — Benefit Showcase</title>
+<style>
+:root {
+  --bg:#0a0a0a;--panel:#141414;--panel-2:#111113;--border:#262626;
+  --ink:#f5f5f5;--muted:#a3a3a3;--accent:#10b981;--accent-soft:rgba(16,185,129,.12);
+  --warn:#f59e0b;--warn-soft:rgba(245,158,11,.12);
+  --blue:#38bdf8;--blue-soft:rgba(56,189,248,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding:28px 20px 56px}
+.wrap{max-width:1080px;margin:0 auto}
+.head{text-align:center;margin-bottom:24px}
+.head h1{font-size:30px;letter-spacing:-.02em}
+.head p{color:var(--muted);margin-top:8px;font-size:15px;max-width:680px;margin-inline:auto}
+.tabs{display:flex;justify-content:center;gap:8px;margin-bottom:22px;flex-wrap:wrap}
+.tab{background:var(--panel);border:1px solid var(--border);color:var(--muted);padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer}
+.tab.active,.tab:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.view{display:none}
+.view.active{display:block}
+.layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px}
+.panel h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:14px}
+.flow{display:flex;flex-direction:column;gap:0}
+.node{
+  border:1px solid var(--border);border-radius:12px;padding:14px 16px;background:var(--panel-2);
+  cursor:pointer;transition:all .18s;position:relative;
+}
+.node:hover,.node.active{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 8px 24px rgba(16,185,129,.08)}
+.node .step{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.node h3{font-size:16px;margin-top:4px}
+.node p{font-size:13px;color:var(--muted);margin-top:6px;max-height:0;overflow:hidden;transition:max-height .25s}
+.node.active p,.node.open p{max-height:120px}
+.node .metric{display:inline-block;margin-top:10px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px}
+.node .demo-link{display:inline-block;margin-top:10px;font-size:12px;font-weight:600;color:var(--blue);text-decoration:none}
+.node .demo-link:hover{text-decoration:underline}
+.connector{height:22px;width:2px;background:linear-gradient(var(--border),var(--accent));margin:0 auto}
+.branch{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.kpi{background:var(--panel-2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.kpi b{display:block;font-size:24px;color:var(--accent)}
+.kpi span{font-size:11px;color:var(--muted)}
+.owner-panel{background:var(--panel-2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:14px}
+.owner-panel h4{font-size:13px;margin-bottom:8px}
+.owner-panel ul{list-style:none;font-size:12px;color:var(--muted)}
+.owner-panel li{padding:6px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:8px}
+.owner-panel li:last-child{border-bottom:0}
+.owner-panel li strong{color:var(--ink);font-weight:600}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+.compare-card{border:1px solid var(--border);border-radius:14px;padding:16px;background:var(--panel)}
+.compare-card h3{font-size:14px;margin-bottom:10px}
+.compare-card.before h3{color:#fca5a5}
+.compare-card.after h3{color:var(--accent)}
+.compare-card li{font-size:13px;color:var(--muted);margin-bottom:8px;list-style:none;padding-left:14px;position:relative}
+.compare-card.before li::before{content:"✕";position:absolute;left:0;color:#f87171}
+.compare-card.after li::before{content:"✓";position:absolute;left:0;color:var(--accent)}
+.stack{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stack-card{border:1px solid var(--border);border-radius:12px;padding:14px;background:var(--panel-2)}
+.stack-card b{display:block;font-size:13px;margin-bottom:4px}
+.stack-card span{font-size:12px;color:var(--muted)}
+.cta{margin-top:24px;text-align:center;padding:22px;background:var(--panel);border:1px solid var(--border);border-radius:16px}
+.cta p{color:var(--muted);font-size:14px;margin-bottom:12px}
+.cta a{display:inline-block;background:var(--accent);color:#03130d;text-decoration:none;padding:12px 22px;border-radius:10px;font-weight:700;font-size:14px}
+@media(max-width:900px){.layout,.branch,.compare,.stack{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>Lead-to-Revenue Growth System</h1>
+    <p>Click any stage to see what happens for the customer, the business owner, and the stack behind it.</p>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab active" data-view="journey">Customer journey</button>
+    <button type="button" class="tab" data-view="owner">Business owner view</button>
+    <button type="button" class="tab" data-view="stack">Full-stack integration</button>
+  </div>
+
+  <section class="view active" id="view-journey">
+    <div class="layout">
+      <div class="panel">
+        <h2>From click to customer</h2>
+        <div class="flow" id="journey-flow"></div>
+      </div>
+      <aside class="panel">
+        <h2>Live metrics</h2>
+        <div class="kpis" id="kpi-grid"></div>
+        <div class="owner-panel">
+          <h4 id="stage-title">Select a stage</h4>
+          <ul id="stage-details">
+            <li><span>Click a pipeline step to see owner benefits and tracked data.</span></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="view" id="view-owner">
+    <div class="panel">
+      <h2>What a business owner gets</h2>
+      <div class="compare">
+        <div class="compare-card before">
+          <h3>Before: disconnected tools</h3>
+          <ul>
+            <li>Landing page with no source tracking</li>
+            <li>Leads sit in email inboxes</li>
+            <li>Phone tag to book appointments</li>
+            <li>Manual follow-up on cold leads</li>
+            <li>No idea which marketing pays off</li>
+          </ul>
+        </div>
+        <div class="compare-card after">
+          <h3>After: integrated growth system</h3>
+          <ul>
+            <li>Every lead tagged with campaign + UTM</li>
+            <li>CRM sync in under 2 seconds</li>
+            <li>Self-serve booking cuts drop-off</li>
+            <li>80% of nurture runs on autopilot</li>
+            <li>Dashboard shows traffic → revenue</li>
+          </ul>
+        </div>
+      </div>
+      <div class="kpis" style="margin-top:20px;grid-template-columns:repeat(4,1fr)">
+        <div class="kpi"><b>3,420</b><span>Monthly visitors</span></div>
+        <div class="kpi"><b>218</b><span>Leads captured</span></div>
+        <div class="kpi"><b>64</b><span>Booked appointments</span></div>
+        <div class="kpi"><b>$38.4k</b><span>Pipeline value</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-stack">
+    <div class="panel">
+      <h2>Full-stack layers</h2>
+      <div class="stack" id="stack-grid"></div>
+      <p style="margin-top:16px;font-size:13px;color:var(--muted)">Each layer is a live demo in this portfolio. Together they form one connected system — not four separate projects.</p>
+    </div>
+  </section>
+
+  <div class="cta">
+    <p>Want this built for your business — landing page, scheduler, nurture, and tracking in one stack?</p>
+    <a href="mailto:raymondtheking@proton.me?subject=Lead-to-Revenue%20Growth%20System">Contact me for the full build</a>
+  </div>
+</div>
+
+<script>
+(function () {
+  const BASE = '/portfolio';
+
+  const STAGES = [
+    {
+      id: 'traffic', step: 'Source', title: 'Traffic arrives',
+      detail: 'SEO, Google Ads, or social sends visitors to a focused landing page. UTM and campaign data attach automatically.',
+      metric: '3,420 visits / mo', kpis: { visitors: '3,420', leads: '—', booked: '—', pipeline: '—' },
+      owner: [['Top source', 'Google Local SEO'], ['Cost per visit', '$1.12'], ['Tracked', 'Yes']],
+    },
+    {
+      id: 'landing', step: 'Capture', title: 'Landing page converts',
+      detail: 'Benefit-driven hero, social proof, and a single CTA. Form submits sync to HubSpot with source attribution.',
+      metric: '45% conversion lift', demo: 'demos/landing-page/index.html',
+      kpis: { visitors: '3,420', leads: '218', booked: '—', pipeline: '$0' },
+      owner: [['Form conversion', '6.4%'], ['Leads captured', '218'], ['Source tagged', '100%']],
+    },
+    {
+      id: 'score', step: 'Score', title: 'Lead scored + CRM sync',
+      detail: 'Behavioral scoring routes high-intent leads to sales and lower-intent leads into nurture. All logged in CRM.',
+      metric: 'Sync in < 2 sec', kpis: { visitors: '3,420', leads: '218', booked: '—', pipeline: '$12k' },
+      owner: [['Hot leads', '41'], ['Nurture queue', '177'], ['CRM sync', '< 2 sec']],
+    },
+    {
+      id: 'book', step: 'Convert', title: 'Scheduler books the job',
+      detail: 'Ready-to-buy leads pick an open slot. Conflict engine, drive time, and SMS confirmation run behind the scenes.',
+      metric: '64 bookings', demo: 'demos/fieldsync-scheduler/index.html',
+      kpis: { visitors: '3,420', leads: '218', booked: '64', pipeline: '$28k' },
+      owner: [['Booked rate', '29%'], ['Avg confirm', '28 min'], ['Double-bookings', '0']],
+    },
+    {
+      id: 'nurture', step: 'Nurture', title: 'Email funnel warms the rest',
+      detail: 'Leads not ready to book enter segmented sequences. Behavior updates scores in real time.',
+      metric: '80% automated', demo: 'demos/email-funnel/index.html',
+      kpis: { visitors: '3,420', leads: '218', booked: '64', pipeline: '$34k' },
+      owner: [['Emails automated', '80%'], ['Re-engaged', '35%'], ['Sales routed', '41']],
+    },
+    {
+      id: 'audit', step: 'Prospect', title: 'Lead audit prioritizes outreach',
+      detail: 'For outbound, prospect websites are scored into prioritized opportunities with outreach angles.',
+      metric: 'A+ pipeline', demo: 'demos/spryte-audit/index.html',
+      kpis: { visitors: '3,420', leads: '218', booked: '64', pipeline: '$38.4k' },
+      owner: [['Prospects scored', '52'], ['Priority A leads', '18'], ['Est. MRR opp.', '$4.2k']],
+    },
+    {
+      id: 'dashboard', step: 'Measure', title: 'Revenue dashboard',
+      detail: 'Owner sees traffic, leads, bookings, source attribution, and pipeline value in one view.',
+      metric: '100% attributed', demo: 'demos/seo-dashboard/index.html',
+      kpis: { visitors: '3,420', leads: '218', booked: '64', pipeline: '$38.4k' },
+      owner: [['Best page', 'Wellness LP'], ['Best source', 'Organic SEO'], ['ROI visible', 'Yes']],
+    },
+  ];
+
+  const STACK = [
+    { name: 'Wellness Landing Page', layer: 'Capture', tech: 'HTML · SEO · CTA tracking', demo: 'demos/landing-page/index.html' },
+    { name: 'FieldSync Scheduler', layer: 'Convert', tech: 'HubSpot · Maps · Twilio SMS', demo: 'demos/fieldsync-scheduler/index.html' },
+    { name: 'Email Automation Funnel', layer: 'Nurture', tech: 'Zapier · HubSpot · Klaviyo', demo: 'demos/email-funnel/index.html' },
+    { name: 'Spryte Lead Audit', layer: 'Prospect', tech: 'AI scoring · SEO audit', demo: 'demos/spryte-audit/index.html' },
+    { name: 'SEO Dashboard', layer: 'Measure', tech: 'Analytics · Reporting', demo: 'demos/seo-dashboard/index.html' },
+    { name: 'CRM + Attribution', layer: 'Connect', tech: 'HubSpot · UTM · Audit log', demo: null },
+  ];
+
+  let activeStage = STAGES[1];
+
+  function renderFlow() {
+    const flow = document.getElementById('journey-flow');
+    flow.innerHTML = STAGES.map((s, i) => {
+      let html = '';
+      if (i > 0) html += '<div class="connector"></div>';
+      html += '<div class="node' + (s.id === activeStage.id ? ' active open' : '') + '" data-id="' + s.id + '">' +
+        '<div class="step">' + s.step + '</div><h3>' + s.title + '</h3>' +
+        '<p>' + s.detail + '</p>' +
+        '<span class="metric">' + s.metric + '</span>' +
+        (s.demo ? '<a class="demo-link" href="' + BASE + '/' + s.demo + '" target="_blank" rel="noopener">Open live demo →</a>' : '') +
+        '</div>';
+      return html;
+    }).join('');
+
+    flow.querySelectorAll('.node').forEach((node) => {
+      node.addEventListener('click', (e) => {
+        if (e.target.closest('.demo-link')) return;
+        activeStage = STAGES.find((s) => s.id === node.dataset.id);
+        renderFlow();
+        renderKpis();
+        renderDetails();
+      });
+    });
+  }
+
+  function renderKpis() {
+    const k = activeStage.kpis;
+    document.getElementById('kpi-grid').innerHTML =
+      '<div class="kpi"><b>' + k.visitors + '</b><span>Visitors</span></div>' +
+      '<div class="kpi"><b>' + k.leads + '</b><span>Leads</span></div>' +
+      '<div class="kpi"><b>' + k.booked + '</b><span>Booked</span></div>' +
+      '<div class="kpi"><b>' + k.pipeline + '</b><span>Pipeline</span></div>';
+  }
+
+  function renderDetails() {
+    document.getElementById('stage-title').textContent = activeStage.title;
+    document.getElementById('stage-details').innerHTML = activeStage.owner
+      .map(([k, v]) => '<li><span>' + k + '</span><strong>' + v + '</strong></li>').join('');
+  }
+
+  function renderStack() {
+    document.getElementById('stack-grid').innerHTML = STACK.map((item) =>
+      '<div class="stack-card">' +
+      '<b>' + item.name + '</b>' +
+      '<span>' + item.layer + ' · ' + item.tech + '</span>' +
+      (item.demo ? '<a class="demo-link" style="display:block;margin-top:8px" href="' + BASE + '/' + item.demo + '" target="_blank" rel="noopener">Open demo →</a>' : '') +
+      '</div>'
+    ).join('');
+  }
+
+  document.querySelectorAll('.tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+      document.querySelectorAll('.view').forEach((v) => v.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('view-' + tab.dataset.view).classList.add('active');
+    });
+  });
+
+  renderFlow();
+  renderKpis();
+  renderDetails();
+  renderStack();
+})();
+</script>
+</body>
+</html>

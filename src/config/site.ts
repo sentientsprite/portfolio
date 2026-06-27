@@ -3,7 +3,7 @@ export const site = {
   title: 'Digital Marketing & Web Development Consultant',
   photo: 'images/raymond-king.png',
   description:
-    'SEO-focused websites, automation systems, and growth marketing projects.',
+    'Full-stack growth systems that turn traffic into tracked leads, booked appointments, and measurable revenue.',
   githubUsername: 'sentientsprite',
   email: 'raymondtheking@proton.me',
   social: {
