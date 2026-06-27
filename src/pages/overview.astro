@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import BlogCard from '../components/BlogCard.astro';
+import GitHubStats from '../components/GitHubStats.astro';
+import ContributionGraph from '../components/ContributionGraph.astro';
+import { site } from '../config/site';
+import { getMergedProjects, fetchGitHubStats } from '../lib/github';
+import { getCollection } from 'astro:content';
+import { withBase } from '../lib/url';
+import { fetchMediumPosts } from '../lib/medium';
+
+const projects = await getMergedProjects();
+const selectedWork = projects.filter((p) => p.featured).slice(0, 3);
+const stats = await fetchGitHubStats();
+
+const caseStudies = (await getCollection('caseStudies', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
+---
+
+<BaseLayout title="Overview" description="Portfolio overview — case studies, selected work, writing, and GitHub activity.">
+  <!-- 1. Hero -->
+  <section class="mx-auto max-w-6xl px-4 py-24 text-center">
+    <p class="text-sm font-medium text-emerald-400">Digital Marketing & Web Development</p>
+    <h1 class="mt-4 text-5xl font-bold tracking-tight text-neutral-100 sm:text-6xl">
+      {site.name}
+    </h1>
+    <p class="mx-auto mt-6 max-w-2xl text-lg text-neutral-400">
+      {site.title}. I build fast, SEO-focused sites and growth systems that drive measurable results.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <a href={withBase('/case-studies')} class="rounded-lg bg-emerald-500 px-6 py-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-emerald-400">
+        See Results
+      </a>
+      <a href={withBase('/work')} class="rounded-lg border border-neutral-700 px-6 py-3 text-sm font-medium text-neutral-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-400">
+        View Work
+      </a>
+      <a href={withBase('/contact')} class="rounded-lg border border-neutral-700 px-6 py-3 text-sm font-medium text-neutral-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-400">
+        Get in Touch
+      </a>
+    </div>
+  </section>
+
+  <!-- 2. About -->
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <SectionHeading title="About" subtitle="Who I am and what I do" />
+    <p class="max-w-3xl text-neutral-400 leading-relaxed">{site.bio}</p>
+    <div class="mt-6 flex flex-wrap gap-2">
+      {site.skills.map((skill) => (
+        <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-sm text-emerald-400">{skill}</span>
+      ))}
+    </div>
+  </section>
+
+  <!-- 3. Proof: Case Studies -->
+  {
+    caseStudies.length > 0 && (
+      <section class="mx-auto max-w-6xl px-4 py-16">
+        <SectionHeading title="Proof of Results" subtitle="Case studies with measurable outcomes" />
+        <div class="grid gap-6 sm:grid-cols-2">
+          {caseStudies.map((study) => (
+            <BlogCard
+              title={study.data.title}
+              description={study.data.description}
+              href={`case-studies/${study.id}`}
+              date={study.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+              tags={study.data.tags}
+              type="case-study"
+            />
+          ))}
+        </div>
+        <div class="mt-8 text-center">
+          <a href={withBase('/case-studies')} class="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
+            All case studies &rarr;
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 4. Selected Work -->
+  {
+    selectedWork.length > 0 && (
+      <section class="mx-auto max-w-6xl px-4 py-16">
+        <SectionHeading title="Selected Work" subtitle="Builds, templates, and systems" />
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {selectedWork.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+        <div class="mt-8 text-center">
+          <a href={withBase('/work')} class="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
+            Browse the full showroom &rarr;
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 5. Thought Leadership -->
+  {
+    mediumPosts.length > 0 && (
+      <section class="mx-auto max-w-6xl px-4 py-16">
+        <SectionHeading title="Writing" subtitle="Latest essays and articles on Medium" />
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {mediumPosts.map((post) => (
+            <BlogCard
+              title={post.title}
+              description={post.snippet}
+              href={post.link}
+              date={post.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+              tags={post.categories}
+              image={post.thumbnail}
+              external={true}
+              source="Medium"
+            />
+          ))}
+        </div>
+        <div class="mt-8 text-center">
+          <a href={withBase('/blog')} class="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors">
+            Read the blog &rarr;
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 6. GitHub Activity -->
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <SectionHeading title="GitHub Activity" subtitle="Open source and ongoing builds" />
+    <GitHubStats stats={stats} />
+    <div class="mt-8">
+      <ContributionGraph />
+    </div>
+  </section>
+
+  <!-- 7. CTA -->
+  <section class="mx-auto max-w-6xl px-4 py-16 text-center">
+    <h2 class="text-2xl font-bold text-neutral-100">Let's work together</h2>
+    <p class="mt-3 text-neutral-400">Need a site, funnel, or growth system? Let's talk.</p>
+    <div class="mt-6 flex flex-wrap justify-center gap-4">
+      <a href={withBase('/contact')} class="rounded-lg bg-emerald-500 px-6 py-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-emerald-400">
+        Contact Me
+      </a>
+      <a href={withBase('/resume')} class="rounded-lg border border-neutral-700 px-6 py-3 text-sm font-medium text-neutral-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-400">
+        View Resume
+      </a>
+    </div>
+  </section>
+</BaseLayout>
