@@ -37,7 +37,7 @@ export const projectOverrides: ProjectOverride[] = [
     demoPath: 'demos/prana-command-center/index.html',
     sourceUrl: '',
     description:
-      'AI-powered CMO command center for local businesses: audits, competitor research, SEO/GEO recommendations, content workflows, and lead-opportunity feeds.',
+      'AI-powered CMO command center for local businesses: audits, competitor research, SEO/GEO recommendations, content workflows, and lead-opportunity feeds. Demo uses Summit Valley Landscaping as an example client with simulated metrics.',
     details:
       'Prana brings marketing operations into one terminal-style workspace. It combines product information, competitor analysis, brand voice, AI chat, SEO/GEO recommendations, article workflows, Reddit/Hacker News opportunity feeds, and analytics into a single operating room for local growth. The desktop/iOS shell wraps the dashboard with Tauri, notification support, and a Mac Mini connection flow.',
     techStack: ['AI Agents', 'Next.js', 'Tauri', 'SEO/GEO', 'Analytics'],
@@ -46,13 +46,14 @@ export const projectOverrides: ProjectOverride[] = [
     repoName: 'mission-control',
     displayName: 'Prana Mission Control',
     category: 'product',
-    featured: true,
+    featured: false,
+    hidden: true,
     demoPath: 'demos/mission-control/index.html',
     sourceUrl: 'https://github.com/builderz-labs/mission-control',
     description:
       'Agent orchestration dashboard for managing AI task fleets, workflows, skills, logs, costs, schedules, and quality gates.',
     details:
-      'Mission Control is the infrastructure layer behind multi-agent operations. It is designed as a single pane of glass for tasks, agents, sessions, memory, logs, cost tracking, cron schedules, security, webhooks, skills, and Aegis-style quality gates. It belongs on the site as platform/infrastructure work rather than a normal marketing case study.',
+      'Mission Control is the infrastructure layer behind multi-agent operations. It is designed as a single pane of glass for tasks, agents, sessions, memory, logs, cost tracking, cron schedules, security, webhooks, skills, and Aegis-style quality gates. Kept off the public showroom — Prana CMO Terminal is the client-facing product.',
     techStack: ['Next.js 16', 'React 19', 'SQLite', 'WebSockets', 'Agent Ops'],
   },
   {
@@ -70,14 +71,14 @@ export const projectOverrides: ProjectOverride[] = [
   },
   {
     repoName: 'NEMO-APP-v.1',
-    displayName: 'NEMO Agent Workspace',
+    displayName: 'Sales Pipeline Workspace',
     category: 'product',
     featured: false,
-    demoUrl: 'https://nemo-app-v-1.vercel.app',
+    hidden: true,
     description:
-      'Live agent workspace and dashboard for experimenting with AI operations, memory, and marketing workflows.',
+      'Private sales pipeline and agent workspace — not shown publicly.',
     details:
-      'NEMO is a working public demo that can stay in the showroom because it has a deployed interface. Related repos such as autoagent, nemo-workspace, and nemo-agent are better treated as supporting infrastructure or rebuildable scaffolds, not standalone portfolio pieces.',
+      'Internal tooling for sales pipeline management. Kept off the public showroom.',
     techStack: ['Next.js', 'Agents', 'Dashboard', 'Vercel'],
   },
   {

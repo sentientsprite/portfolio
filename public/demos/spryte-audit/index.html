@@ -1,4 +1,259 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spryte Audit Demo</title><style>
-*{box-sizing:border-box}body{margin:0;background:#09090b;color:#fafafa;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;padding:28px}.wrap{max-width:980px;margin:auto}.hero{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-bottom:22px}.hero h1{font-size:34px;margin:0}.hero p{color:#a1a1aa}.input{display:flex;gap:10px;background:#18181b;border:1px solid #27272a;border-radius:14px;padding:10px;margin:20px 0}.input input{flex:1;background:transparent;border:0;color:#fafafa;font-size:15px;outline:0}.input button{background:#10b981;color:#03130d;border:0;border-radius:10px;padding:10px 16px;font-weight:700}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{background:#18181b;border:1px solid #27272a;border-radius:16px;padding:18px}.score{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.metric{text-align:center;background:#111113;border:1px solid #27272a;border-radius:14px;padding:16px}.metric b{display:block;font-size:30px;color:#10b981}.metric span{font-size:12px;color:#a1a1aa}.issue{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #27272a}.issue:last-child{border-bottom:0}.sev{font-size:11px;border-radius:999px;padding:4px 8px;height:max-content}.crit{background:#451a1a;color:#fca5a5}.warn{background:#422006;color:#fcd34d}.ok{background:#052e2b;color:#6ee7b7}.copy{background:#0f172a;border-left:3px solid #10b981;padding:14px;border-radius:10px;color:#cbd5e1;font-size:14px}.lead{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px;border-radius:12px;background:#111113;margin-bottom:10px}.lead small{color:#a1a1aa}.cta{color:#10b981;font-weight:700;font-size:13px}@media(max-width:760px){.grid,.score{grid-template-columns:1fr}.hero{display:block}}
-</style></head><body><div class="wrap"><div class="hero"><div><h1>Spryte Lead Audit</h1><p>Turn a prospect website into a scored opportunity and outreach angle.</p></div><span style="color:#10b981;font-weight:700">AI audit complete</span></div><div class="input"><input value="https://slclandscaping.example" aria-label="Website URL"><button>Run Audit</button></div><section class="score"><div class="metric"><b>72</b><span>Lead Score</span></div><div class="metric"><b>3</b><span>Critical Issues</span></div><div class="metric"><b>$2.4k</b><span>Est. MRR Fit</span></div><div class="metric"><b>A</b><span>Outreach Priority</span></div></section><div class="grid"><section class="panel"><h2>Issues Found</h2><div class="issue"><span class="sev crit">Critical</span><div><strong>Missing meta description</strong><p style="color:#a1a1aa;margin:4px 0 0">Search results do not explain the offer.</p></div></div><div class="issue"><span class="sev crit">Critical</span><div><strong>No local schema</strong><p style="color:#a1a1aa;margin:4px 0 0">Service-area pages are not machine-readable.</p></div></div><div class="issue"><span class="sev warn">Warning</span><div><strong>Slow mobile LCP</strong><p style="color:#a1a1aa;margin:4px 0 0">Hero image and scripts delay first impression.</p></div></div><div class="issue"><span class="sev ok">Win</span><div><strong>Good page structure</strong><p style="color:#a1a1aa;margin:4px 0 0">Strong base for conversion improvements.</p></div></div></section><section class="panel"><h2>Suggested Outreach</h2><div class="copy">I noticed your landscaping site ranks for several local terms, but Google is missing key business/service-area context. A quick schema + page-speed cleanup could help you capture more quote requests from Salt Lake searches.</div><h2 style="margin-top:22px">Next Actions</h2><div class="lead"><div><strong>Create SEO repair brief</strong><br><small>Meta, local schema, image optimization</small></div><span class="cta">Fix</span></div><div class="lead"><div><strong>Draft cold email</strong><br><small>Personalized to service-area gaps</small></div><span class="cta">Write</span></div><div class="lead"><div><strong>Add to pipeline</strong><br><small>Stage: qualified opportunity</small></div><span class="cta">Add</span></div></section></div></div></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spryte Lead Audit Demo</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#09090b;color:#fafafa;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;padding:28px}
+.wrap{max-width:980px;margin:auto}
+.hero{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-bottom:16px}
+.hero h1{font-size:34px;margin:0}
+.hero p{color:#a1a1aa;margin:8px 0 0}
+.disclaimer{background:#422006;border:1px solid #854d0e;border-radius:12px;padding:14px 16px;margin:18px 0;font-size:13px;color:#fcd34d;line-height:1.5}
+.disclaimer strong{color:#fde68a}
+.disclaimer a{color:#10b981;font-weight:600}
+.input{display:flex;gap:10px;background:#18181b;border:1px solid #27272a;border-radius:14px;padding:10px;margin:20px 0}
+.input input{flex:1;background:transparent;border:0;color:#fafafa;font-size:15px;outline:0;min-width:0}
+.input button{background:#10b981;color:#03130d;border:0;border-radius:10px;padding:10px 18px;font-weight:700;cursor:pointer;white-space:nowrap}
+.input button:disabled{opacity:.5;cursor:not-allowed}
+.input button:hover:not(:disabled){background:#34d399}
+.status{color:#a1a1aa;font-size:13px;margin:-8px 0 16px;min-height:20px}
+.results{opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s}
+.results.visible{opacity:1;transform:none}
+.score{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.metric{text-align:center;background:#111113;border:1px solid #27272a;border-radius:14px;padding:16px}
+.metric b{display:block;font-size:30px;color:#10b981}
+.metric span{font-size:12px;color:#a1a1aa}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.panel{background:#18181b;border:1px solid #27272a;border-radius:16px;padding:18px}
+.issue{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #27272a}
+.issue:last-child{border-bottom:0}
+.sev{font-size:11px;border-radius:999px;padding:4px 8px;height:max-content;white-space:nowrap}
+.crit{background:#451a1a;color:#fca5a5}
+.warn{background:#422006;color:#fcd34d}
+.ok{background:#052e2b;color:#6ee7b7}
+.copy{background:#0f172a;border-left:3px solid #10b981;padding:14px;border-radius:10px;color:#cbd5e1;font-size:14px;line-height:1.55}
+.lead{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px;border-radius:12px;background:#111113;margin-bottom:10px}
+.lead small{color:#a1a1aa}
+.cta{color:#10b981;font-weight:700;font-size:13px}
+.cta-box{margin-top:24px;text-align:center;padding:24px;background:#111113;border:1px solid #27272a;border-radius:16px}
+.cta-box p{color:#a1a1aa;margin:0 0 14px;font-size:14px}
+.cta-box a{display:inline-block;background:#10b981;color:#03130d;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:700;font-size:14px}
+.cta-box a:hover{background:#34d399}
+.placeholder{color:#71717a;text-align:center;padding:48px 24px;border:1px dashed #27272a;border-radius:16px}
+@media(max-width:760px){.grid,.score{grid-template-columns:1fr}.hero{display:block}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <h1>Spryte Lead Audit</h1>
+      <p>Enter a prospect website to preview estimated scores and outreach angles.</p>
+    </div>
+  </div>
+
+  <div class="disclaimer" role="note">
+    <strong>Demo disclaimer:</strong> All numbers, issues, and recommendations shown here are
+    <strong>simulated estimates</strong> — not based on live crawls or current search data.
+    Contact Raymond for a full audit with real diagnostics.
+    <a href="mailto:raymondtheking@proton.me">raymondtheking@proton.me</a>
+  </div>
+
+  <form class="input" id="audit-form">
+    <input
+      type="url"
+      id="url-input"
+      placeholder="https://example.com"
+      aria-label="Website URL"
+      required
+    >
+    <button type="submit" id="run-btn">Run Audit</button>
+  </form>
+  <p class="status" id="status" aria-live="polite"></p>
+
+  <div id="placeholder" class="placeholder">
+    Enter a website URL above to generate a sample audit report.
+  </div>
+
+  <div id="results" class="results" hidden>
+    <section class="score" id="score-row"></section>
+    <div class="grid">
+      <section class="panel">
+        <h2>Issues Found <span style="color:#71717a;font-weight:400;font-size:14px">(estimated)</span></h2>
+        <div id="issues"></div>
+      </section>
+      <section class="panel">
+        <h2>Suggested Outreach</h2>
+        <div class="copy" id="outreach"></div>
+        <h2 style="margin-top:22px">Next Actions</h2>
+        <div id="actions"></div>
+      </section>
+    </div>
+    <div class="cta-box">
+      <p>Want real Lighthouse scores, keyword gaps, and competitor benchmarks?</p>
+      <a href="mailto:raymondtheking@proton.me?subject=Spryte%20full%20audit%20request">Contact me for the full demo</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const ISSUE_POOL = [
+    { sev: 'crit', title: 'Missing meta description', desc: 'Search results do not explain the offer clearly.' },
+    { sev: 'crit', title: 'No local business schema', desc: 'Service-area pages are not machine-readable for Google.' },
+    { sev: 'crit', title: 'Thin homepage copy', desc: 'Primary landing page lacks keyword depth and trust signals.' },
+    { sev: 'warn', title: 'Slow mobile LCP', desc: 'Hero image and third-party scripts delay first impression.' },
+    { sev: 'warn', title: 'Weak internal linking', desc: 'Key service pages are orphaned from the main nav.' },
+    { sev: 'warn', title: 'No conversion tracking', desc: 'Form submits and calls may not be attributed to campaigns.' },
+    { sev: 'warn', title: 'Duplicate title tags', desc: 'Multiple pages compete for the same search intent.' },
+    { sev: 'ok', title: 'Readable page structure', desc: 'Solid base for conversion and SEO improvements.' },
+    { sev: 'ok', title: 'HTTPS configured', desc: 'Site meets baseline security expectations.' },
+  ];
+
+  const VERTICALS = [
+    { keys: ['landscap', 'lawn', 'garden', 'tree'], label: 'landscaping', city: 'local service-area' },
+    { keys: ['dental', 'dentist', 'ortho'], label: 'dental practice', city: 'patient acquisition' },
+    { keys: ['law', 'legal', 'attorney'], label: 'law firm', city: 'case intake' },
+    { keys: ['shop', 'store', 'ecom', 'buy'], label: 'e-commerce', city: 'product discovery' },
+    { keys: ['saas', 'software', 'app', 'tech'], label: 'SaaS', city: 'trial signups' },
+    { keys: ['restaurant', 'cafe', 'food', 'pizza'], label: 'restaurant', city: 'reservations and orders' },
+  ];
+
+  function hash(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) h = ((h << 5) - h + str.charCodeAt(i)) | 0;
+    return Math.abs(h);
+  }
+
+  function pick(arr, seed) {
+    return arr[seed % arr.length];
+  }
+
+  function parseHost(raw) {
+    try {
+      const u = raw.includes('://') ? raw : 'https://' + raw;
+      return new URL(u).hostname.replace(/^www\./, '');
+    } catch {
+      return raw.replace(/^https?:\/\//, '').split('/')[0] || 'example.com';
+    }
+  }
+
+  function detectVertical(host) {
+    const lower = host.toLowerCase();
+    for (const v of VERTICALS) {
+      if (v.keys.some((k) => lower.includes(k))) return v;
+    }
+    return { label: 'local business', city: 'lead generation' };
+  }
+
+  function formatMrr(n) {
+    if (n >= 1000) return '$' + (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    return '$' + n;
+  }
+
+  function priorityLetter(score) {
+    if (score >= 80) return 'A+';
+    if (score >= 70) return 'A';
+    if (score >= 55) return 'B';
+    return 'C';
+  }
+
+  function buildAudit(url) {
+    const host = parseHost(url);
+    const seed = hash(host);
+    const vertical = detectVertical(host);
+
+    const leadScore = 48 + (seed % 42);
+    const critical = 1 + (seed % 4);
+    const mrr = 1200 + (seed % 9) * 350;
+    const priority = priorityLetter(leadScore);
+
+    const issueCount = 4 + (seed % 2);
+    const issues = [];
+    const used = new Set();
+    for (let i = 0; i < issueCount; i++) {
+      let idx = (seed + i * 7) % ISSUE_POOL.length;
+      while (used.has(idx)) idx = (idx + 1) % ISSUE_POOL.length;
+      used.add(idx);
+      issues.push(ISSUE_POOL[idx]);
+    }
+
+    const brand = host.split('.')[0].replace(/-/g, ' ');
+    const outreach =
+      'I reviewed ' + host + ' and noticed strong potential in the ' + vertical.label + ' space, ' +
+      'but Google is likely missing key context for ' + vertical.city + '. ' +
+      'Based on estimated gaps (meta, schema, page speed), a focused SEO + conversion pass could help ' +
+      brand + ' capture more qualified leads — happy to walk through a real audit if useful.';
+
+    return {
+      host,
+      leadScore,
+      critical,
+      mrr: formatMrr(mrr),
+      priority,
+      issues,
+      outreach,
+      brand,
+    };
+  }
+
+  function renderIssue(issue) {
+    const cls = issue.sev === 'crit' ? 'crit' : issue.sev === 'warn' ? 'warn' : 'ok';
+    const label = issue.sev === 'crit' ? 'Critical' : issue.sev === 'warn' ? 'Warning' : 'Win';
+    return (
+      '<div class="issue"><span class="sev ' + cls + '">' + label + '</span>' +
+      '<div><strong>' + issue.title + '</strong>' +
+      '<p style="color:#a1a1aa;margin:4px 0 0">' + issue.desc + '</p></div></div>'
+    );
+  }
+
+  const form = document.getElementById('audit-form');
+  const input = document.getElementById('url-input');
+  const status = document.getElementById('status');
+  const placeholder = document.getElementById('placeholder');
+  const results = document.getElementById('results');
+  const runBtn = document.getElementById('run-btn');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const raw = input.value.trim();
+    if (!raw) return;
+
+    runBtn.disabled = true;
+    status.textContent = 'Running simulated audit for ' + parseHost(raw) + '…';
+    placeholder.hidden = true;
+    results.hidden = true;
+    results.classList.remove('visible');
+
+    setTimeout(function () {
+      const audit = buildAudit(raw);
+
+      document.getElementById('score-row').innerHTML =
+        '<div class="metric"><b>' + audit.leadScore + '</b><span>Lead Score</span></div>' +
+        '<div class="metric"><b>' + audit.critical + '</b><span>Critical Issues</span></div>' +
+        '<div class="metric"><b>' + audit.mrr + '</b><span>Est. MRR Fit</span></div>' +
+        '<div class="metric"><b>' + audit.priority + '</b><span>Outreach Priority</span></div>';
+
+      document.getElementById('issues').innerHTML = audit.issues.map(renderIssue).join('');
+      document.getElementById('outreach').textContent = audit.outreach;
+
+      document.getElementById('actions').innerHTML =
+        '<div class="lead"><div><strong>Create SEO repair brief</strong><br><small>Meta, schema, ' + audit.host + '</small></div><span class="cta">Fix</span></div>' +
+        '<div class="lead"><div><strong>Draft cold email</strong><br><small>Personalized to ' + audit.brand + '</small></div><span class="cta">Write</span></div>' +
+        '<div class="lead"><div><strong>Add to pipeline</strong><br><small>Stage: qualified opportunity</small></div><span class="cta">Add</span></div>';
+
+      status.textContent = 'Simulated audit complete for ' + audit.host + ' — numbers are illustrative only.';
+      results.hidden = false;
+      requestAnimationFrame(function () {
+        results.classList.add('visible');
+      });
+      runBtn.disabled = false;
+    }, 900);
+  });
+})();
+</script>
+</body>
+</html>
