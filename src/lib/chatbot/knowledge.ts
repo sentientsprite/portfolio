@@ -11,8 +11,12 @@ export interface ChatLink {
 
 export interface ChatIntent {
   id: string;
+  /** Short label used for suggestion chips when this intent is a close match. */
+  label?: string;
   /** Words/phrases that boost match score (lowercase). */
   keywords: string[];
+  /** Natural-language example questions used for fuzzy matching. */
+  questions?: string[];
   response: string;
   links?: ChatLink[];
   quickReplies?: string[];
@@ -22,6 +26,7 @@ export interface ChatIntent {
 
 export interface ChatbotConfig {
   ownerName: string;
+  botName: string;
   email: string;
   greeting: string;
   fallback: string;
@@ -53,9 +58,10 @@ export function buildChatbotConfig(): ChatbotConfig {
 
   return {
     ownerName: site.name,
+    botName: 'Future.fox',
     email: site.email,
-    greeting: `Hey — I'm Raymond's fox guide. I can walk you through his services, the Lead-to-Revenue growth system, live demos, case study results, or how to start a project. What are you looking for?`,
-    fallback: `I'm not sure I caught that. Try asking about services, the growth system, a specific product demo, pricing, or how to hire Raymond. You can also email him directly at ${site.email}.`,
+    greeting: `Hey, I'm **Future.fox** — Raymond's AI guide. I can walk you through his services, the Lead-to-Revenue growth system, live demos, case study results, or how to start a project. What are you looking for?`,
+    fallback: `I didn't quite catch that — but here are a few things I can help with. Pick one below, or email Raymond directly at ${site.email}.`,
     quickStart: [
       'What does Raymond do?',
       'Lead-to-Revenue system',
@@ -65,6 +71,7 @@ export function buildChatbotConfig(): ChatbotConfig {
     intents: [
       {
         id: 'about',
+        label: 'About Raymond',
         keywords: [
           'who',
           'about',
@@ -76,6 +83,12 @@ export function buildChatbotConfig(): ChatbotConfig {
           'yourself',
           'introduce',
         ],
+        questions: [
+          'who is raymond',
+          'what does raymond do',
+          'tell me about yourself',
+          'what is your background',
+        ],
         response: `${site.name} is a ${site.title}. ${site.bio}\n\nCore skills: ${skills}.`,
         links: [
           { label: 'Overview', href: withBase('/overview') },
@@ -86,6 +99,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'services',
+        label: 'Services',
         keywords: [
           'service',
           'services',
@@ -97,6 +111,11 @@ export function buildChatbotConfig(): ChatbotConfig {
           'expertise',
           'hire for',
         ],
+        questions: [
+          'what services do you offer',
+          'what can you help with',
+          'what do you specialize in',
+        ],
         response: `Raymond builds full-stack growth systems — not one-off campaigns. Typical engagements cover:\n\n• SEO & GEO strategy — technical audits, content architecture, AI-search optimization\n• Web development — fast, conversion-focused sites on modern tooling\n• Automation — lead scoring, nurture funnels, Zapier/HubSpot workflows\n• Growth marketing — paid + organic experiments tied to revenue metrics\n• AI products — command centers, audit tools, agent-driven dashboards\n• Analytics & reporting — client-ready dashboards that tell a clear story`,
         links: [
           { label: 'Services section', href: withBase('/#services') },
@@ -106,6 +125,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'growth-system',
+        label: 'Growth system',
         keywords: [
           'growth system',
           'lead-to-revenue',
@@ -120,6 +140,11 @@ export function buildChatbotConfig(): ChatbotConfig {
           'attribution',
           'roi dashboard',
         ],
+        questions: [
+          'what is the lead to revenue system',
+          'how does the growth system work',
+          'tell me about the funnel',
+        ],
         response: `${growth.name}: ${growth.tagline}\n\n${growth.pitch}\n\nThe five connected modules:\n${growthModules}\n\nTypical outcomes: ${growth.outcomes.map((o) => `${o.value} ${o.label}`).join(' · ')}.`,
         links: [
           { label: 'Explore growth system', href: withBase('/work/growth-system') },
@@ -129,6 +154,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'fieldsync',
+        label: 'FieldSync Scheduler',
         keywords: [
           'fieldsync',
           'scheduler',
@@ -148,6 +174,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'spryte',
+        label: 'Spryte audits',
         keywords: ['spryte', 'audit', 'lead audit', 'prospect', 'outreach', 'scoring'],
         response: `Spryte Lead Audit Tool uses AI to turn prospect websites into scored opportunities with prioritized outreach recommendations. Sales and marketing teams use it to decide who to pursue first — the "Prioritize prospects" step in the growth system.`,
         links: [
@@ -158,6 +185,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'prana',
+        label: 'Prana AI',
         keywords: [
           'prana',
           'cmo',
@@ -177,6 +205,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'zephyr',
+        label: 'Second brain app',
         keywords: [
           'zephyr',
           'second brain',
@@ -195,6 +224,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'roi',
+        label: 'ROI dashboard',
         keywords: [
           'roi',
           'attribution',
@@ -215,6 +245,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'demos',
+        label: 'See live demos',
         keywords: [
           'demo',
           'demos',
@@ -227,6 +258,11 @@ export function buildChatbotConfig(): ChatbotConfig {
           'built',
           'live',
         ],
+        questions: [
+          'show me live demos',
+          'can i see your work',
+          'what have you built',
+        ],
         response: `Raymond's showroom includes interactive demos you can open right now:\n\n${projectList}`,
         links: [
           { label: 'All work', href: withBase('/work') },
@@ -236,6 +272,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'case-studies',
+        label: 'Case study results',
         keywords: [
           'case study',
           'case studies',
@@ -247,6 +284,11 @@ export function buildChatbotConfig(): ChatbotConfig {
           'roi result',
           'testimonial',
         ],
+        questions: [
+          'what results have you driven',
+          'show me case studies',
+          'do you have proof',
+        ],
         response: `Selected measurable outcomes:\n\n• E-commerce landing redesign — 45% conversion lift, 28% bounce reduction (wellness brand)\n• Email automation funnel — 80% of nurture emails automated, 35% engagement boost\n• Google Ads overhaul — 3× ROAS within 90 days for a tech startup\n• Epicvue campaigns — 300% conversion surge in peak season, $10k/mo ad budget → 400+ B2B leads\n\nRaymond focuses on systems that compound — not campaigns that fade.`,
         links: [
           { label: 'Case studies', href: withBase('/case-studies') },
@@ -256,6 +298,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'seo',
+        label: 'SEO & ads',
         keywords: [
           'seo',
           'sem',
@@ -276,6 +319,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'automation',
+        label: 'Automation',
         keywords: [
           'automation',
           'automate',
@@ -296,6 +340,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'store',
+        label: 'Store & products',
         keywords: ['store', 'template', 'kit', 'buy', 'purchase', 'product', 'download'],
         response: `The store lists digital products Raymond offers:\n\n${productList}\n\nFor custom builds and growth systems, most clients start with a project conversation rather than an off-the-shelf purchase.`,
         links: [{ label: 'Visit store', href: withBase('/store') }],
@@ -303,6 +348,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'resume',
+        label: 'Resume & experience',
         keywords: [
           'resume',
           'experience',
@@ -319,6 +365,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'contact',
+        label: 'Contact',
         keywords: [
           'contact',
           'email',
@@ -339,6 +386,7 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'hire',
+        label: 'Start a project',
         keywords: [
           'hire',
           'project',
@@ -352,6 +400,12 @@ export function buildChatbotConfig(): ChatbotConfig {
           'engagement',
           'need help',
           'looking for',
+        ],
+        questions: [
+          'how do i get started',
+          'how much does it cost',
+          'i want to hire you',
+          'how do we work together',
         ],
         response: `Raymond takes on projects spanning landing pages, full growth stacks, automation, and AI product builds. Typical engagements blend strategy + implementation — not just advice. Tell him what problem you're solving (traffic, leads, bookings, attribution, etc.) and he'll scope the right system.`,
         links: [
@@ -381,8 +435,9 @@ export function buildChatbotConfig(): ChatbotConfig {
       },
       {
         id: 'greeting',
+        label: 'Say hi',
         keywords: ['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'sup', 'yo'],
-        response: `Hey! I'm the fox guide for ${site.name}'s portfolio. Ask me about services, the Lead-to-Revenue growth system, live demos, case study numbers, or how to start a project.`,
+        response: `Hey! I'm **Future.fox**, the AI guide for ${site.name}'s portfolio. Ask me about services, the Lead-to-Revenue growth system, live demos, case study numbers, or how to start a project.`,
         quickReplies: ['What does Raymond do?', 'Lead-to-Revenue system', 'Start a project'],
       },
       {

@@ -50,15 +50,27 @@ const STOP = new Set([
   'king',
 ]);
 
+/** Light stem: drop a trailing plural/possessive 's' so "demos" ~ "demo". */
+function stem(word: string): string {
+  return word.length > 4 && word.endsWith('s') ? word.slice(0, -1) : word;
+}
+
 function tokenize(text: string): string[] {
   return text
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, ' ')
     .split(/\s+/)
-    .filter((w) => w.length > 1 && !STOP.has(w));
+    .filter((w) => w.length > 1 && !STOP.has(w))
+    .map(stem);
 }
 
-/** Score how well a user message matches an intent's keywords. */
+const MATCH_THRESHOLD = 2;
+
+/**
+ * Score how well a user message matches an intent. Combines exact phrase
+ * matches (strongest), keyword token overlap, and fuzzy overlap against the
+ * intent's example questions so natural-language phrasing still routes well.
+ */
 function scoreIntent(message: string, intent: ChatIntent): number {
   const lower = message.toLowerCase();
   let score = 0;
@@ -68,29 +80,63 @@ function scoreIntent(message: string, intent: ChatIntent): number {
   }
 
   const tokens = tokenize(message);
+  const keywordTokens = new Set(intent.keywords.flatMap((kw) => tokenize(kw)));
   for (const token of tokens) {
-    if (intent.keywords.some((kw) => kw === token || kw.includes(token))) score += 1;
+    for (const kt of keywordTokens) {
+      if (kt === token) {
+        score += 1;
+        break;
+      }
+      // prefix overlap catches typos / variants ("automat" ~ "automation")
+      if ((kt.length >= 4 && token.startsWith(kt)) || (token.length >= 4 && kt.startsWith(token))) {
+        score += 0.5;
+        break;
+      }
+    }
+  }
+
+  // Fuzzy overlap against example questions (Jaccard-style token similarity).
+  if (intent.questions?.length && tokens.length) {
+    const userSet = new Set(tokens);
+    let bestSim = 0;
+    for (const q of intent.questions) {
+      const qTokens = tokenize(q);
+      if (!qTokens.length) continue;
+      let shared = 0;
+      for (const qt of qTokens) if (userSet.has(qt)) shared += 1;
+      const sim = shared / Math.max(qTokens.length, userSet.size);
+      if (sim > bestSim) bestSim = sim;
+    }
+    score += bestSim * 4;
   }
 
   return score;
+}
+
+/** Rank all intents by score (highest first), regardless of threshold. */
+function rankIntents(message: string, config: ChatbotConfig): { intent: ChatIntent; score: number }[] {
+  return config.intents
+    .map((intent) => ({ intent, score: scoreIntent(message, intent) }))
+    .sort((a, b) => b.score - a.score);
 }
 
 export function matchIntent(message: string, config: ChatbotConfig): ChatIntent | null {
   const trimmed = message.trim();
   if (!trimmed) return null;
 
-  let best: ChatIntent | null = null;
-  let bestScore = 0;
+  const [top] = rankIntents(trimmed, config);
+  return top && top.score >= MATCH_THRESHOLD ? top.intent : null;
+}
 
-  for (const intent of config.intents) {
-    const s = scoreIntent(trimmed, intent);
-    if (s > bestScore) {
-      bestScore = s;
-      best = intent;
-    }
-  }
-
-  return bestScore >= 2 ? best : null;
+/** Closest intents (as suggestion labels) for when nothing clears the threshold. */
+export function suggestLabels(message: string, config: ChatbotConfig, n = 4): string[] {
+  const trimmed = message.trim();
+  const ranked = trimmed ? rankIntents(trimmed, config) : [];
+  const labels = ranked
+    .filter((r) => r.score > 0 && r.intent.label)
+    .slice(0, n)
+    .map((r) => r.intent.label as string);
+  return labels.length ? labels : config.quickStart;
 }
 
 export function intentToMessage(intent: ChatIntent): ChatMessage {
@@ -144,7 +190,7 @@ export function respond(message: string, config: ChatbotConfig): ChatMessage {
   if (intent) return intentToMessage(intent);
 
   return botReply(config.fallback, {
-    quickReplies: config.quickStart,
+    quickReplies: suggestLabels(message, config),
   });
 }
 

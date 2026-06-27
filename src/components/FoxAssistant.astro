@@ -23,15 +23,33 @@ const chatbotJson = JSON.stringify(chatbot);
     hidden
   >
     <header class="fox-chat-header">
-      <div class="fox-chat-heading">
-        <p id="fox-chat-title" class="fox-chat-title">Fox Guide</p>
-        <p class="fox-chat-sub">FAQ · demos · lead funnel</p>
-      </div>
-      <button type="button" id="fox-chat-close" class="fox-chat-close" aria-label="Minimize chat">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      <span class="fox-chat-mark" aria-hidden="true">
+        <svg viewBox="0 0 120 120" focusable="false">
+          <path d="M37 33 L30 7 L56 25 Z" fill="#10b981" />
+          <path d="M83 33 L90 7 L64 25 Z" fill="#10b981" />
+          <circle cx="60" cy="52" r="30" fill="#10b981" />
+          <ellipse cx="60" cy="64" rx="13" ry="11" fill="#ecfdf5" />
+          <circle cx="49" cy="52" r="4.2" fill="#06281c" />
+          <circle cx="71" cy="52" r="4.2" fill="#06281c" />
+          <path d="M55.5 62 q4.5 5.5 9 0 q-4.5 4.5 -9 0 Z" fill="#06281c" />
         </svg>
-      </button>
+      </span>
+      <div class="fox-chat-heading">
+        <p id="fox-chat-title" class="fox-chat-title">Future<span>.fox</span></p>
+        <p class="fox-chat-sub"><span class="fox-status-dot"></span>AI guide · online</p>
+      </div>
+      <div class="fox-chat-actions">
+        <button type="button" id="fox-chat-reset" class="fox-chat-icon" aria-label="Restart conversation" title="Restart conversation">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5M5.5 9a7 7 0 0111.8-2.3L20 9M18.5 15a7 7 0 01-11.8 2.3L4 15" />
+          </svg>
+        </button>
+        <button type="button" id="fox-chat-close" class="fox-chat-icon" aria-label="Minimize chat" title="Minimize">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      </div>
     </header>
 
     <div id="fox-chat-messages" class="fox-chat-messages" aria-live="polite"></div>
@@ -61,7 +79,7 @@ const chatbotJson = JSON.stringify(chatbot);
     aria-label="Open chat assistant"
     aria-expanded="false"
     aria-controls="fox-chat"
-    title="Chat with the fox guide"
+    title="Chat with Future.fox"
   >
     <span class="fox-bubble" aria-hidden="true">Ask me anything!</span>
 
@@ -167,24 +185,72 @@ const chatbotJson = JSON.stringify(chatbot);
   .fox-chat-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px 16px;
+    gap: 11px;
+    padding: 13px 14px;
     border-bottom: 1px solid rgba(38, 38, 38, 0.9);
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), transparent 60%);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), transparent 65%);
+  }
+  .fox-chat-mark {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: rgba(16, 185, 129, 0.14);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+  .fox-chat-mark svg {
+    width: 26px;
+    height: 26px;
+    overflow: visible;
+  }
+  .fox-chat-heading {
+    flex: 1;
+    min-width: 0;
   }
   .fox-chat-title {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
     color: #ecfdf5;
   }
+  .fox-chat-title span {
+    color: #34d399;
+  }
   .fox-chat-sub {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     margin-top: 2px;
     font-size: 11px;
-    color: #6ee7b7;
-    opacity: 0.8;
+    color: #9ca3af;
   }
-  .fox-chat-close {
+  .fox-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6);
+    animation: fox-pulse 2.4s ease-out infinite;
+  }
+  @keyframes fox-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5);
+    }
+    70% {
+      box-shadow: 0 0 0 6px rgba(52, 211, 153, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+    }
+  }
+  .fox-chat-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .fox-chat-icon {
     display: grid;
     place-items: center;
     width: 32px;
@@ -194,11 +260,15 @@ const chatbotJson = JSON.stringify(chatbot);
     background: rgba(23, 23, 23, 0.8);
     color: #a3a3a3;
     cursor: pointer;
-    transition: color 0.2s, border-color 0.2s;
+    transition: color 0.2s, border-color 0.2s, transform 0.2s;
   }
-  .fox-chat-close:hover {
+  .fox-chat-icon:hover {
     color: #6ee7b7;
     border-color: rgba(16, 185, 129, 0.4);
+  }
+  #fox-chat-reset:hover svg {
+    transform: rotate(-45deg);
+    transition: transform 0.3s ease;
   }
 
   .fox-chat-messages {
@@ -213,8 +283,47 @@ const chatbotJson = JSON.stringify(chatbot);
   }
 
   /* :global — messages, chips, and links are rendered via client JS */
+  .fox-chat-messages :global(.fox-row) {
+    display: flex;
+    gap: 8px;
+    max-width: 100%;
+    animation: fox-msg-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .fox-chat-messages :global(.fox-row-user) {
+    justify-content: flex-end;
+  }
+  .fox-chat-messages :global(.fox-row-bot) {
+    justify-content: flex-start;
+    align-items: flex-end;
+  }
+  @keyframes fox-msg-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .fox-chat-messages :global(.fox-avatar) {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: rgba(16, 185, 129, 0.16);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    margin-bottom: 2px;
+  }
+  .fox-chat-messages :global(.fox-avatar svg) {
+    width: 20px;
+    height: 20px;
+    overflow: visible;
+  }
   .fox-chat-messages :global(.fox-msg) {
-    max-width: 88%;
+    max-width: 84%;
     padding: 12px 14px;
     border-radius: 14px;
     font-size: 14px;
@@ -223,18 +332,20 @@ const chatbotJson = JSON.stringify(chatbot);
     word-break: break-word;
   }
   .fox-chat-messages :global(.fox-msg-user) {
-    align-self: flex-end;
-    background: rgba(16, 185, 129, 0.2);
-    border: 1px solid rgba(16, 185, 129, 0.35);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.28), rgba(16, 185, 129, 0.18));
+    border: 1px solid rgba(16, 185, 129, 0.4);
     color: #d1fae5;
     border-bottom-right-radius: 4px;
   }
   .fox-chat-messages :global(.fox-msg-bot) {
-    align-self: flex-start;
     background: rgba(23, 23, 23, 0.9);
     border: 1px solid rgba(64, 64, 64, 0.8);
-    color: #d4d4d4;
+    color: #e0e0e0;
     border-bottom-left-radius: 4px;
+  }
+  .fox-chat-messages :global(.fox-msg strong) {
+    color: #ecfdf5;
+    font-weight: 600;
   }
   .fox-chat-messages :global(.fox-msg-links) {
     display: flex;
@@ -493,7 +604,7 @@ const chatbotJson = JSON.stringify(chatbot);
 
   .fox-pupils {
     transform: translate(var(--px, 0px), var(--py, 0px));
-    transition: transform 0.12s ease-out;
+    transition: transform 0.08s linear;
   }
 
   .fox-eyes-closed {
@@ -664,6 +775,7 @@ const chatbotJson = JSON.stringify(chatbot);
     const root = document.getElementById('fox-assistant');
     const chat = document.getElementById('fox-chat');
     const closeBtn = document.getElementById('fox-chat-close');
+    const resetBtn = document.getElementById('fox-chat-reset');
     const messagesEl = document.getElementById('fox-chat-messages');
     const form = document.getElementById('fox-chat-form');
     const input = document.getElementById('fox-chat-input');
@@ -746,9 +858,12 @@ const chatbotJson = JSON.stringify(chatbot);
           const dx = e.clientX - (r.left + r.width / 2);
           const dy = e.clientY - (r.top + r.height * 0.42);
           const dist = Math.hypot(dx, dy) || 1;
-          const max = 2.6;
-          root.style.setProperty('--px', `${((dx / dist) * max).toFixed(2)}px`);
-          root.style.setProperty('--py', `${((dy / dist) * max).toFixed(2)}px`);
+          // Pupils swing almost the full width of the eye whites so the gaze
+          // obviously tracks the cursor anywhere on screen (per-axis range).
+          const MAX_X = 3.8;
+          const MAX_Y = 5;
+          root.style.setProperty('--px', `${((dx / dist) * MAX_X).toFixed(2)}px`);
+          root.style.setProperty('--py', `${((dy / dist) * MAX_Y).toFixed(2)}px`);
         });
       },
       { passive: true },
@@ -798,6 +913,16 @@ const chatbotJson = JSON.stringify(chatbot);
     });
     closeBtn?.addEventListener('click', closeChat);
 
+    function resetChat() {
+      messages = [];
+      const greeting = greetingMessage(chatbot);
+      messages.push(greeting);
+      saveHistory();
+      renderMessages();
+      input.focus();
+    }
+    resetBtn?.addEventListener('click', resetChat);
+
     function escapeHtml(text) {
       return text
         .replace(/&/g, '&amp;')
@@ -805,6 +930,24 @@ const chatbotJson = JSON.stringify(chatbot);
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
     }
+
+    // Markdown-lite: escape, then render **bold**.
+    function formatText(text) {
+      return escapeHtml(text).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    }
+
+    const BOT_AVATAR = `
+      <span class="fox-avatar" aria-hidden="true">
+        <svg viewBox="0 0 120 120" focusable="false">
+          <path d="M37 33 L30 7 L56 25 Z" fill="#10b981" />
+          <path d="M83 33 L90 7 L64 25 Z" fill="#10b981" />
+          <circle cx="60" cy="52" r="30" fill="#10b981" />
+          <ellipse cx="60" cy="64" rx="13" ry="11" fill="#ecfdf5" />
+          <circle cx="49" cy="52" r="4.2" fill="#06281c" />
+          <circle cx="71" cy="52" r="4.2" fill="#06281c" />
+          <path d="M55.5 62 q4.5 5.5 9 0 q-4.5 4.5 -9 0 Z" fill="#06281c" />
+        </svg>
+      </span>`;
 
     function renderLeadForm() {
       return `
@@ -819,9 +962,13 @@ const chatbotJson = JSON.stringify(chatbot);
     function renderMessages() {
       messagesEl.innerHTML = '';
       for (const msg of messages) {
+        const row = document.createElement('div');
+        row.className = `fox-row fox-row-${msg.role}`;
+        if (msg.role === 'bot') row.innerHTML = BOT_AVATAR;
+
         const el = document.createElement('div');
         el.className = `fox-msg fox-msg-${msg.role}`;
-        el.innerHTML = escapeHtml(msg.text);
+        el.innerHTML = formatText(msg.text);
 
         if (msg.links?.length) {
           const links = document.createElement('div');
@@ -846,7 +993,8 @@ const chatbotJson = JSON.stringify(chatbot);
           el.appendChild(wrap.firstElementChild);
         }
 
-        messagesEl.appendChild(el);
+        row.appendChild(el);
+        messagesEl.appendChild(row);
       }
 
       // Quick-reply chips from the latest bot message
@@ -895,11 +1043,11 @@ const chatbotJson = JSON.stringify(chatbot);
     }
 
     function showTyping() {
-      const el = document.createElement('div');
-      el.className = 'fox-typing';
-      el.id = 'fox-typing';
-      el.innerHTML = '<span></span><span></span><span></span>';
-      messagesEl.appendChild(el);
+      const row = document.createElement('div');
+      row.className = 'fox-row fox-row-bot';
+      row.id = 'fox-typing';
+      row.innerHTML = `${BOT_AVATAR}<div class="fox-typing"><span></span><span></span><span></span></div>`;
+      messagesEl.appendChild(row);
       messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
