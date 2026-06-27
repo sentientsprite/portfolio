@@ -1,0 +1,396 @@
+import { site } from '../../config/site';
+import { growthSystems } from '../../data/growth-systems';
+import { projectOverrides } from '../../data/projects';
+import { products } from '../../data/products';
+import { withBase } from '../url';
+
+export interface ChatLink {
+  label: string;
+  href: string;
+}
+
+export interface ChatIntent {
+  id: string;
+  /** Words/phrases that boost match score (lowercase). */
+  keywords: string[];
+  response: string;
+  links?: ChatLink[];
+  quickReplies?: string[];
+  /** Opens the in-chat lead capture form after this reply. */
+  leadCapture?: boolean;
+}
+
+export interface ChatbotConfig {
+  ownerName: string;
+  email: string;
+  greeting: string;
+  fallback: string;
+  quickStart: string[];
+  intents: ChatIntent[];
+}
+
+/** Build FAQ intents from the same data that powers the public site. */
+export function buildChatbotConfig(): ChatbotConfig {
+  const growth = growthSystems[0];
+  const featured = projectOverrides.filter((p) => p.featured && !p.hidden);
+  const growthModules = growth.modules
+    .map((m) => {
+      const p = projectOverrides.find((x) => x.repoName === m.repoName);
+      return p ? `• ${m.stageLabel}: ${p.displayName}` : null;
+    })
+    .filter(Boolean)
+    .join('\n');
+
+  const projectList = featured
+    .map((p) => `• ${p.displayName} — ${p.description}`)
+    .join('\n');
+
+  const skills = site.skills.join(', ');
+
+  const productList = products
+    .map((p) => `• ${p.name} (${p.price}) — ${p.description}`)
+    .join('\n');
+
+  return {
+    ownerName: site.name,
+    email: site.email,
+    greeting: `Hey — I'm Raymond's fox guide. I can walk you through his services, the Lead-to-Revenue growth system, live demos, case study results, or how to start a project. What are you looking for?`,
+    fallback: `I'm not sure I caught that. Try asking about services, the growth system, a specific product demo, pricing, or how to hire Raymond. You can also email him directly at ${site.email}.`,
+    quickStart: [
+      'What does Raymond do?',
+      'Lead-to-Revenue system',
+      'See live demos',
+      'Start a project',
+    ],
+    intents: [
+      {
+        id: 'about',
+        keywords: [
+          'who',
+          'about',
+          'raymond',
+          'background',
+          'bio',
+          'consultant',
+          'you',
+          'yourself',
+          'introduce',
+        ],
+        response: `${site.name} is a ${site.title}. ${site.bio}\n\nCore skills: ${skills}.`,
+        links: [
+          { label: 'Overview', href: withBase('/overview') },
+          { label: 'Resume', href: withBase('/resume') },
+          { label: 'About on home', href: withBase('/#about') },
+        ],
+        quickReplies: ['Services', 'Case study results', 'Start a project'],
+      },
+      {
+        id: 'services',
+        keywords: [
+          'service',
+          'services',
+          'offer',
+          'offering',
+          'help',
+          'do for',
+          'specializ',
+          'expertise',
+          'hire for',
+        ],
+        response: `Raymond builds full-stack growth systems — not one-off campaigns. Typical engagements cover:\n\n• SEO & GEO strategy — technical audits, content architecture, AI-search optimization\n• Web development — fast, conversion-focused sites on modern tooling\n• Automation — lead scoring, nurture funnels, Zapier/HubSpot workflows\n• Growth marketing — paid + organic experiments tied to revenue metrics\n• AI products — command centers, audit tools, agent-driven dashboards\n• Analytics & reporting — client-ready dashboards that tell a clear story`,
+        links: [
+          { label: 'Services section', href: withBase('/#services') },
+          { label: 'Work showroom', href: withBase('/work') },
+        ],
+        quickReplies: ['Lead-to-Revenue system', 'Start a project'],
+      },
+      {
+        id: 'growth-system',
+        keywords: [
+          'growth system',
+          'lead-to-revenue',
+          'lead to revenue',
+          'pipeline',
+          'funnel',
+          'stack',
+          'integrated',
+          'full stack',
+          'infrastructure',
+          'crm',
+          'attribution',
+          'roi dashboard',
+        ],
+        response: `${growth.name}: ${growth.tagline}\n\n${growth.pitch}\n\nThe five connected modules:\n${growthModules}\n\nTypical outcomes: ${growth.outcomes.map((o) => `${o.value} ${o.label}`).join(' · ')}.`,
+        links: [
+          { label: 'Explore growth system', href: withBase('/work/growth-system') },
+          { label: 'Interactive showcase', href: withBase(growth.demoPath) },
+        ],
+        quickReplies: ['FieldSync Scheduler', 'Spryte audits', 'Start a project'],
+      },
+      {
+        id: 'fieldsync',
+        keywords: [
+          'fieldsync',
+          'scheduler',
+          'booking',
+          'appointment',
+          'calendar',
+          'dispatch',
+          'field service',
+          'schedule',
+        ],
+        response: `FieldSync Scheduler is a dual-view field-service booking system. Customers get a high-converting booking form; operators get a dispatch console with HubSpot sync, drive-time math, conflict blocking, and SMS confirmation. It's the "Book instantly" layer in the Lead-to-Revenue stack.`,
+        links: [
+          { label: 'Live demo', href: withBase('/demos/fieldsync-scheduler/index.html') },
+          { label: 'Work detail', href: withBase('/work/fieldsync-scheduler') },
+        ],
+        quickReplies: ['Growth system', 'Start a project'],
+      },
+      {
+        id: 'spryte',
+        keywords: ['spryte', 'audit', 'lead audit', 'prospect', 'outreach', 'scoring'],
+        response: `Spryte Lead Audit Tool uses AI to turn prospect websites into scored opportunities with prioritized outreach recommendations. Sales and marketing teams use it to decide who to pursue first — the "Prioritize prospects" step in the growth system.`,
+        links: [
+          { label: 'Live demo', href: withBase('/demos/spryte-audit/index.html') },
+          { label: 'Work detail', href: withBase('/work/spryte') },
+        ],
+        quickReplies: ['Prana AI', 'Start a project'],
+      },
+      {
+        id: 'prana',
+        keywords: [
+          'prana',
+          'cmo',
+          'command center',
+          'terminal',
+          'ai cmo',
+          'local business',
+          'competitor',
+          'geo',
+        ],
+        response: `Prana AI CMO Terminal is an AI-powered marketing command center for local businesses. It combines audits, competitor research, SEO/GEO recommendations, content workflows, lead-opportunity feeds, and analytics in one workspace — like a CMO operating room.`,
+        links: [
+          { label: 'Live demo', href: withBase('/demos/prana-command-center/index.html') },
+          { label: 'Work detail', href: withBase('/work/prana') },
+        ],
+        quickReplies: ['Second brain app', 'Start a project'],
+      },
+      {
+        id: 'zephyr',
+        keywords: [
+          'zephyr',
+          'second brain',
+          'obsidian',
+          'pkm',
+          'knowledge',
+          'vault',
+          'vellum',
+        ],
+        response: `Obsidian Based Second Brain (Zephyr) is an AI-powered knowledge system with an Obsidian-style vault: inbox capture, daily briefs, weekly connections, a graph view, and Chief of Staff chat. Built for knowledge workers who want structured notes plus AI workflows.`,
+        links: [
+          { label: 'Live app', href: 'https://zephyr-lyart-beta.vercel.app' },
+          { label: 'Work detail', href: withBase('/work/zephyr') },
+        ],
+        quickReplies: ['Prana AI', 'Start a project'],
+      },
+      {
+        id: 'roi',
+        keywords: [
+          'roi',
+          'attribution',
+          'dashboard',
+          'analytics',
+          'google analytics',
+          'ga4',
+          'ad spend',
+          'roas',
+          'measure',
+        ],
+        response: `The ROI Attribution Dashboard is the measurement layer of the growth stack. It unifies Google Analytics session data, CRM closed-won revenue, and Google/Meta ad spend into one channel-level ROI view — so owners see what actually drives profit instead of juggling five tools.`,
+        links: [
+          { label: 'Live demo', href: withBase('/demos/roi-attribution-dashboard/index.html') },
+          { label: 'Work detail', href: withBase('/work/roi-attribution-dashboard') },
+        ],
+        quickReplies: ['Growth system', 'SEO dashboard'],
+      },
+      {
+        id: 'demos',
+        keywords: [
+          'demo',
+          'demos',
+          'showcase',
+          'work',
+          'portfolio',
+          'project',
+          'products',
+          'build',
+          'built',
+          'live',
+        ],
+        response: `Raymond's showroom includes interactive demos you can open right now:\n\n${projectList}`,
+        links: [
+          { label: 'All work', href: withBase('/work') },
+          { label: 'Home showcase', href: withBase('/#showcase') },
+        ],
+        quickReplies: ['Growth system', 'Prana AI', 'Start a project'],
+      },
+      {
+        id: 'case-studies',
+        keywords: [
+          'case study',
+          'case studies',
+          'results',
+          'proof',
+          'outcome',
+          'conversion',
+          'lift',
+          'roi result',
+          'testimonial',
+        ],
+        response: `Selected measurable outcomes:\n\n• E-commerce landing redesign — 45% conversion lift, 28% bounce reduction (wellness brand)\n• Email automation funnel — 80% of nurture emails automated, 35% engagement boost\n• Google Ads overhaul — 3× ROAS within 90 days for a tech startup\n• Epicvue campaigns — 300% conversion surge in peak season, $10k/mo ad budget → 400+ B2B leads\n\nRaymond focuses on systems that compound — not campaigns that fade.`,
+        links: [
+          { label: 'Case studies', href: withBase('/case-studies') },
+          { label: 'Stats on home', href: withBase('/#services') },
+        ],
+        quickReplies: ['Services', 'Start a project'],
+      },
+      {
+        id: 'seo',
+        keywords: [
+          'seo',
+          'sem',
+          'search',
+          'ranking',
+          'organic',
+          'google ads',
+          'ppc',
+          'ads',
+          'marketing',
+        ],
+        response: `SEO & SEM are core to Raymond's practice. He's Google Ads and Google Analytics certified (renewed 2025), SEMrush-certified, and has driven results like 120% organic traffic growth, 30% ranking improvements, and managed $5k–$20k/mo ad budgets. He also builds SEO dashboards and GEO recommendations for AI-search visibility.`,
+        links: [
+          { label: 'SEO dashboard demo', href: withBase('/demos/seo-dashboard/index.html') },
+          { label: 'Resume', href: withBase('/resume') },
+        ],
+        quickReplies: ['Growth system', 'Start a project'],
+      },
+      {
+        id: 'automation',
+        keywords: [
+          'automation',
+          'automate',
+          'zapier',
+          'hubspot',
+          'email',
+          'nurture',
+          'workflow',
+          'klaviyo',
+          'sms',
+        ],
+        response: `Automation is how Raymond keeps pipelines running 24/7. Examples include Zapier–HubSpot lead scoring, behavior-based nurture sequences (80% automated in a B2B case study), FieldSync SMS confirmations, and Python scripts that cut manual work by 60% for freelance clients.`,
+        links: [
+          { label: 'Email funnel demo', href: withBase('/demos/email-funnel/index.html') },
+          { label: 'Email case study', href: withBase('/case-studies/automated-email-funnel') },
+        ],
+        quickReplies: ['Growth system', 'Start a project'],
+      },
+      {
+        id: 'store',
+        keywords: ['store', 'template', 'kit', 'buy', 'purchase', 'product', 'download'],
+        response: `The store lists digital products Raymond offers:\n\n${productList}\n\nFor custom builds and growth systems, most clients start with a project conversation rather than an off-the-shelf purchase.`,
+        links: [{ label: 'Visit store', href: withBase('/store') }],
+        quickReplies: ['Start a project', 'Services'],
+      },
+      {
+        id: 'resume',
+        keywords: [
+          'resume',
+          'experience',
+          'job',
+          'career',
+          'work history',
+          'education',
+          'certification',
+          'degree',
+        ],
+        response: `Raymond holds a BA in Business & Marketing from Westminster College (2021). Recent roles include freelance consultant (2025–present), Digital Marketing Specialist at Groove/Epicvue (2024–2025), and Digital Marketing Director at RidgeCrest Herbals (2021–2023). Certifications: Google Ads, Google Analytics, HubSpot Inbound, SEMrush SEO, Klaviyo Email.`,
+        links: [{ label: 'Full resume', href: withBase('/resume') }],
+        quickReplies: ['Services', 'Start a project'],
+      },
+      {
+        id: 'contact',
+        keywords: [
+          'contact',
+          'email',
+          'reach',
+          'talk',
+          'call',
+          'meet',
+          'hello',
+          'message',
+        ],
+        response: `The fastest way to reach Raymond is email at ${site.email}. He works with small businesses and startups on websites, funnels, and growth systems. Share what you're building and he'll bring strategy, code, and automation.`,
+        links: [
+          { label: 'Contact page', href: withBase('/contact') },
+          { label: `Email ${site.email}`, href: `mailto:${site.email}` },
+        ],
+        quickReplies: ['Start a project'],
+        leadCapture: true,
+      },
+      {
+        id: 'hire',
+        keywords: [
+          'hire',
+          'project',
+          'start',
+          'work together',
+          'quote',
+          'budget',
+          'pricing',
+          'cost',
+          'rate',
+          'engagement',
+          'need help',
+          'looking for',
+        ],
+        response: `Raymond takes on projects spanning landing pages, full growth stacks, automation, and AI product builds. Typical engagements blend strategy + implementation — not just advice. Tell him what problem you're solving (traffic, leads, bookings, attribution, etc.) and he'll scope the right system.`,
+        links: [
+          { label: 'Contact page', href: withBase('/contact') },
+          { label: 'View work', href: withBase('/work') },
+        ],
+        quickReplies: ['Share my project details'],
+        leadCapture: true,
+      },
+      {
+        id: 'nav',
+        keywords: [
+          'where',
+          'find',
+          'page',
+          'navigate',
+          'blog',
+          'home',
+          'overview',
+        ],
+        response: `Site map:\n\n• Home — 3D studio landing with services & showcase\n• Overview — classic portfolio summary\n• Work — full showroom + Lead-to-Revenue system\n• Case Studies — measurable outcomes\n• Resume — experience & certifications\n• Store — digital products\n• Blog — articles (when published)\n• Contact — email & social links`,
+        links: [
+          { label: 'Home', href: withBase('/') },
+          { label: 'Work', href: withBase('/work') },
+          { label: 'Contact', href: withBase('/contact') },
+        ],
+      },
+      {
+        id: 'greeting',
+        keywords: ['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'sup', 'yo'],
+        response: `Hey! I'm the fox guide for ${site.name}'s portfolio. Ask me about services, the Lead-to-Revenue growth system, live demos, case study numbers, or how to start a project.`,
+        quickReplies: ['What does Raymond do?', 'Lead-to-Revenue system', 'Start a project'],
+      },
+      {
+        id: 'thanks',
+        keywords: ['thanks', 'thank you', 'thx', 'appreciate', 'helpful', 'great'],
+        response: `You're welcome! If you want to go deeper on a specific demo or start a project, just say the word — or email ${site.email} anytime.`,
+        quickReplies: ['Start a project', 'See live demos'],
+      },
+    ],
+  };
+}
