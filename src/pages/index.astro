@@ -595,7 +595,29 @@ const stats = [
         const startX = -((layerCounts.length - 1) * layerGap) / 2;
         const endX = startX + (layerCounts.length - 1) * layerGap;
 
+        // Shared node geometry with a baked-in vertical blue → purple gradient
         const nodeGeo = new THREE.IcosahedronGeometry(0.15, 0);
+        {
+          const top = new THREE.Color(0x3b82f6); // blue
+          const bottom = new THREE.Color(0xa855f7); // purple
+          const posAttr = nodeGeo.attributes.position;
+          const cols = new Float32Array(posAttr.count * 3);
+          let minY = Infinity;
+          let maxY = -Infinity;
+          for (let i = 0; i < posAttr.count; i++) {
+            const y = posAttr.getY(i);
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          }
+          const cc = new THREE.Color();
+          for (let i = 0; i < posAttr.count; i++) {
+            cc.copy(top).lerp(bottom, (posAttr.getY(i) - minY) / (maxY - minY || 1));
+            cols[i * 3] = cc.r;
+            cols[i * 3 + 1] = cc.g;
+            cols[i * 3 + 2] = cc.b;
+          }
+          nodeGeo.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
+        }
         const layers: { mesh: THREE.Mesh; pos: THREE.Vector3 }[][] = [];
         const nodeData: { mesh: THREE.Mesh; phase: number; base: number }[] = [];
 
@@ -616,9 +638,11 @@ const stats = [
             const mesh = new THREE.Mesh(
               nodeGeo,
               new THREE.MeshStandardMaterial({
-                color: isLast ? 0x6ee7b7 : 0x34d399,
-                emissive: isLast ? 0x10b981 : 0x059669,
-                emissiveIntensity: isLast ? 2.2 : 1,
+                vertexColors: true, // blue → purple gradient baked into the geometry
+                emissive: isLast ? 0x7c3aed : 0x4f46e5, // violet / indigo glow
+                emissiveIntensity: isLast ? 1.3 : 0.55,
+                metalness: 0.1,
+                roughness: 0.45,
                 flatShading: true,
               }),
             );
@@ -734,16 +758,16 @@ const stats = [
         );
         scene.add(particles);
 
-        /* --- Lights --- */
-        scene.add(new THREE.AmbientLight(0x404858, 0.85));
-        const key = new THREE.DirectionalLight(0xffffff, 1.1);
+        /* --- Lights (tuned to keep nodes reading blue/purple) --- */
+        scene.add(new THREE.AmbientLight(0x55608a, 0.95));
+        const key = new THREE.DirectionalLight(0xffffff, 1.05);
         key.position.set(4, 6, 8);
         scene.add(key);
-        const rim = new THREE.DirectionalLight(0x34d399, 0.7);
+        const rim = new THREE.DirectionalLight(0x8b5cf6, 0.9); // violet rim
         rim.position.set(-6, -2, -4);
         scene.add(rim);
         // Bright glow sits at the "won" node so conversions feel like the payoff
-        const glow = new THREE.PointLight(0x10b981, 5, 18, 2);
+        const glow = new THREE.PointLight(0x6366f1, 5, 18, 2); // indigo payoff glow
         glow.position.set(endX, 0, 1.5);
         scene.add(glow);
 
