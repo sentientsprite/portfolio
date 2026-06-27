@@ -1,5 +1,6 @@
 import { site } from '../config/site';
 import { projectOverrides, type WorkCategory } from '../data/projects';
+import { slugify } from './url';
 
 export interface GitHubRepo {
   name: string;
@@ -14,11 +15,14 @@ export interface GitHubRepo {
 
 export interface MergedProject {
   name: string;
+  slug: string;
   displayName: string;
   category: WorkCategory;
   description: string;
+  details: string | null;
   htmlUrl: string;
   demoUrl: string | null;
+  demoPath: string | null;
   stars: number;
   language: string | null;
   screenshot: string | null;
@@ -101,12 +105,15 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
 
     merged.push({
       name: repo.name,
+      slug: slugify(repo.name),
       displayName: override?.displayName ?? repo.name,
       category: override?.category ?? 'development',
       description:
         override?.description ?? repo.description ?? 'No description available.',
+      details: override?.details ?? null,
       htmlUrl: repo.html_url,
       demoUrl: override?.demoUrl ?? repo.homepage ?? null,
+      demoPath: override?.demoPath ?? null,
       stars: repo.stargazers_count,
       language: repo.language,
       screenshot: override?.screenshot ?? null,
@@ -119,11 +126,14 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
     if (!repos.find((r) => r.name === override.repoName) && !override.hidden) {
       merged.push({
         name: override.repoName,
+        slug: slugify(override.repoName),
         displayName: override.displayName ?? override.repoName,
         category: override.category ?? 'development',
         description: override.description ?? 'Curated project.',
+        details: override.details ?? null,
         htmlUrl: `https://github.com/${site.githubUsername}/${override.repoName}`,
         demoUrl: override.demoUrl ?? null,
+        demoPath: override.demoPath ?? null,
         stars: 0,
         language: override.techStack?.[0] ?? null,
         screenshot: override.screenshot ?? null,

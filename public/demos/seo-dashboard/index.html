@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SEO Performance Dashboard — Demo</title>
+    <style>
+      :root {
+        --bg: #0b0f0e; --panel: #14201c; --border: #1f2d28;
+        --ink: #ecfdf5; --muted: #8aa39b; --accent: #10b981; --accent2: #34d399;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg); color: var(--ink); padding: 28px 22px 48px;
+      }
+      .wrap { max-width: 960px; margin: 0 auto; }
+      .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+      .top h1 { font-size: 22px; letter-spacing: -0.02em; }
+      .top .range { display: flex; gap: 6px; }
+      .top .range button {
+        background: var(--panel); border: 1px solid var(--border); color: var(--muted);
+        padding: 6px 12px; border-radius: 8px; font-size: 13px; cursor: pointer; transition: all .15s;
+      }
+      .top .range button.active, .top .range button:hover { color: var(--accent); border-color: var(--accent); }
+      .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+      .metric { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px; transition: transform .15s; cursor: default; }
+      .metric:hover { transform: translateY(-3px); border-color: var(--accent); }
+      .metric .label { font-size: 13px; color: var(--muted); }
+      .metric .value { font-size: 28px; font-weight: 800; margin: 6px 0 4px; }
+      .metric .delta { font-size: 13px; font-weight: 600; }
+      .delta.up { color: var(--accent2); }
+      .delta.down { color: #f87171; }
+      .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 22px; margin-bottom: 18px; }
+      .panel h2 { font-size: 15px; margin-bottom: 18px; color: var(--ink); }
+      .chart { display: flex; align-items: flex-end; gap: 10px; height: 180px; }
+      .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+      .bar { width: 100%; background: linear-gradient(180deg, var(--accent2), var(--accent)); border-radius: 6px 6px 0 0; transition: height .6s ease; position: relative; }
+      .bar:hover::after { content: attr(data-v); position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+        background: #000; color: var(--accent2); font-size: 11px; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+      .bar-col span { font-size: 11px; color: var(--muted); }
+      .two { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { text-align: left; padding: 10px 8px; font-size: 13px; border-bottom: 1px solid var(--border); }
+      th { color: var(--muted); font-weight: 600; }
+      td .pos { color: var(--accent2); }
+      .kw-bar { height: 6px; background: #0b0f0e; border-radius: 999px; overflow: hidden; margin-top: 4px; }
+      .kw-bar i { display: block; height: 100%; background: var(--accent); }
+      @media (max-width: 720px) { .cards { grid-template-columns: repeat(2,1fr);} .two { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="top">
+        <h1>🌱 Organic Performance — acme-wellness.com</h1>
+        <div class="range">
+          <button>7d</button>
+          <button class="active">30d</button>
+          <button>90d</button>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="metric"><div class="label">Organic traffic</div><div class="value">48.2k</div><div class="delta up">▲ 120%</div></div>
+        <div class="metric"><div class="label">Avg. position</div><div class="value">6.4</div><div class="delta up">▲ 30%</div></div>
+        <div class="metric"><div class="label">Conversions</div><div class="value">1,284</div><div class="delta up">▲ 45%</div></div>
+        <div class="metric"><div class="label">Bounce rate</div><div class="value">42%</div><div class="delta down">▼ 28%</div></div>
+      </div>
+
+      <div class="panel">
+        <h2>Organic sessions by month</h2>
+        <div class="chart" id="chart"></div>
+      </div>
+
+      <div class="two">
+        <div class="panel">
+          <h2>Top performing pages</h2>
+          <table>
+            <thead><tr><th>Page</th><th>Sessions</th><th>Δ</th></tr></thead>
+            <tbody>
+              <tr><td>/collections/immunity</td><td>9,420</td><td class="pos">+62%</td></tr>
+              <tr><td>/blog/sleep-guide</td><td>7,105</td><td class="pos">+88%</td></tr>
+              <tr><td>/products/daily-greens</td><td>5,860</td><td class="pos">+34%</td></tr>
+              <tr><td>/blog/gut-health</td><td>4,290</td><td class="pos">+120%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h2>Keyword movement</h2>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:4px;">
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;"><span>organic supplements</span><span class="pos" style="color:var(--accent2)">#3</span></div><div class="kw-bar"><i style="width:88%"></i></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;"><span>natural sleep aid</span><span class="pos" style="color:var(--accent2)">#5</span></div><div class="kw-bar"><i style="width:74%"></i></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;"><span>gut health greens</span><span class="pos" style="color:var(--accent2)">#2</span></div><div class="kw-bar"><i style="width:93%"></i></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;"><span>immunity booster</span><span class="pos" style="color:var(--accent2)">#7</span></div><div class="kw-bar"><i style="width:61%"></i></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var data = [
+        { m: 'Jan', v: 21 }, { m: 'Feb', v: 26 }, { m: 'Mar', v: 24 },
+        { m: 'Apr', v: 31 }, { m: 'May', v: 38 }, { m: 'Jun', v: 48 }
+      ];
+      var max = 50;
+      var chart = document.getElementById('chart');
+      data.forEach(function (d) {
+        var col = document.createElement('div');
+        col.className = 'bar-col';
+        var bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.setAttribute('data-v', d.v + 'k');
+        bar.style.height = '0%';
+        var label = document.createElement('span');
+        label.textContent = d.m;
+        col.appendChild(bar); col.appendChild(label); chart.appendChild(col);
+        setTimeout(function () { bar.style.height = (d.v / max * 100) + '%'; }, 80);
+      });
+      document.querySelectorAll('.range button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('.range button').forEach(function (x){ x.classList.remove('active'); });
+          b.classList.add('active');
+        });
+      });
+    </script>
+  </body>
+</html>

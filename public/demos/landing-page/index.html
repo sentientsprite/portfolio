@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Verdant — Wellness Landing Page Demo</title>
+    <style>
+      :root {
+        --green: #0f766e;
+        --green-light: #14b8a6;
+        --ink: #0f172a;
+        --muted: #64748b;
+        --bg: #f8faf9;
+        --card: #ffffff;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        line-height: 1.6;
+      }
+      .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+      header {
+        position: sticky; top: 0; z-index: 10;
+        background: rgba(248, 250, 249, 0.85);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+      .logo { font-weight: 800; font-size: 20px; color: var(--green); letter-spacing: -0.02em; }
+      .nav a { color: var(--muted); text-decoration: none; margin-left: 24px; font-size: 14px; font-weight: 500; }
+      .nav a:hover { color: var(--green); }
+      .btn {
+        display: inline-block; background: var(--green); color: #fff;
+        padding: 12px 24px; border-radius: 10px; text-decoration: none;
+        font-weight: 600; font-size: 15px; transition: transform .15s, background .15s;
+        border: none; cursor: pointer;
+      }
+      .btn:hover { background: var(--green-light); transform: translateY(-1px); }
+      .btn-ghost { background: transparent; color: var(--green); border: 1px solid #cbd5e1; }
+      .hero { text-align: center; padding: 88px 0 64px; }
+      .pill {
+        display: inline-block; background: #ccfbf1; color: var(--green);
+        padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; margin-bottom: 20px;
+      }
+      .hero h1 { font-size: 52px; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 20px; }
+      .hero h1 span { color: var(--green); }
+      .hero p { font-size: 19px; color: var(--muted); max-width: 560px; margin: 0 auto 32px; }
+      .hero-actions { display: flex; gap: 14px; justify-content: center; }
+      .stats { display: flex; gap: 48px; justify-content: center; margin-top: 56px; flex-wrap: wrap; }
+      .stat b { display: block; font-size: 34px; color: var(--green); }
+      .stat span { font-size: 14px; color: var(--muted); }
+      section { padding: 64px 0; }
+      .section-title { text-align: center; margin-bottom: 48px; }
+      .section-title h2 { font-size: 34px; letter-spacing: -0.02em; }
+      .section-title p { color: var(--muted); margin-top: 8px; }
+      .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+      .card {
+        background: var(--card); border: 1px solid #e2e8f0; border-radius: 16px;
+        padding: 28px; transition: transform .15s, box-shadow .15s;
+      }
+      .card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(15,23,42,.08); }
+      .card .icon { width: 44px; height: 44px; border-radius: 12px; background: #ccfbf1;
+        display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+      .card h3 { font-size: 18px; margin-bottom: 8px; }
+      .card p { color: var(--muted); font-size: 15px; }
+      .pricing { background: #ecfdf5; }
+      .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+      .price {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 32px; text-align: center;
+      }
+      .price.popular { border: 2px solid var(--green); transform: scale(1.03); position: relative; }
+      .price.popular::before {
+        content: "Most popular"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+        background: var(--green); color: #fff; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px;
+      }
+      .price h3 { font-size: 16px; color: var(--muted); }
+      .price .amount { font-size: 44px; font-weight: 800; margin: 12px 0; }
+      .price .amount span { font-size: 16px; color: var(--muted); font-weight: 500; }
+      .price ul { list-style: none; margin: 20px 0; text-align: left; }
+      .price li { padding: 8px 0; font-size: 15px; color: #334155; border-bottom: 1px solid #f1f5f9; }
+      .price li::before { content: "✓ "; color: var(--green); font-weight: 700; }
+      .cta { text-align: center; }
+      .cta h2 { font-size: 38px; letter-spacing: -0.02em; margin-bottom: 16px; }
+      .cta p { color: var(--muted); margin-bottom: 28px; }
+      footer { border-top: 1px solid #e2e8f0; padding: 32px 0; text-align: center; color: var(--muted); font-size: 14px; }
+      @media (max-width: 760px) {
+        .grid, .price-grid { grid-template-columns: 1fr; }
+        .hero h1 { font-size: 38px; }
+        .price.popular { transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap nav">
+        <div class="logo">Verdant</div>
+        <nav>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#cta" class="btn" style="padding:8px 18px;color:#fff;">Get started</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero wrap">
+      <div class="pill">Trusted by 12,000+ wellness seekers</div>
+      <h1>Feel your <span>best self</span>, naturally.</h1>
+      <p>Plant-based supplements crafted by herbalists. Clinically informed, third-party tested, and made for real results.</p>
+      <div class="hero-actions">
+        <a href="#pricing" class="btn">Shop the collection</a>
+        <a href="#features" class="btn btn-ghost">How it works</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>45%</b><span>Higher conversions</span></div>
+        <div class="stat"><b>4.9★</b><span>2,300+ reviews</span></div>
+        <div class="stat"><b>60-day</b><span>Money-back guarantee</span></div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="wrap">
+        <div class="section-title">
+          <h2>Why people switch to Verdant</h2>
+          <p>Everything is built around outcomes you can feel.</p>
+        </div>
+        <div class="grid">
+          <div class="card"><div class="icon">🌿</div><h3>Clean ingredients</h3><p>No fillers, no junk. Just researched botanicals in effective doses.</p></div>
+          <div class="card"><div class="icon">🔬</div><h3>Third-party tested</h3><p>Every batch is independently verified for purity and potency.</p></div>
+          <div class="card"><div class="icon">📦</div><h3>Flexible delivery</h3><p>Subscribe and save, skip anytime, cancel in one click.</p></div>
+          <div class="card"><div class="icon">💚</div><h3>Real support</h3><p>Talk to certified herbalists, not a chatbot, whenever you need.</p></div>
+          <div class="card"><div class="icon">⚡</div><h3>Fast results</h3><p>Most customers report noticeable changes within the first 3 weeks.</p></div>
+          <div class="card"><div class="icon">🌎</div><h3>Sustainable</h3><p>Recyclable packaging and responsibly sourced ingredients.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+      <div class="wrap">
+        <div class="section-title">
+          <h2>Simple, honest pricing</h2>
+          <p>Start small or go all-in. Cancel anytime.</p>
+        </div>
+        <div class="price-grid">
+          <div class="price">
+            <h3>Starter</h3>
+            <div class="amount">$29<span>/mo</span></div>
+            <ul><li>1 supplement</li><li>Monthly delivery</li><li>Email support</li></ul>
+            <a href="#cta" class="btn btn-ghost" style="width:100%;">Choose Starter</a>
+          </div>
+          <div class="price popular">
+            <h3>Wellness</h3>
+            <div class="amount">$59<span>/mo</span></div>
+            <ul><li>3 supplements</li><li>Free shipping</li><li>Herbalist consults</li><li>Skip or swap anytime</li></ul>
+            <a href="#cta" class="btn" style="width:100%;">Choose Wellness</a>
+          </div>
+          <div class="price">
+            <h3>Complete</h3>
+            <div class="amount">$99<span>/mo</span></div>
+            <ul><li>Full stack</li><li>Priority support</li><li>Quarterly lab reports</li></ul>
+            <a href="#cta" class="btn btn-ghost" style="width:100%;">Choose Complete</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta" class="cta">
+      <div class="wrap">
+        <h2>Start your 60-day risk-free trial</h2>
+        <p>Join thousands who made the switch. Love it or get your money back.</p>
+        <a href="#" class="btn" onclick="return false;">Get started today</a>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">© 2026 Verdant Wellness · Demo landing page · Built by Raymond King</div>
+    </footer>
+  </body>
+</html>

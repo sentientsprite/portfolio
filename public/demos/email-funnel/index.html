@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Email Automation Funnel — Interactive Demo</title>
+    <style>
+      :root {
+        --bg: #0a0a0a; --panel: #141414; --border: #262626;
+        --ink: #f5f5f5; --muted: #a3a3a3; --accent: #10b981; --accent-soft: rgba(16,185,129,.12);
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg); color: var(--ink); line-height: 1.5; padding: 32px 20px 56px;
+      }
+      .wrap { max-width: 900px; margin: 0 auto; }
+      .head { text-align: center; margin-bottom: 40px; }
+      .head h1 { font-size: 30px; letter-spacing: -0.02em; }
+      .head p { color: var(--muted); margin-top: 8px; }
+      .flow { display: flex; flex-direction: column; gap: 0; align-items: center; }
+      .node {
+        width: 100%; max-width: 520px; background: var(--panel); border: 1px solid var(--border);
+        border-radius: 14px; padding: 18px 20px; cursor: pointer; transition: all .18s;
+        position: relative;
+      }
+      .node:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(16,185,129,.1); }
+      .node .tag { font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
+      .node h3 { font-size: 17px; margin-top: 4px; }
+      .node .detail { color: var(--muted); font-size: 14px; margin-top: 10px; max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+      .node.open .detail { max-height: 160px; }
+      .node .metric { display: inline-block; margin-top: 12px; background: var(--accent-soft); color: var(--accent);
+        font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
+      .connector { width: 2px; height: 28px; background: linear-gradient(var(--border), var(--accent)); }
+      .branch { display: flex; gap: 20px; width: 100%; max-width: 520px; }
+      .branch .node { max-width: none; flex: 1; }
+      .hint { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+      .summary { margin-top: 44px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+      .kpi { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+      .kpi b { display: block; font-size: 26px; color: var(--accent); }
+      .kpi span { font-size: 12px; color: var(--muted); }
+      @media (max-width: 620px) { .branch { flex-direction: column; } .summary { grid-template-columns: repeat(2,1fr);} }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="head">
+        <h1>Lead Nurture Automation</h1>
+        <p>Zapier + HubSpot + Klaviyo — click any stage to see what happens.</p>
+      </div>
+      <div class="hint">Tap a step to expand ↓</div>
+
+      <div class="flow">
+        <div class="node open">
+          <div class="tag">Trigger</div>
+          <h3>New lead captured</h3>
+          <div class="detail">Form submission or ad lead syncs into HubSpot via Zapier in under 2 seconds. Source, campaign, and UTM data are attached automatically.</div>
+          <span class="metric">2,000+ contacts / mo</span>
+        </div>
+        <div class="connector"></div>
+
+        <div class="node">
+          <div class="tag">Scoring</div>
+          <h3>Behavioral lead scoring</h3>
+          <div class="detail">Points assigned for page visits (+5), form fills (+20), email clicks (+10), and demo requests (+50). Score updates in real time.</div>
+          <span class="metric">Auto-qualified</span>
+        </div>
+        <div class="connector"></div>
+
+        <div class="branch">
+          <div class="node">
+            <div class="tag">Score 50+</div>
+            <h3>Route to sales</h3>
+            <div class="detail">High-intent leads are pushed to a sales rep with full context and a Slack alert, cutting response time by 40%.</div>
+            <span class="metric">40% faster</span>
+          </div>
+          <div class="node">
+            <div class="tag">Score &lt; 50</div>
+            <h3>Nurture sequence</h3>
+            <div class="detail">Segmented by industry and stage: awareness → consideration → decision. Content adapts to engagement.</div>
+            <span class="metric">80% automated</span>
+          </div>
+        </div>
+        <div class="connector"></div>
+
+        <div class="node">
+          <div class="tag">Recovery</div>
+          <h3>Abandoned cart SMS</h3>
+          <div class="detail">Klaviyo SMS flow recovers drop-offs with a timed reminder and incentive, recapturing lost revenue.</div>
+          <span class="metric">12% recovered</span>
+        </div>
+        <div class="connector"></div>
+
+        <div class="node">
+          <div class="tag">Reporting</div>
+          <h3>Automated dashboards</h3>
+          <div class="detail">Weekly performance rolls up to stakeholders automatically — no manual exports.</div>
+          <span class="metric">0 manual reports</span>
+        </div>
+      </div>
+
+      <div class="summary">
+        <div class="kpi"><b>80%</b><span>Emails automated</span></div>
+        <div class="kpi"><b>35%</b><span>Engagement lift</span></div>
+        <div class="kpi"><b>40%</b><span>Faster response</span></div>
+        <div class="kpi"><b>12%</b><span>Cart recovery</span></div>
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll('.node').forEach((node) => {
+        node.addEventListener('click', () => node.classList.toggle('open'));
+      });
+    </script>
+  </body>
+</html>
