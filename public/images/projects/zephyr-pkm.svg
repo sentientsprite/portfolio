@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" fill="none">
+  <rect width="1200" height="675" fill="#050508"/>
+  <rect width="1200" height="675" fill="url(#bg)" opacity="0.9"/>
+  <defs>
+    <radialGradient id="bg" cx="30%" cy="20%" r="70%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.12"/>
+      <stop offset="50%" stop-color="#8b5cf6" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#050508" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- sidebar -->
+  <rect x="0" y="0" width="200" height="675" fill="#0a0a0f" stroke="#ffffff" stroke-opacity="0.06"/>
+  <text x="24" y="48" fill="#67e8f9" font-family="system-ui,sans-serif" font-size="18" font-weight="600">Zephyr</text>
+  <text x="24" y="68" fill="#737373" font-family="system-ui,sans-serif" font-size="11">Chief of Staff PKM</text>
+  <rect x="16" y="100" width="168" height="28" rx="6" fill="#22d3ee" fill-opacity="0.1"/>
+  <text x="28" y="118" fill="#a5f3fc" font-family="system-ui,sans-serif" font-size="12">Dashboard</text>
+  <text x="28" y="150" fill="#737373" font-family="system-ui,sans-serif" font-size="12">00-INBOX</text>
+  <text x="28" y="178" fill="#737373" font-family="system-ui,sans-serif" font-size="12">01-CAPTURES</text>
+  <text x="28" y="206" fill="#737373" font-family="system-ui,sans-serif" font-size="12">02-CONNECTIONS</text>
+  <!-- main -->
+  <text x="240" y="80" fill="#fafafa" font-family="system-ui,sans-serif" font-size="28" font-weight="600">Chief of Staff</text>
+  <text x="240" y="108" fill="#737373" font-family="system-ui,sans-serif" font-size="14">Capture ’ Process ’ Connect</text>
+  <!-- stat cards -->
+  <rect x="240" y="140" width="140" height="72" rx="12" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text x="256" y="168" fill="#737373" font-family="system-ui,sans-serif" font-size="11">Inbox</text>
+  <text x="256" y="198" fill="#67e8f9" font-family="system-ui,sans-serif" font-size="24" font-weight="600">2</text>
+  <rect x="410" y="140" width="140" height="72" rx="12" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text x="426" y="168" fill="#737373" font-family="system-ui,sans-serif" font-size="11">Captures</text>
+  <text x="426" y="198" fill="#c4b5fd" font-family="system-ui,sans-serif" font-size="24" font-weight="600">6</text>
+  <rect x="560" y="140" width="140" height="72" rx="12" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text x="576" y="168" fill="#737373" font-family="system-ui,sans-serif" font-size="11">Connections</text>
+  <text x="576" y="198" fill="#6ee7b7" font-family="system-ui,sans-serif" font-size="24" font-weight="600">1</text>
+  <!-- chat panel -->
+  <rect x="880" y="0" width="320" height="675" fill="#0a0a0f" stroke="#ffffff" stroke-opacity="0.06"/>
+  <text x="904" y="48" fill="#a5f3fc" font-family="system-ui,sans-serif" font-size="14" font-weight="600">Chief of Staff</text>
+  <rect x="904" y="80" width="272" height="56" rx="8" fill="#ffffff" fill-opacity="0.05"/>
+  <text x="916" y="108" fill="#d4d4d4" font-family="system-ui,sans-serif" font-size="11">Zephyr online. Try Process Inbox&</text>
+  <rect x="904" y="140" width="120" height="24" rx="6" fill="#22d3ee" fill-opacity="0.15"/>
+  <text x="916" y="156" fill="#67e8f9" font-family="system-ui,sans-serif" font-size="10">Process Inbox</text>
+  <rect x="1024" y="140" width="100" height="24" rx="6" fill="#8b5cf6" fill-opacity="0.15"/>
+  <text x="1036" y="156" fill="#c4b5fd" font-family="system-ui,sans-serif" font-size="10">Daily Brief</text>
+  <!-- graph nodes -->
+  <circle cx="500" cy="380" r="28" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee" stroke-opacity="0.5"/>
+  <circle cx="380" cy="480" r="22" fill="#8b5cf6" fill-opacity="0.2" stroke="#8b5cf6" stroke-opacity="0.5"/>
+  <circle cx="620" cy="460" r="22" fill="#34d399" fill-opacity="0.2" stroke="#34d399" stroke-opacity="0.5"/>
+  <line x1="500" y1="380" x2="380" y2="480" stroke="#22d3ee" stroke-opacity="0.3" stroke-width="2"/>
+  <line x1="500" y1="380" x2="620" y2="460" stroke="#22d3ee" stroke-opacity="0.3" stroke-width="2"/>
+</svg>

@@ -128,6 +128,20 @@ export const projectOverrides: ProjectOverride[] = [
     techStack: ['AI Agents', 'Next.js', 'Tauri', 'SEO/GEO', 'Analytics'],
   },
   {
+    repoName: 'zephyr',
+    displayName: 'Zephyr Chief of Staff PKM',
+    category: 'product',
+    featured: true,
+    screenshot: 'images/projects/zephyr-pkm.svg',
+    demoUrl: 'https://zephyr-lyart-beta.vercel.app',
+    sourceUrl: '',
+    description:
+      'AI-powered second brain with Obsidian-style vault structure — inbox capture, daily briefs, weekly connections, graph view, and Chief of Staff chat.',
+    details:
+      'Zephyr implements the Chief of Staff knowledge system: a structured vault (INBOX → CAPTURES → CONNECTIONS → PROJECTS → VELLUM), frictionless capture (text, voice, Telegram-style), one-click inbox processing, daily briefs with emerging patterns and key questions, weekly connection synthesis, an interactive note graph, and a persistent VELLUM system-prompt editor. Built for crypto/AI knowledge workers who want Obsidian organization with Vellum-like AI workflows — deployed live on Vercel, demo mode uses in-browser persistence.',
+    techStack: ['Next.js', 'AI PKM', 'Obsidian Vault', 'Graph View', 'Workflows'],
+  },
+  {
     repoName: 'mission-control',
     displayName: 'Prana Mission Control',
     category: 'product',
