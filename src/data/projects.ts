@@ -138,6 +138,11 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'The measurement layer of the Lead-to-Revenue stack. This dashboard pulls session and conversion data from Google Analytics, closed-won revenue from the CRM, and spend from Google Ads and Meta into one view. Owners compare ROAS, cost per lead, and attributed revenue by channel — organic, paid search, paid social, email, and direct — without juggling five separate tools. Simulated demo data; production builds wire live GA4, HubSpot, and ad platform APIs.',
     techStack: ['Google Analytics', 'HubSpot CRM', 'Google Ads', 'Meta Ads', 'Attribution'],
+    metrics: [
+      { value: '5\u21921', label: 'Tools unified' },
+      { value: '100%', label: 'Ad spend attributed' },
+      { value: 'Channel', label: 'Level ROI clarity' },
+    ],
   },
   {
     repoName: 'feedback-board',
