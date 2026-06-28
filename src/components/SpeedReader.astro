@@ -71,20 +71,25 @@
 </div>
 
 <style>
+  /* Anchored just under the top-left logo/home button, aligned to the
+     centered nav-shell's left edge (max-w-6xl + px-5). */
   .speed-widget {
     position: fixed;
-    left: 22px;
-    top: 142px;
+    left: max(20px, calc((100vw - 1152px) / 2 + 20px));
+    top: 70px;
     z-index: 60;
   }
 
+  /* Organic curved tab that "hangs" below the logo. */
   .speed-fab {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 50px;
     display: grid;
     place-items: center;
-    border-radius: 9999px;
+    padding-top: 6px;
+    border-radius: 40% 40% 50% 50% / 26% 26% 74% 74%;
     border: 1px solid rgba(96, 165, 250, 0.55);
+    border-top-color: rgba(96, 165, 250, 0.3);
     background: rgba(10, 10, 10, 0.85);
     color: #34d399;
     font-size: 1rem;
@@ -96,18 +101,22 @@
     box-shadow:
       0 0 0 1px rgba(96, 165, 250, 0.25),
       0 0 18px -2px rgba(96, 165, 250, 0.55),
-      0 8px 24px -10px rgba(0, 0, 0, 0.8);
-    transition: transform 0.2s ease, box-shadow 0.25s ease, color 0.2s ease;
+      0 10px 22px -12px rgba(0, 0, 0, 0.8);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+      border-radius 0.4s ease, box-shadow 0.25s ease, color 0.2s ease;
   }
   .speed-fab:hover {
-    transform: translateY(-2px);
+    transform: translateY(3px);
+    border-radius: 44% 44% 52% 52% / 30% 30% 70% 70%;
     color: #6ee7b7;
     box-shadow:
       0 0 0 1px rgba(96, 165, 250, 0.4),
       0 0 26px 0 rgba(96, 165, 250, 0.75),
-      0 10px 28px -8px rgba(0, 0, 0, 0.85);
+      0 14px 26px -10px rgba(0, 0, 0, 0.85);
   }
   .speed-fab.is-active {
+    transform: translateY(4px);
+    border-radius: 46% 46% 30% 30% / 34% 34% 66% 66%;
     color: #a7f3d0;
     border-color: rgba(147, 197, 253, 0.8);
     box-shadow:
@@ -119,26 +128,26 @@
     outline-offset: 3px;
   }
 
-  /* Compact box anchored to the right of the "S" launcher (top-left stack). */
+  /* Compact box that drops straight down from under the curved tab. */
   .speed-panel {
     position: fixed;
-    left: 72px;
-    top: 138px;
+    left: max(20px, calc((100vw - 1152px) / 2 + 20px));
+    top: 126px;
     z-index: 70;
-    width: min(300px, calc(100vw - 104px));
+    width: min(300px, calc(100vw - 40px));
     border: 1px solid rgba(96, 165, 250, 0.35);
-    border-radius: 16px;
+    border-radius: 18px;
     background: rgba(10, 10, 10, 0.94);
     backdrop-filter: blur(14px);
     box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.9);
-    transform: translateX(-10px) scale(0.97);
-    transform-origin: top left;
+    transform: translateY(-14px) scaleY(0.55);
+    transform-origin: top center;
     opacity: 0;
     pointer-events: none;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+    transition: transform 0.38s cubic-bezier(0.34, 1.4, 0.5, 1), opacity 0.22s ease;
   }
   .speed-panel.is-open {
-    transform: translateX(0) scale(1);
+    transform: translateY(0) scaleY(1);
     opacity: 1;
     pointer-events: auto;
   }
@@ -284,18 +293,18 @@
 
   @media (max-width: 640px) {
     .speed-widget {
-      left: 12px;
-      top: 130px;
+      left: 16px;
+      top: 66px;
     }
     .speed-fab {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 46px;
       font-size: 0.95rem;
     }
     .speed-panel {
-      left: 56px;
-      top: 126px;
-      width: calc(100vw - 68px);
+      left: 16px;
+      top: 118px;
+      width: calc(100vw - 32px);
     }
     .speed-panel-inner {
       padding: 8px 12px 12px;
