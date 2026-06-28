@@ -140,8 +140,8 @@ export const projectOverrides: ProjectOverride[] = [
     techStack: ['Google Analytics', 'HubSpot CRM', 'Google Ads', 'Meta Ads', 'Attribution'],
     metrics: [
       { value: '5\u21921', label: 'Tools unified' },
-      { value: '100%', label: 'Ad spend attributed' },
-      { value: 'Channel', label: 'Level ROI clarity' },
+      { value: '100%', label: 'Spend attributed' },
+      { value: 'Live', label: 'Channel ROI' },
     ],
   },
   {

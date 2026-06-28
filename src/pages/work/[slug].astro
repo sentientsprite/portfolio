@@ -105,6 +105,23 @@ const heroImage = project.screenshot ? withBase(`/${project.screenshot}`) : null
     </header>
 
     {
+      project.metrics.length > 0 && (
+        <section class="mt-10">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Representative outcomes</p>
+          <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {project.metrics.map((metric) => (
+              <div class="rounded-xl border border-neutral-800 bg-neutral-900/40 p-4 text-center">
+                <b class="block text-2xl font-bold text-emerald-400">{metric.value}</b>
+                <span class="mt-1 block text-xs text-neutral-500">{metric.label}</span>
+              </div>
+            ))}
+          </div>
+          <p class="mt-2 text-xs text-neutral-600">Typical results from comparable builds — actuals vary by business and traffic.</p>
+        </section>
+      )
+    }
+
+    {
       hasDemo ? (
         <div class="mt-10 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 shadow-2xl">
           <div class="flex items-center gap-2 border-b border-neutral-800 bg-neutral-950/60 px-4 py-2.5">

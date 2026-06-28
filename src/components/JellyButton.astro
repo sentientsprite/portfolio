@@ -30,7 +30,6 @@ const target = external ? '_blank' : undefined;
   data-jelly
 >
   <span class="jelly-btn__body">
-    <span class="jelly-btn__shine" aria-hidden="true"></span>
     <span class="jelly-btn__label">
       {eyebrow && <span class="jelly-btn__eyebrow">{eyebrow}</span>}
       <span class="jelly-btn__text">{label}</span>
@@ -62,32 +61,23 @@ const target = external ? '_blank' : undefined;
     justify-content: center;
     padding: 1.05rem 2.4rem;
     border-radius: 999px;
-    background: linear-gradient(160deg, var(--jelly-from) 0%, var(--jelly-to) 100%);
+    /* Glossy "wet jelly" sheen baked into the body: a soft top highlight that
+       fades into the base gradient, so there is no hard inner box. */
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.45) 0%,
+        rgba(255, 255, 255, 0.08) 32%,
+        rgba(255, 255, 255, 0) 55%
+      ),
+      linear-gradient(165deg, var(--jelly-from) 0%, var(--jelly-to) 100%);
     box-shadow:
-      0 1px 0 1px rgba(255, 255, 255, 0.35) inset,
-      0 -10px 18px -8px rgba(2, 44, 34, 0.85) inset,
+      0 -10px 18px -10px rgba(2, 44, 34, 0.7) inset,
       0 14px 28px -10px rgba(5, 150, 105, 0.7),
       0 6px 14px -6px rgba(0, 0, 0, 0.55);
     transform-origin: center bottom;
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
     will-change: transform;
-  }
-
-  /* Glossy top highlight — the "wet jelly" sheen */
-  .jelly-btn__shine {
-    position: absolute;
-    left: 8%;
-    right: 8%;
-    top: 6px;
-    height: 42%;
-    border-radius: 999px;
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.55),
-      rgba(255, 255, 255, 0)
-    );
-    pointer-events: none;
-    filter: blur(0.3px);
   }
 
   .jelly-btn__label {
@@ -119,9 +109,8 @@ const target = external ? '_blank' : undefined;
     .jelly-btn:hover .jelly-btn__body {
       transform: scale(1.06, 0.97) translateY(-2px);
       box-shadow:
-        0 1px 0 1px rgba(255, 255, 255, 0.45) inset,
-        0 -12px 20px -8px rgba(2, 44, 34, 0.9) inset,
-        0 20px 36px -10px rgba(5, 150, 105, 0.8),
+        0 -12px 20px -10px rgba(2, 44, 34, 0.8) inset,
+        0 20px 36px -10px rgba(5, 150, 105, 0.85),
         0 10px 20px -6px rgba(0, 0, 0, 0.55);
     }
   }
@@ -151,7 +140,7 @@ const target = external ? '_blank' : undefined;
   .jelly-btn:focus-visible .jelly-btn__body {
     box-shadow:
       0 0 0 3px rgba(16, 185, 129, 0.45),
-      0 1px 0 1px rgba(255, 255, 255, 0.35) inset,
+      0 -10px 18px -10px rgba(2, 44, 34, 0.7) inset,
       0 14px 28px -10px rgba(5, 150, 105, 0.7);
   }
 
