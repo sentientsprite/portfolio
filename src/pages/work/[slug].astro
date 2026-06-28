@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import VaultSuggestionForm from '../../components/VaultSuggestionForm.astro';
 import { getMergedProjects, type MergedProject } from '../../lib/github';
 import { categoryLabels } from '../../data/projects';
 import { growthSystemById } from '../../data/growth-systems';
@@ -33,7 +32,6 @@ const systemModules = project.growthSystemId
   ? allProjects.filter((p) => p.growthSystemId === project.growthSystemId)
   : [];
 const isGrowthSystemHub = project.slug === 'growth-system';
-const isZephyr = project.slug === 'zephyr';
 const heroImage = project.screenshot ? withBase(`/${project.screenshot}`) : null;
 ---
 
@@ -146,8 +144,6 @@ const heroImage = project.screenshot ? withBase(`/${project.screenshot}`) : null
         </div>
       )
     }
-
-    {isZephyr && <VaultSuggestionForm />}
 
     {
       project.details && (

@@ -3,13 +3,17 @@ import { site } from '../config/site';
 
 interface Props {
   apiUrl?: string;
+  class?: string;
 }
 
-const { apiUrl = site.zephyrSuggestApi } = Astro.props;
+const { apiUrl = site.zephyrSuggestApi, class: className } = Astro.props;
 ---
 
 <section
-  class="glow-card mt-10 rounded-xl border border-violet-500/20 bg-gradient-to-br from-violet-500/5 via-neutral-900/40 to-neutral-950 p-6 sm:p-8"
+  class:list={[
+    'glow-card rounded-xl border border-violet-500/20 bg-gradient-to-br from-violet-500/5 via-neutral-900/40 to-neutral-950 p-6 sm:p-8',
+    className,
+  ]}
   data-vault-suggest
   data-api-url={apiUrl}
 >
@@ -63,8 +67,7 @@ const { apiUrl = site.zephyrSuggestApi } = Astro.props;
 </section>
 
 <script>
-  const root = document.querySelector('[data-vault-suggest]');
-  if (root) {
+  document.querySelectorAll('[data-vault-suggest]').forEach((root) => {
     const apiUrl = root.getAttribute('data-api-url') ?? '';
     const form = root.querySelector('[data-suggest-form]');
     const status = root.querySelector('[data-suggest-status]');
@@ -113,5 +116,5 @@ const { apiUrl = site.zephyrSuggestApi } = Astro.props;
         submitBtn?.removeAttribute('disabled');
       }
     });
-  }
+  });
 </script>

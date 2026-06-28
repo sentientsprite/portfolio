@@ -8,6 +8,7 @@
  */
 import '../styles/global.css';
 import FoxAssistant from '../components/FoxAssistant.astro';
+import VaultSuggestionForm from '../components/VaultSuggestionForm.astro';
 import { site } from '../config/site';
 import { withBase } from '../lib/url';
 import { resolveDemoUrl, slugify } from '../lib/url';
@@ -522,6 +523,13 @@ const structuredData = {
               Contact page
             </a>
           </div>
+        </div>
+      </section>
+
+      <!-- ===================== VAULT SUGGESTION ===================== -->
+      <section id="suggest" class="relative mx-auto max-w-6xl px-4 pb-20">
+        <div data-reveal>
+          <VaultSuggestionForm />
         </div>
       </section>
 
