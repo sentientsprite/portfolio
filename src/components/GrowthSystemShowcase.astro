@@ -158,11 +158,11 @@ const detailUrl = withBase(`/work/${systemProject.slug}`);
 {
   modules.length > 0 && (
     <section class="mb-16">
-      <h3 class="mb-2 text-xl font-semibold text-neutral-100" data-animate>System modules</h3>
+      <h3 class="mb-2 text-xl font-semibold text-neutral-100" data-animate>Marketing Systems</h3>
       <p class="mb-6 max-w-2xl text-sm text-neutral-500" data-animate>
-        Each layer is a live, interactive demo. Together they form a full-stack integration from first click to booked revenue and channel ROI.
+        Landing pages, SEO reporting, nurture flows, and the full lead-to-revenue stack — each card is a live demo.
       </p>
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {modules.map((project) => (
           <ProjectCard project={project} />
         ))}

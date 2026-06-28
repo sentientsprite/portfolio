@@ -10,13 +10,31 @@ const projects = await getMergedProjects();
 const growthSystemProject = projects.find((p) => p.slug === 'growth-system');
 const growthModules = projects.filter((p) => p.growthSystemId === 'lead-to-revenue');
 const growthModuleSlugs = new Set(growthModules.map((p) => p.slug));
+const marketingSystems = [
+  ...growthModules,
+  ...projects.filter((p) => p.slug === 'seo-dashboard'),
+];
 
-const featured = projects.filter(
-  (p) => p.featured && p.slug !== 'growth-system' && !growthModuleSlugs.has(p.slug),
-);
+const productSystems = projects
+  .filter(
+    (p) =>
+      p.category === 'product' &&
+      p.slug !== 'growth-system' &&
+      !growthModuleSlugs.has(p.slug) &&
+      !p.hidden,
+  )
+  .sort((a, b) => {
+    if (a.featured !== b.featured) return a.featured ? -1 : 1;
+    return 0;
+  });
 
 const showroom = projects.filter(
-  (p) => !p.featured && !p.growthSystemId && p.category !== 'meta',
+  (p) =>
+    !p.growthSystemId &&
+    p.category !== 'meta' &&
+    p.category !== 'product' &&
+    p.slug !== 'seo-dashboard' &&
+    !p.hidden,
 );
 
 const meta = projects.filter((p) => p.category === 'meta');
@@ -28,7 +46,7 @@ const grouped = showroom.reduce<Record<string, typeof showroom>>((acc, project) 
   return acc;
 }, {});
 
-const categoryOrder: WorkCategory[] = ['product', 'marketing', 'development', 'automation', 'fun'];
+const categoryOrder: WorkCategory[] = ['development', 'automation', 'fun'];
 
 const siteOrigin = 'https://sentientsprite.github.io/portfolio';
 const catalogProjects = projects.filter((p) => p.category !== 'meta');
@@ -70,17 +88,17 @@ const itemListSchema = {
       <GrowthSystemShowcase
         systemId="lead-to-revenue"
         systemProject={growthSystemProject}
-        modules={growthModules}
+        modules={marketingSystems}
       />
     )
   }
 
     {
-      featured.length > 0 && (
+      productSystems.length > 0 && (
         <section class="mb-16">
-          <h3 class="mb-6 text-xl font-semibold text-neutral-100" data-animate>More Product Systems</h3>
+          <h3 class="mb-6 text-xl font-semibold text-neutral-100" data-animate>Product Systems</h3>
           <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((project) => (
+            {productSystems.map((project) => (
               <ProjectCard project={project} />
             ))}
           </div>
