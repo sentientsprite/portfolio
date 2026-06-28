@@ -33,7 +33,7 @@ export const categoryLabels: Record<WorkCategory, string> = {
   marketing: 'Marketing',
   development: 'Development',
   automation: 'Automation',
-  meta: 'Site',
+  meta: 'Web Design',
 };
 
 export const projectOverrides: ProjectOverride[] = [
@@ -161,8 +161,8 @@ export const projectOverrides: ProjectOverride[] = [
   {
     repoName: 'accessibility-suite',
     displayName: 'Accessibility Suite',
-    category: 'product',
-    featured: true,
+    category: 'meta',
+    featured: false,
     demoUrl: 'https://sentientsprite.github.io/portfolio/',
     sourceUrl: '',
     description:
@@ -281,5 +281,57 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'This site is open source. It uses Astro for static, near-zero-JS pages, Tailwind for styling, Markdown content collections for writing, and a build-time GitHub API integration for stats.',
     techStack: ['Astro', 'Tailwind CSS', 'TypeScript'],
+  },
+  {
+    repoName: 'jelly-button',
+    displayName: 'Jelly Button',
+    category: 'meta',
+    featured: false,
+    demoUrl: 'https://sentientsprite.github.io/portfolio/',
+    sourceUrl: '',
+    description:
+      'A squishy 3D gel call-to-action: glossy highlight, pushable depth base, pointer-anchored click ripple, and elastic wobble on press — honors reduced motion.',
+    details:
+      'Inspired by tactile jelly CTAs on high-end landing pages, this component layers a raised glossy cap over a darker “socket” so the button visibly presses down on click. A reactive ripple originates from the exact pointer position, and a spring wobble animation retriggers on rapid taps. Used as the primary CTA across project pages and the homepage hero. Try it live — click any “Let\'s Build” or “Book a build audit” jelly button on this site.',
+    techStack: ['CSS', '3D UI', 'Micro-interactions', 'Astro'],
+  },
+  {
+    repoName: 'speed-reader',
+    displayName: 'Speed Reader',
+    category: 'meta',
+    featured: false,
+    demoUrl: 'https://sentientsprite.github.io/portfolio/',
+    sourceUrl: '',
+    description:
+      'Spritz-style speed reading for any page: pulls all paragraph text and flashes it word-by-word at a chosen WPM, with the optimal recognition letter highlighted.',
+    details:
+      'Adapted from Glance/OpenSpritz (MIT). Tap the blue S icon to open a reader bar that harvests visible <p> copy from the page main content, preprocesses words for punctuation-aware pacing, and displays each word with the Spritz pivot letter in emerald. WPM is adjustable (200–800) and saved for the session. Pause, resume, or close with Escape. No external APIs — a self-contained reader engine. Try it live — tap the S icon at the bottom-left of any page.',
+    techStack: ['Glance/OpenSpritz', 'Spritz', 'TypeScript', 'Astro'],
+  },
+  {
+    repoName: 'future-fox',
+    displayName: 'Future.fox',
+    category: 'meta',
+    featured: false,
+    demoUrl: 'https://sentientsprite.github.io/portfolio/',
+    sourceUrl: '',
+    description:
+      'Animated green fox mascot and FAQ chatbot: runs on screen after load, tracks your mouse with its eyes, falls asleep when idle, and answers questions about the site with fuzzy intent matching.',
+    details:
+      'Future.fox is a persistent site guide disguised as a Firefox-style mascot. The fox runs in 3 seconds after page load, watches pointer movement with obvious eye tracking, and dozes off after 5 seconds of mouse inactivity. Opening the chat reveals an intent-matched FAQ bot filled with portfolio content — services, growth system, demos, case studies, and contact paths — plus dynamic quick-reply chips and markdown-lite responses. Conversation state persists across page navigation for the session. Try it live — tap the fox at the bottom-right of any page.',
+    techStack: ['Chatbot', 'Intent Matching', 'SVG Animation', 'Session Storage', 'Astro'],
+  },
+  {
+    repoName: 'touch-fluid',
+    displayName: 'Touch-Reactive Fluid',
+    category: 'meta',
+    featured: false,
+    demoUrl: 'https://sentientsprite.github.io/portfolio/',
+    sourceUrl: '',
+    description:
+      'Lightweight 2D ambient fluid behind the homepage hero — soft emerald blobs with fade trails that react strongly to touch drags on mobile and subtly to mouse movement on desktop.',
+    details:
+      'Inspired by WebGL fluid backgrounds but implemented as a ~150-line Canvas 2D layer — no heavy simulation, no extra dependencies. Several blobs drift with spring physics; touch and pointer movement add impulses and attraction, with a brighter cursor glow on mobile for obvious feedback. Sits between the atmospheric gradient and the Three.js neural-net canvas using screen blend mode. Respects reduced-motion settings and pauses when the tab is hidden. Try it live — drag your finger across the homepage hero on mobile.',
+    techStack: ['Canvas 2D', 'Touch UX', 'Physics', 'Performance', 'TypeScript'],
   },
 ];
