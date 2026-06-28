@@ -232,6 +232,12 @@ const structuredData = {
     <canvas id="scene" class="pointer-events-none fixed inset-0 z-0 h-full w-full"></canvas>
     <!-- Atmospheric gradient layer behind the canvas -->
     <div class="bg-atmosphere pointer-events-none fixed inset-0 z-[-1]"></div>
+    <!-- Touch-reactive ambient fluid (lightweight 2D, mobile-first) -->
+    <canvas
+      id="touch-fluid"
+      class="touch-fluid pointer-events-none fixed inset-0 z-0 h-full w-full"
+      aria-hidden="true"
+    ></canvas>
 
     <!-- ===================== NAVBAR (glassmorphism, scroll-aware) ===================== -->
     <header
@@ -257,6 +263,7 @@ const structuredData = {
         <div class="flex items-center gap-3">
           <a
             href={withBase('/contact#intake')}
+            data-magnetic
             class="hidden rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400 sm:inline-block"
           >
             Build my system
@@ -324,6 +331,7 @@ const structuredData = {
             />
             <a
               href="#growth"
+              data-magnetic
               class="rounded-full border border-emerald-400/60 px-7 py-3 text-sm font-semibold text-emerald-300 transition hover:border-emerald-400 hover:bg-emerald-500 hover:text-neutral-950"
             >
               See the growth system
@@ -661,6 +669,16 @@ const structuredData = {
           #0a0a0a;
       }
 
+      /* Soft-blend touch fluid sits between atmosphere and the neural-net canvas */
+      .touch-fluid {
+        opacity: 0.72;
+        mix-blend-mode: screen;
+      }
+      html[data-theme="light"] .touch-fluid {
+        opacity: 0.45;
+        mix-blend-mode: multiply;
+      }
+
       /* ---- Loader ---- */
       .loader-ring {
         width: 46px;
@@ -768,8 +786,10 @@ const structuredData = {
       @media (prefers-reduced-motion: reduce) {
         .scroll-dot::after,
         .showcase-orb,
-        .loader-ring { animation: none; }
+        .loader-ring,
+        .touch-fluid { animation: none; display: none; }
       }
+      html[data-motion="reduce"] .touch-fluid { display: none; }
     </style>
 
     <!-- ===================== SCRIPT (Three.js + GSAP + Lenis) ===================== -->
@@ -778,6 +798,8 @@ const structuredData = {
       import { gsap } from 'gsap';
       import { ScrollTrigger } from 'gsap/ScrollTrigger';
       import Lenis from 'lenis';
+      import { initTouchFluid } from '../lib/touch-fluid';
+      import { initMagneticButtons } from '../lib/magnetic-buttons';
 
       gsap.registerPlugin(ScrollTrigger);
 
@@ -1197,6 +1219,11 @@ const structuredData = {
       }
 
       /* ---- Boot ---- */
+      const fluidCanvas = document.getElementById('touch-fluid') as HTMLCanvasElement | null;
+      if (fluidCanvas) initTouchFluid(fluidCanvas);
+      initMagneticButtons();
+      document.addEventListener('astro:page-load', () => initMagneticButtons());
+
       initScene();
       initAnimations();
       initUI();

@@ -334,6 +334,20 @@
   }
   .a11y-switch:focus-visible { outline: 2px solid #34d399; outline-offset: 2px; }
 
+  /* Jelly stretch: the knob squashes/elongates as it slides, like a liquid toggle. */
+  .a11y-switch.is-jelly::after { animation: a11y-jelly 0.42s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .a11y-switch.is-jelly:checked::after { animation: a11y-jelly-on 0.42s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  @keyframes a11y-jelly {
+    0% { transform: translateX(18px) scaleX(1.45); }
+    55% { transform: translateX(0) scaleX(0.85); }
+    100% { transform: translateX(0) scaleX(1); }
+  }
+  @keyframes a11y-jelly-on {
+    0% { transform: translateX(0) scaleX(1.45); }
+    55% { transform: translateX(18px) scaleX(0.85); }
+    100% { transform: translateX(18px) scaleX(1); }
+  }
+
   /* Stepper */
   .a11y-stepper { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   .a11y-step {
@@ -527,6 +541,16 @@
     });
 
     // ---- Control wiring ----
+    // Jelly stretch on every toggle, replayable on rapid flips.
+    panel?.querySelectorAll<HTMLElement>('.a11y-switch').forEach((sw) => {
+      sw.addEventListener('change', () => {
+        sw.classList.remove('is-jelly');
+        void sw.offsetWidth;
+        sw.classList.add('is-jelly');
+      });
+      sw.addEventListener('animationend', () => sw.classList.remove('is-jelly'));
+    });
+
     themeEl?.addEventListener('change', () => {
       state.theme = themeEl.checked ? 'light' : 'dark';
       commit();

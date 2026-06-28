@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[29223,["/portfolio/demos/provable-blackjack/_next/static/chunks/0uwp6xsgo_9ob.js"],"ViewportBoundary"]
+3:I[29223,["/portfolio/demos/provable-blackjack/_next/static/chunks/0uwp6xsgo_9ob.js"],"MetadataBoundary"]
+4:"$Sreact.suspense"
+5:I[95353,["/portfolio/demos/provable-blackjack/_next/static/chunks/0uwp6xsgo_9ob.js"],"IconMark"]
+0:{"rsc":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Provable Blackjack — Verifiable True Random"}],["$","meta","1",{"name":"description","content":"Blackjack with triple-layer entropy, provably fair shuffle, SHA-256 hash chain, and proof-of-work mining validation."}],["$","link","2",{"rel":"icon","href":"/portfolio/demos/provable-blackjack/favicon.ico?favicon.2vob68tjqpejf.ico","sizes":"256x256","type":"image/x-icon"}],["$","$L5","3",{}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"fTbau1jR50ip_hHsgRyPT"}

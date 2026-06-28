@@ -240,6 +240,24 @@ export const projectOverrides: ProjectOverride[] = [
     techStack: ['Analytics', 'SEMrush', 'Data Viz'],
   },
   {
+    repoName: 'provable-blackjack',
+    displayName: 'Provable Blackjack',
+    category: 'development',
+    featured: true,
+    demoPath: 'demos/provable-blackjack/index.html',
+    sourceUrl: '',
+    description:
+      'Verifiably fair blackjack: every deal is provably random and every hand is bound to a SHA-256 hash chain with proof-of-work — double-validated, fully transparent, in the browser.',
+    details:
+      'A from-scratch demonstration of verifiable randomness applied to a casino game. Each round layers three entropy sources — the browser/OS CSPRNG (crypto.getRandomValues), a pre-committed server seed revealed after play (commit-reveal), and the drand distributed BLS randomness beacon — mixed via SHA-256 into a single combined seed that drives a deterministic Fisher-Yates shuffle. The app then runs two independent, on-screen cryptographic validations: (1) the deal is provably fair — the revealed seed matches its commitment and re-running the shuffle reproduces the exact deck order; and (2) the hand is mined — a SHA-256 hash chain over the full round payload is brute-forced for a proof-of-work nonce meeting a difficulty target, then re-verified. Both checks show live VERIFIED / FAILED badges so anyone can audit that the cards were truly random and the work was real. Fully client-side static build embedded in this site.',
+    techStack: ['Next.js', 'TypeScript', 'Web Crypto', 'drand', 'SHA-256 PoW'],
+    metrics: [
+      { value: '3', label: 'Entropy sources' },
+      { value: '2', label: 'Crypto validations' },
+      { value: '100%', label: 'Client-side verifiable' },
+    ],
+  },
+  {
     repoName: 'portfolio',
     displayName: 'This Website',
     category: 'meta',

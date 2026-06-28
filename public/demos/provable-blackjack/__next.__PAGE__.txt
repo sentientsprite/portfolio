@@ -1,0 +1,9 @@
+1:"$Sreact.fragment"
+2:I[39542,["/portfolio/demos/provable-blackjack/_next/static/chunks/0uwp6xsgo_9ob.js"],"ClientPageRoot"]
+3:I[39067,["/portfolio/demos/provable-blackjack/_next/static/chunks/0uwp6xsgo_9ob.js","/portfolio/demos/provable-blackjack/_next/static/chunks/2_01wxmjl44wy.js"],"default"]
+6:I[29223,["/portfolio/demos/provable-blackjack/_next/static/chunks/0uwp6xsgo_9ob.js"],"OutletBoundary"]
+7:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/portfolio/demos/provable-blackjack/_next/static/chunks/2_01wxmjl44wy.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"fTbau1jR50ip_hHsgRyPT"}
+4:{}
+5:"$0:rsc:props:children:0:props:serverProvidedParams:params"
+8:null

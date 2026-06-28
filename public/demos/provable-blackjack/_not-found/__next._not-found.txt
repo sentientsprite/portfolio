@@ -1,0 +1,5 @@
+1:"$Sreact.fragment"
+2:I[61882,["/portfolio/demos/provable-blackjack/_next/static/chunks/0uwp6xsgo_9ob.js"],"default"]
+3:I[26036,["/portfolio/demos/provable-blackjack/_next/static/chunks/0uwp6xsgo_9ob.js"],"default"]
+4:[]
+0:{"rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"isPartial":false,"staleTime":300,"varyParams":"$W4","buildId":"fTbau1jR50ip_hHsgRyPT"}

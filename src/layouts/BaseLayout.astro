@@ -113,6 +113,13 @@ const structuredData = {
     <!-- Site-wide accessibility settings (theme + assistive display options) -->
     <AccessibilityWidget />
 
+    <!-- Magnetic CTA pull (desktop fine pointer) -->
+    <script>
+      import { initMagneticButtons } from '../lib/magnetic-buttons';
+      initMagneticButtons();
+      document.addEventListener('astro:page-load', () => initMagneticButtons());
+    </script>
+
     <!-- Shared UX enhancements: nav scroll state, scroll reveals, card glow -->
     <script>
       function initEnhancements() {
