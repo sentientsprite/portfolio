@@ -40,14 +40,6 @@
       <div id="crypto-result" class="crypto-result" hidden>
         <div class="crypto-field">
           <div class="crypto-field-head">
-            <span class="crypto-label">Recovery phrase (BIP39)</span>
-            <button type="button" class="crypto-copy" data-copy="mnemonic">Copy</button>
-          </div>
-          <output id="crypto-mnemonic" class="crypto-value crypto-mnemonic"></output>
-        </div>
-
-        <div class="crypto-field">
-          <div class="crypto-field-head">
             <span class="crypto-label">Address (P2PKH)</span>
             <button type="button" class="crypto-copy" data-copy="address">Copy</button>
           </div>
@@ -71,7 +63,6 @@
             </div>
           </div>
           <output id="crypto-wif" class="crypto-value crypto-mono crypto-secret" data-hidden="true"></output>
-          <p class="crypto-path">Path <span id="crypto-path" class="crypto-mono"></span></p>
         </div>
 
         <p class="crypto-warn">
@@ -292,7 +283,6 @@
   }
   html[data-theme="light"] .crypto-value { color: #2a1f0a; }
   .crypto-mono { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; }
-  .crypto-mnemonic { font-weight: 600; letter-spacing: 0.01em; }
   .crypto-truncate {
     white-space: nowrap;
     overflow: hidden;
@@ -301,11 +291,6 @@
   .crypto-secret[data-hidden="true"] {
     filter: blur(6px);
     user-select: none;
-  }
-  .crypto-path {
-    margin: 6px 0 0;
-    font-size: 0.66rem;
-    color: #9a8a66;
   }
 
   .crypto-warn {
@@ -354,11 +339,9 @@
     const genBtn = document.getElementById('crypto-generate') as HTMLButtonElement | null;
     const statusEl = document.getElementById('crypto-status') as HTMLElement | null;
     const resultEl = document.getElementById('crypto-result') as HTMLElement | null;
-    const mnemonicEl = document.getElementById('crypto-mnemonic') as HTMLElement | null;
     const addressEl = document.getElementById('crypto-address') as HTMLElement | null;
     const pubEl = document.getElementById('crypto-pub') as HTMLElement | null;
     const wifEl = document.getElementById('crypto-wif') as HTMLElement | null;
-    const pathEl = document.getElementById('crypto-path') as HTMLElement | null;
     const revealBtn = document.getElementById('crypto-reveal') as HTMLButtonElement | null;
 
     if (!fab || !panel || !genBtn || !resultEl) return;
@@ -384,19 +367,16 @@
       }
       try {
         const wallet = await generateWallet();
-        data.mnemonic = wallet.mnemonic;
         data.address = wallet.address;
         data.pubHex = wallet.pubHex;
         data.wif = wallet.wif;
 
-        if (mnemonicEl) mnemonicEl.textContent = wallet.mnemonic;
         if (addressEl) addressEl.textContent = wallet.address;
         if (pubEl) pubEl.textContent = wallet.pubHex;
         if (wifEl) {
           wifEl.textContent = wallet.wif;
           wifEl.dataset.hidden = 'true';
         }
-        if (pathEl) pathEl.textContent = wallet.path;
         if (revealBtn) {
           revealBtn.textContent = 'Reveal';
           revealBtn.setAttribute('aria-pressed', 'false');

@@ -53,7 +53,7 @@ const target = external ? '_blank' : undefined;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0 0 7px; /* room for the pushable base edge below the cap */
+    padding: 0 0 6px; /* the cap's vertical "throw" — depth it travels when pressed */
     border: 0;
     background: none;
     text-decoration: none;
@@ -78,11 +78,10 @@ const target = external ? '_blank' : undefined;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 1.05rem 2.4rem;
+    padding: 0.66rem 2.2rem;
     border-radius: 999px;
-    overflow: hidden; /* clip the click ripple to the pill */
-    /* Glossy "wet jelly" sheen baked into the body: a soft top highlight that
-       fades into the base gradient, so there is no hard inner box. */
+    /* Glossy sheen baked into the body: a soft top highlight that fades into
+       the base gradient, so there is no hard inner box. */
     background:
       linear-gradient(
         to bottom,
@@ -91,12 +90,9 @@ const target = external ? '_blank' : undefined;
         rgba(255, 255, 255, 0) 55%
       ),
       linear-gradient(165deg, var(--jelly-from) 0%, var(--jelly-to) 100%);
-    box-shadow:
-      0 -8px 14px -10px rgba(2, 44, 34, 0.7) inset,
-      0 7px 14px -12px rgba(5, 150, 105, 0.7);
-    transform: translateY(-4px); /* raised cap floats above the base */
-    transform-origin: center bottom;
-    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+    box-shadow: 0 -7px 12px -10px rgba(2, 44, 34, 0.65) inset;
+    transform: translateY(-6px); /* raised cap floats above the base socket */
+    transition: transform 0.16s cubic-bezier(0.2, 0.85, 0.3, 1), box-shadow 0.16s ease;
     will-change: transform;
   }
 
@@ -141,52 +137,27 @@ const target = external ? '_blank' : undefined;
     font-weight: 700;
   }
 
-  /* Pointer-anchored ripple (injected by JS on press). */
-  :global(.jelly-btn__ripple) {
-    position: absolute;
-    z-index: 1;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 70%);
-    transform: translate(-50%, -50%) scale(0);
-    pointer-events: none;
-    animation: jelly-ripple 0.6s ease-out forwards;
-  }
-
-  @keyframes jelly-ripple {
-    to {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 0;
-    }
-  }
-
-  /* Hover: swell + lift further off the base */
+  /* Hover: cap lifts a touch higher off the base (button "armed"). */
   @media (hover: hover) {
     .jelly-btn:hover .jelly-btn__body {
-      transform: scale(1.05, 0.97) translateY(-6px);
-      box-shadow:
-        0 -10px 16px -10px rgba(2, 44, 34, 0.8) inset,
-        0 12px 20px -14px rgba(5, 150, 105, 0.85);
+      transform: translateY(-7px);
+    }
+    .jelly-btn:hover .jelly-btn__base {
+      box-shadow: 0 7px 14px -8px rgba(0, 0, 0, 0.6);
     }
   }
 
-  /* Press: deep squish down onto the base */
+  /* Press: the cap travels straight down and seats flush on the base — a
+     realistic physical button-press, no gel wobble. */
   .jelly-btn:active .jelly-btn__body {
-    transform: scale(0.94, 1.07) translateY(0);
-    transition-duration: 0.12s;
-    box-shadow: 0 -8px 16px -10px rgba(2, 44, 34, 0.8) inset;
+    transform: translateY(0);
+    transition-duration: 0.05s;
+    box-shadow:
+      0 -5px 10px -10px rgba(2, 44, 34, 0.6) inset,
+      0 2px 4px rgba(2, 44, 34, 0.35) inset;
   }
-
-  /* Wobble keyframe fired via JS on click for an extra gel jiggle */
-  .jelly-btn.is-wobbling .jelly-btn__body {
-    animation: jelly-wobble 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  @keyframes jelly-wobble {
-    0% { transform: scale(0.9, 1.12) translateY(0); }
-    35% { transform: scale(1.08, 0.92) translateY(-7px); }
-    60% { transform: scale(0.97, 1.04) translateY(-3px); }
-    80% { transform: scale(1.02, 0.99) translateY(-4px); }
-    100% { transform: scale(1, 1) translateY(-4px); }
+  .jelly-btn:active .jelly-btn__base {
+    box-shadow: 0 2px 6px -6px rgba(0, 0, 0, 0.5);
   }
 
   .jelly-btn:focus-visible {
@@ -195,67 +166,17 @@ const target = external ? '_blank' : undefined;
   .jelly-btn:focus-visible .jelly-btn__body {
     box-shadow:
       0 0 0 3px rgba(16, 185, 129, 0.45),
-      0 -8px 14px -10px rgba(2, 44, 34, 0.7) inset,
-      0 7px 14px -12px rgba(5, 150, 105, 0.7);
+      0 -7px 12px -10px rgba(2, 44, 34, 0.65) inset;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .jelly-btn__body,
-    .jelly-btn:hover .jelly-btn__body,
+    .jelly-btn:hover .jelly-btn__body {
+      transition: box-shadow 0.16s ease;
+      transform: translateY(-6px);
+    }
     .jelly-btn:active .jelly-btn__body {
-      transition: box-shadow 0.2s ease;
-      transform: translateY(-4px);
-      animation: none;
-    }
-    .jelly-btn.is-wobbling .jelly-btn__body {
-      animation: none;
-    }
-    :global(.jelly-btn__ripple) {
-      animation: none;
-      display: none;
+      transform: translateY(0);
     }
   }
 </style>
-
-<script>
-  function initJelly() {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    document.querySelectorAll<HTMLElement>('[data-jelly]').forEach((btn) => {
-      if (btn.dataset.jellyBound) return;
-      btn.dataset.jellyBound = 'true';
-
-      btn.addEventListener('pointerdown', (event) => {
-        const body = btn.querySelector<HTMLElement>('.jelly-btn__body');
-        if (!body) return;
-
-        // Re-trigger the wobble even on rapid repeat clicks.
-        btn.classList.remove('is-wobbling');
-        void body.offsetWidth;
-        btn.classList.add('is-wobbling');
-
-        if (reduce) return;
-
-        // Pointer-anchored ripple.
-        const rect = body.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height) * 2.2;
-        const ripple = document.createElement('span');
-        ripple.className = 'jelly-btn__ripple';
-        ripple.style.width = ripple.style.height = `${size}px`;
-        ripple.style.left = `${(event as PointerEvent).clientX - rect.left}px`;
-        ripple.style.top = `${(event as PointerEvent).clientY - rect.top}px`;
-        ripple.addEventListener('animationend', () => ripple.remove());
-        body.appendChild(ripple);
-      });
-
-      btn.addEventListener('animationend', (event) => {
-        if ((event as AnimationEvent).animationName === 'jelly-wobble') {
-          btn.classList.remove('is-wobbling');
-        }
-      });
-    });
-  }
-
-  initJelly();
-  document.addEventListener('astro:page-load', initJelly);
-</script>

@@ -1,10 +1,11 @@
 ---
 /**
- * GrowthIntakeForm.astro — qualification intake for the "Build my growth system" CTA.
+ * GrowthIntakeForm.astro — "Book a free consult" offer + qualification intake.
  *
  * Static-site friendly: on submit it composes a structured email (mailto) to
  * Raymond with all answers pre-filled, so there is no backend dependency or
- * stored secret. Anchor id="intake" so CTAs can deep-link to it.
+ * stored secret. After submit it shows an inline confirmation that explains the
+ * consult steps. Anchor id="intake" so CTAs can deep-link to it.
  */
 import { site } from '../config/site';
 
@@ -19,6 +20,21 @@ const needs = [
 
 const timelines = ['ASAP', 'Next 1–3 months', '3–6 months', 'Just exploring'];
 const budgets = ['Not sure yet', 'Under $2k', '$2k–$5k', '$5k–$15k', '$15k+'];
+
+const consultSteps = [
+  {
+    title: 'We schedule your consult',
+    body: 'Pick a time that works. I’ll confirm by email — no back-and-forth.',
+  },
+  {
+    title: 'We meet for an hour',
+    body: 'We talk through your business, your marketing, and where leads are slipping.',
+  },
+  {
+    title: 'You get a plan',
+    body: 'I map a clear growth plan for your situation. Whether you hire me to build it is entirely up to you.',
+  },
+];
 ---
 
 <section
@@ -27,14 +43,14 @@ const budgets = ['Not sure yet', 'Under $2k', '$2k–$5k', '$5k–$15k', '$15k+'
   data-intake
   data-email={site.email}
 >
-  <p class="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">Free intake</p>
+  <p class="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">Free consult</p>
   <h2 class="mt-2 text-2xl font-bold tracking-tight text-neutral-100 sm:text-3xl">
-    Build my growth system
+    Book a free consult
   </h2>
   <p class="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-400">
-    Tell me where leads are getting lost. A few quick answers and I will map the
-    website, automation, CRM follow-up, and ROI tracking your business needs — then
-    follow up with a clear next step. No obligation.
+    A free, no-obligation hour to talk through your business and marketing. Share a
+    few details below and I’ll reach out to schedule it — then map a growth plan
+    built for where leads are actually getting lost.
   </p>
 
   <form class="mt-7 grid gap-5" data-intake-form novalidate>
@@ -102,8 +118,37 @@ const budgets = ['Not sure yet', 'Under $2k', '$2k–$5k', '$5k–$15k', '$15k+'
       </div>
     </div>
 
+    <div class="grid gap-5 sm:grid-cols-2">
+      <div>
+        <label for="intake-type" class="mb-1.5 block text-xs font-medium text-neutral-400">
+          Type of business
+        </label>
+        <input
+          id="intake-type"
+          name="businessType"
+          type="text"
+          maxlength="120"
+          placeholder="e.g. HVAC, dental, gym, e-commerce, SaaS"
+          class="w-full rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+        />
+      </div>
+      <div>
+        <label for="intake-tools" class="mb-1.5 block text-xs font-medium text-neutral-400">
+          Tools you use today <span class="text-neutral-600">(optional)</span>
+        </label>
+        <input
+          id="intake-tools"
+          name="tools"
+          type="text"
+          maxlength="200"
+          placeholder="e.g. Squarespace, Mailchimp, HubSpot, Calendly"
+          class="w-full rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+        />
+      </div>
+    </div>
+
     <fieldset>
-      <legend class="mb-2 block text-xs font-medium text-neutral-400">What do you need? (pick any)</legend>
+      <legend class="mb-2 block text-xs font-medium text-neutral-400">What are you hoping to improve? (pick any)</legend>
       <div class="grid gap-2 sm:grid-cols-2">
         {needs.map((need) => (
           <label class="flex cursor-pointer items-center gap-2.5 rounded-lg border border-neutral-800 bg-neutral-950/60 px-3 py-2.5 text-sm text-neutral-300 transition hover:border-emerald-500/30 hover:text-neutral-100">
@@ -116,7 +161,7 @@ const budgets = ['Not sure yet', 'Under $2k', '$2k–$5k', '$5k–$15k', '$15k+'
 
     <div>
       <label for="intake-bottleneck" class="mb-1.5 block text-xs font-medium text-neutral-400">
-        What is the biggest bottleneck right now?
+        Where are leads getting lost right now?
       </label>
       <textarea
         id="intake-bottleneck"
@@ -161,16 +206,69 @@ const budgets = ['Not sure yet', 'Under $2k', '$2k–$5k', '$5k–$15k', '$15k+'
         class="inline-flex items-center gap-2 rounded-full bg-emerald-500 px-7 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
         data-intake-submit
       >
-        Send my intake
+        Request my free consult
         <span aria-hidden="true">&rarr;</span>
       </button>
       <p class="text-xs text-neutral-500" data-intake-status aria-live="polite"></p>
     </div>
     <p class="text-[11px] leading-relaxed text-neutral-600">
-      Submitting opens your email app with the details pre-filled and sends to {site.email}.
+      Free and no-obligation. Submitting opens your email app with the details pre-filled and sends to {site.email}.
       Prefer to write directly? Email me anytime.
     </p>
   </form>
+
+  <!-- Confirmation state (revealed after submit) -->
+  <div class="hidden" data-intake-success>
+    <div class="flex items-start gap-3">
+      <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-500/30">&check;</span>
+      <div>
+        <h3 class="text-lg font-semibold text-neutral-100" data-intake-success-title>Your consult request is on its way</h3>
+        <p class="mt-1 text-sm text-neutral-400">
+          I’ll reply by email to schedule your free hour. Here’s exactly what happens next.
+        </p>
+      </div>
+    </div>
+
+    <ol class="mt-6 grid gap-3 sm:grid-cols-3">
+      {
+        consultSteps.map((step, i) => (
+          <li class="rounded-xl border border-neutral-800 bg-neutral-950/50 p-4">
+            <span class="grid h-7 w-7 place-items-center rounded-full bg-emerald-500/10 text-sm font-bold text-emerald-400 ring-1 ring-emerald-500/20">
+              {i + 1}
+            </span>
+            <p class="mt-3 text-sm font-semibold text-neutral-100">{step.title}</p>
+            <p class="mt-1 text-xs leading-relaxed text-neutral-500">{step.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="mt-5 text-xs text-neutral-500">
+      Didn’t see your email app open?{' '}
+      <a href={`mailto:${site.email}`} class="text-emerald-400 hover:text-emerald-300">Email me directly</a>.
+    </p>
+  </div>
+
+  <!-- Static "what happens after" reference, always visible below the form -->
+  <div class="mt-8 border-t border-neutral-800 pt-6" data-intake-howitworks>
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">What happens after you submit</p>
+    <ol class="mt-4 grid gap-3 sm:grid-cols-3">
+      {
+        consultSteps.map((step, i) => (
+          <li class="rounded-xl border border-neutral-800 bg-neutral-950/40 p-4">
+            <span class="grid h-7 w-7 place-items-center rounded-full bg-emerald-500/10 text-sm font-bold text-emerald-400 ring-1 ring-emerald-500/20">
+              {i + 1}
+            </span>
+            <p class="mt-3 text-sm font-semibold text-neutral-100">{step.title}</p>
+            <p class="mt-1 text-xs leading-relaxed text-neutral-500">{step.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="mt-4 text-xs text-neutral-600">
+      No pressure and no obligation — whether you hire me for the work is entirely your call.
+    </p>
+  </div>
 </section>
 
 <script>
@@ -178,6 +276,9 @@ const budgets = ['Not sure yet', 'Under $2k', '$2k–$5k', '$5k–$15k', '$15k+'
     document.querySelectorAll<HTMLElement>('[data-intake]').forEach((root) => {
       const form = root.querySelector<HTMLFormElement>('[data-intake-form]');
       const status = root.querySelector('[data-intake-status]');
+      const success = root.querySelector<HTMLElement>('[data-intake-success]');
+      const successTitle = root.querySelector('[data-intake-success-title]');
+      const howItWorks = root.querySelector<HTMLElement>('[data-intake-howitworks]');
       const email = root.dataset.email ?? '';
       if (!form || form.dataset.bound) return;
       form.dataset.bound = 'true';
@@ -200,12 +301,14 @@ const budgets = ['Not sure yet', 'Under $2k', '$2k–$5k', '$5k–$15k', '$15k+'
         const fromEmail = String(data.get('email') ?? '').trim();
 
         if (!name || !fromEmail) {
-          setStatus('Please add your name and email so I can reply.', 'warn');
+          setStatus('Please add your name and email so I can reach out to schedule.', 'warn');
           return;
         }
 
         const business = String(data.get('business') ?? '').trim();
         const website = String(data.get('website') ?? '').trim();
+        const businessType = String(data.get('businessType') ?? '').trim();
+        const tools = String(data.get('tools') ?? '').trim();
         const bottleneck = String(data.get('bottleneck') ?? '').trim();
         const timeline = String(data.get('timeline') ?? '').trim();
         const budget = String(data.get('budget') ?? '').trim();
@@ -215,23 +318,37 @@ const budgets = ['Not sure yet', 'Under $2k', '$2k–$5k', '$5k–$15k', '$15k+'
           `Name: ${name}`,
           `Email: ${fromEmail}`,
           business ? `Business: ${business}` : null,
+          businessType ? `Type of business: ${businessType}` : null,
           website ? `Website: ${website}` : null,
+          tools ? `Tools used: ${tools}` : null,
           '',
-          'Needs:',
+          'Hoping to improve:',
           selectedNeeds.length ? selectedNeeds.map((n) => `  - ${n}`).join('\n') : '  - (not specified)',
           '',
-          `Biggest bottleneck:\n${bottleneck || '  (not specified)'}`,
+          `Where leads are getting lost:\n${bottleneck || '  (not specified)'}`,
           '',
           `Timeline: ${timeline}`,
           `Budget: ${budget}`,
         ].filter((l) => l !== null);
 
-        const subject = `Growth system intake — ${business || name}`;
+        const subject = `Free consult request — ${business || name}`;
         const body = lines.join('\n');
         const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
         window.location.href = mailto;
-        setStatus('Opening your email app… if nothing happens, email me directly.', 'ok');
+
+        if (success) {
+          if (successTitle) {
+            const first = name.split(/\s+/)[0];
+            successTitle.textContent = `Thanks, ${first} — your consult request is on its way`;
+          }
+          form.classList.add('hidden');
+          howItWorks?.classList.add('hidden');
+          success.classList.remove('hidden');
+          success.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+          setStatus('Opening your email app… if nothing happens, email me directly.', 'ok');
+        }
       });
     });
   }

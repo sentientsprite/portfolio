@@ -11,10 +11,19 @@ const ESM_URL = 'https://esm.sh/yours-bitcoin@0.14.14';
 
 let modPromise: Promise<Record<string, unknown>> | null = null;
 
-/** Lazy-load yours-bitcoin (cached after first call). */
+/**
+ * Indirect dynamic import so Vite/Rollup never rewrites it (a plain
+ * `import(url)` triggers a `__VITE_PRELOAD__` injection that breaks at runtime).
+ * This keeps the CDN load a pure browser-native dynamic import.
+ */
+const runtimeImport = new Function('u', 'return import(u);') as (
+  u: string,
+) => Promise<Record<string, unknown>>;
+
+/** Lazy-load yours-bitcoin from the CDN (cached after first call). */
 export function loadBitcoin(): Promise<Record<string, unknown>> {
   if (!modPromise) {
-    modPromise = import(/* @vite-ignore */ ESM_URL).catch((err) => {
+    modPromise = runtimeImport(ESM_URL).catch((err) => {
       modPromise = null;
       throw err;
     });

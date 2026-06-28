@@ -326,7 +326,7 @@ const structuredData = {
           <div data-hero="line" class="mt-10 flex flex-wrap items-center justify-center gap-5">
             <JellyButton
               href={withBase('/contact#intake')}
-              eyebrow="Free intake"
+              eyebrow="Free consult"
               label="Let's Build"
             />
             <a
@@ -401,22 +401,11 @@ const structuredData = {
                 ))}
               </div>
 
-              <div class="mt-7 flex flex-wrap gap-3">
-                {
-                  growthDemoUrl && (
-                    <a
-                      href={growthDemoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="inline-flex items-center gap-2 rounded-full bg-emerald-500 px-6 py-2.5 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400"
-                    >
-                      Open benefit showcase &nearr;
-                    </a>
-                  )
-                }
+              <div class="mt-7 flex flex-wrap items-center gap-4">
+                {growthDemoUrl && <JellyButton href={growthDemoUrl} label="Open benefit showcase" size="sm" external />}
                 <a
                   href={growthDetailUrl}
-                  class="inline-flex items-center gap-2 rounded-full border border-neutral-700 px-6 py-2.5 text-sm font-medium text-neutral-200 transition hover:border-emerald-400/50 hover:text-emerald-300"
+                  class="inline-flex items-center gap-2 rounded-full border border-emerald-400/60 px-6 py-2.5 text-sm font-semibold text-emerald-300 transition hover:border-emerald-400 hover:bg-emerald-500 hover:text-neutral-950"
                 >
                   System overview
                 </a>
@@ -613,7 +602,7 @@ const structuredData = {
           <div class="mt-10 flex flex-wrap items-center justify-center gap-5">
             <JellyButton
               href={withBase('/contact#intake')}
-              eyebrow="Free intake"
+              eyebrow="Free consult"
               label="Let's Build"
             />
             <a
