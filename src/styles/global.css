@@ -307,10 +307,10 @@ html[data-theme="light"] {
 html[data-theme="light"] .text-neutral-950 {
   color: #0a0a0a !important;
 }
-/* Accent text on white needs a darker emerald for contrast (AA). */
+/* Accent text on white needs a much darker emerald for contrast (AA). */
 html[data-theme="light"] .text-emerald-400,
 html[data-theme="light"] .text-emerald-300 {
-  color: #047857 !important;
+  color: #064e3b !important;
 }
 
 /* Custom (hardcoded) dark surfaces → light equivalents. */

@@ -74,20 +74,20 @@
   .speed-widget {
     position: fixed;
     left: 22px;
-    bottom: 84px;
+    top: 142px;
     z-index: 60;
   }
 
   .speed-fab {
-    width: 54px;
-    height: 54px;
+    width: 40px;
+    height: 40px;
     display: grid;
     place-items: center;
     border-radius: 9999px;
     border: 1px solid rgba(96, 165, 250, 0.55);
     background: rgba(10, 10, 10, 0.85);
     color: #34d399;
-    font-size: 1.35rem;
+    font-size: 1rem;
     font-weight: 800;
     font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
     line-height: 1;
@@ -119,11 +119,11 @@
     outline-offset: 3px;
   }
 
-  /* Compact box anchored to the right of the "S" launcher (bottom-left stack). */
+  /* Compact box anchored to the right of the "S" launcher (top-left stack). */
   .speed-panel {
     position: fixed;
-    left: 86px;
-    bottom: 80px;
+    left: 72px;
+    top: 138px;
     z-index: 70;
     width: min(300px, calc(100vw - 104px));
     border: 1px solid rgba(96, 165, 250, 0.35);
@@ -132,7 +132,7 @@
     backdrop-filter: blur(14px);
     box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.9);
     transform: translateX(-10px) scale(0.97);
-    transform-origin: bottom left;
+    transform-origin: top left;
     opacity: 0;
     pointer-events: none;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
@@ -212,7 +212,7 @@
     font-weight: 700;
     text-shadow: 0 0 18px rgba(52, 211, 153, 0.35);
   }
-  html[data-theme="light"] .speed-focus { color: #047857; }
+  html[data-theme="light"] .speed-focus { color: #064e3b; }
   :global(.speed-after) { text-align: left; padding-left: 0.08em; }
 
   .speed-status {
@@ -285,17 +285,17 @@
   @media (max-width: 640px) {
     .speed-widget {
       left: 12px;
-      bottom: 76px;
+      top: 130px;
     }
     .speed-fab {
-      width: 48px;
-      height: 48px;
-      font-size: 1.2rem;
+      width: 36px;
+      height: 36px;
+      font-size: 0.95rem;
     }
     .speed-panel {
-      left: 70px;
-      bottom: 72px;
-      width: calc(100vw - 84px);
+      left: 56px;
+      top: 126px;
+      width: calc(100vw - 68px);
     }
     .speed-panel-inner {
       padding: 8px 12px 12px;

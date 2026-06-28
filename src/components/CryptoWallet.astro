@@ -93,13 +93,13 @@
   .crypto-widget {
     position: fixed;
     left: 22px;
-    bottom: 150px;
+    top: 192px;
     z-index: 60;
   }
 
   .crypto-fab {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     display: grid;
     place-items: center;
     border-radius: 9999px;
@@ -115,7 +115,7 @@
     transition: transform 0.2s ease, box-shadow 0.25s ease, color 0.2s ease;
   }
   .crypto-fab-c {
-    font-size: 1.5rem;
+    font-size: 1.15rem;
     font-weight: 800;
     line-height: 1;
     filter: drop-shadow(0 0 5px rgba(247, 147, 26, 0.7));
@@ -143,17 +143,17 @@
   .crypto-panel {
     position: absolute;
     left: 0;
-    bottom: calc(100% + 14px);
+    top: calc(100% + 14px);
     width: min(340px, calc(100vw - 32px));
-    max-height: min(70vh, 560px);
+    max-height: min(70vh, calc(100vh - 220px));
     overflow-y: auto;
     border-radius: 18px;
     border: 1px solid rgba(247, 147, 26, 0.35);
     background: rgba(12, 10, 6, 0.96);
     backdrop-filter: blur(16px);
     box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.9);
-    transform: translateY(12px) scale(0.96);
-    transform-origin: bottom left;
+    transform: translateY(-12px) scale(0.96);
+    transform-origin: top left;
     opacity: 0;
     pointer-events: none;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
@@ -311,10 +311,10 @@
   @media (max-width: 640px) {
     .crypto-widget {
       left: 12px;
-      bottom: 140px;
+      top: 176px;
     }
-    .crypto-fab { width: 44px; height: 44px; }
-    .crypto-fab-c { font-size: 1.3rem; }
+    .crypto-fab { width: 36px; height: 36px; }
+    .crypto-fab-c { font-size: 1.05rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
