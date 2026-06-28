@@ -1,4 +1,4 @@
-export type WorkCategory = 'product' | 'marketing' | 'development' | 'automation' | 'meta';
+export type WorkCategory = 'product' | 'marketing' | 'development' | 'automation' | 'fun' | 'meta';
 
 export interface ProjectOverride {
   repoName: string;
@@ -33,6 +33,7 @@ export const categoryLabels: Record<WorkCategory, string> = {
   marketing: 'Marketing',
   development: 'Development',
   automation: 'Automation',
+  fun: 'Fun Projects and hobbies',
   meta: 'Web Design',
 };
 
@@ -255,8 +256,8 @@ export const projectOverrides: ProjectOverride[] = [
   {
     repoName: 'provable-blackjack',
     displayName: 'Provable Blackjack',
-    category: 'development',
-    featured: true,
+    category: 'fun',
+    featured: false,
     demoPath: 'demos/provable-blackjack/index.html',
     sourceUrl: '',
     description:

@@ -133,7 +133,7 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
       };
     });
 
-  const categoryOrder: WorkCategory[] = ['product', 'marketing', 'development', 'automation', 'meta'];
+  const categoryOrder: WorkCategory[] = ['product', 'marketing', 'development', 'automation', 'fun', 'meta'];
 
   return merged.sort((a, b) => {
     if (a.featured !== b.featured) return a.featured ? -1 : 1;
