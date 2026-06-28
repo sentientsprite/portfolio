@@ -46,7 +46,7 @@ const grouped = showroom.reduce<Record<string, typeof showroom>>((acc, project) 
   return acc;
 }, {});
 
-const categoryOrder: WorkCategory[] = ['development', 'automation', 'fun'];
+const categoryOrder: WorkCategory[] = ['automation', 'fun'];
 
 const siteOrigin = 'https://sentientsprite.github.io/portfolio';
 const catalogProjects = projects.filter((p) => p.category !== 'meta');
