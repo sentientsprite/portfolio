@@ -172,6 +172,19 @@ export const projectOverrides: ProjectOverride[] = [
     techStack: ['Accessibility', 'WCAG', 'Tailwind v4', 'Design Tokens', 'TypeScript'],
   },
   {
+    repoName: 'crypto-keypair-demo',
+    displayName: 'Bitcoin Keypair Demo',
+    category: 'development',
+    featured: true,
+    demoUrl: 'https://sentientsprite.github.io/portfolio/',
+    sourceUrl: '',
+    description:
+      'A floating "₿" widget that generates a real Bitcoin wallet entirely in your browser — BIP39 recovery phrase, BIP32-derived address, public key, and WIF private key — with copy and reveal controls. No server, no funds, throwaway keys.',
+    details:
+      'A client-side demonstration of Bitcoin key generation built on the yours-bitcoin library (moneybutton/yours-bitcoin). Tapping the neon ₿ icon beside the chat mascot lazy-loads the crypto library from a CDN only on demand — keeping it out of the main site bundle — then generates a fresh BIP39 mnemonic, derives a key at the standard account path (m/44\u0027/0\u0027/0\u0027/0/0) via BIP32, and computes the matching compressed public key and P2PKH address. The private key is shown as WIF behind a blur-to-reveal control, with one-tap copy on every field and an explicit demo-only safety warning. Everything runs locally in the browser with no network calls beyond loading the library and no funds at risk. Try it live — tap the ₿ icon at the bottom-right of this site.',
+    techStack: ['Bitcoin', 'yours-bitcoin', 'BIP39', 'BIP32', 'Web Crypto', 'TypeScript'],
+  },
+  {
     repoName: 'prana',
     displayName: 'Prana AI CMO Terminal',
     category: 'product',

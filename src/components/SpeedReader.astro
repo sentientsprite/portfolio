@@ -1,0 +1,447 @@
+---
+/**
+ * SpeedReader.astro — site-wide Spritz-style speed reader (Glance/OpenSpritz).
+ *
+ * An "S" FAB toggles a fixed reader bar that pulls all visible <p> text from
+ * the page main content and flashes it word-by-word at a chosen WPM.
+ * Adapted from https://github.com/Miserlou/Glance-Bookmarklet (MIT).
+ */
+---
+
+<div id="speed-reader-widget" class="speed-widget">
+  <section
+    id="speed-reader-panel"
+    class="speed-panel"
+    role="dialog"
+    aria-labelledby="speed-reader-title"
+    aria-hidden="true"
+    hidden
+  >
+    <div class="speed-panel-inner">
+      <header class="speed-head">
+        <p id="speed-reader-title" class="speed-title">Speed read</p>
+        <button type="button" id="speed-close" class="speed-icon-btn" aria-label="Close speed reader">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      </header>
+
+      <div class="speed-stage" aria-live="assertive" aria-atomic="true">
+        <p class="speed-guide speed-guide-top" aria-hidden="true">―――――――――― ф ―――――――――――</p>
+        <div id="speed-word" class="speed-word">
+          <span class="speed-before"></span>
+          <span class="speed-focus">S</span>
+          <span class="speed-after"></span>
+        </div>
+        <p class="speed-guide speed-guide-bottom" aria-hidden="true">――――――――――――――――――――――</p>
+        <p id="speed-status" class="speed-status">Choose a WPM to start.</p>
+      </div>
+
+      <div class="speed-controls">
+        <label class="speed-wpm-label" for="speed-wpm">WPM</label>
+        <select id="speed-wpm" class="speed-wpm">
+          <option value="200">200</option>
+          <option value="250">250</option>
+          <option value="300">300</option>
+          <option value="350" selected>350</option>
+          <option value="400">400</option>
+          <option value="450">450</option>
+          <option value="500">500</option>
+          <option value="550">550</option>
+          <option value="600">600</option>
+          <option value="700">700</option>
+          <option value="800">800</option>
+        </select>
+        <button type="button" id="speed-play" class="speed-play" disabled>Play</button>
+      </div>
+
+      <p class="speed-credit">
+        Powered by <a href="https://github.com/Miserlou/Glance-Bookmarklet" target="_blank" rel="noopener noreferrer">Glance/OpenSpritz</a>
+      </p>
+    </div>
+  </section>
+
+  <button
+    id="speed-fab"
+    class="speed-fab"
+    type="button"
+    aria-label="Speed read this page"
+    aria-expanded="false"
+    aria-controls="speed-reader-panel"
+    title="Speed read"
+  >
+    S
+  </button>
+</div>
+
+<style>
+  .speed-widget {
+    position: fixed;
+    left: 22px;
+    bottom: 84px;
+    z-index: 60;
+  }
+
+  .speed-fab {
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    border-radius: 9999px;
+    border: 1px solid rgba(96, 165, 250, 0.55);
+    background: rgba(10, 10, 10, 0.85);
+    color: #60a5fa;
+    font-size: 1.35rem;
+    font-weight: 800;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    line-height: 1;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    box-shadow:
+      0 0 0 1px rgba(96, 165, 250, 0.25),
+      0 0 18px -2px rgba(96, 165, 250, 0.55),
+      0 8px 24px -10px rgba(0, 0, 0, 0.8);
+    transition: transform 0.2s ease, box-shadow 0.25s ease, color 0.2s ease;
+  }
+  .speed-fab:hover {
+    transform: translateY(-2px);
+    color: #93c5fd;
+    box-shadow:
+      0 0 0 1px rgba(96, 165, 250, 0.4),
+      0 0 26px 0 rgba(96, 165, 250, 0.75),
+      0 10px 28px -8px rgba(0, 0, 0, 0.85);
+  }
+  .speed-fab.is-active {
+    color: #bfdbfe;
+    border-color: rgba(147, 197, 253, 0.8);
+    box-shadow:
+      0 0 0 1px rgba(147, 197, 253, 0.45),
+      0 0 28px 0 rgba(96, 165, 250, 0.9);
+  }
+  .speed-fab:focus-visible {
+    outline: 2px solid #60a5fa;
+    outline-offset: 3px;
+  }
+
+  .speed-panel {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 70;
+    border-bottom: 1px solid rgba(38, 38, 38, 0.95);
+    background: rgba(10, 10, 10, 0.94);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 18px 50px -24px rgba(0, 0, 0, 0.9);
+    transform: translateY(-104%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  }
+  .speed-panel.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  html[data-theme="light"] .speed-panel {
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom-color: rgba(212, 212, 212, 0.95);
+  }
+
+  .speed-panel-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 14px 18px 16px;
+  }
+
+  .speed-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .speed-title {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #60a5fa;
+  }
+  .speed-icon-btn {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    border: 1px solid rgba(64, 64, 64, 0.9);
+    background: rgba(23, 23, 23, 0.85);
+    color: #d4d4d4;
+    cursor: pointer;
+  }
+  .speed-icon-btn svg { width: 16px; height: 16px; }
+  html[data-theme="light"] .speed-icon-btn {
+    background: rgba(245, 245, 245, 0.95);
+    border-color: rgba(212, 212, 212, 0.95);
+    color: #404040;
+  }
+
+  .speed-stage {
+    padding: 4px 0 10px;
+  }
+  .speed-guide {
+    margin: 0;
+    text-align: center;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: clamp(1rem, 4vw, 1.65rem);
+    color: rgba(115, 115, 115, 0.45);
+    line-height: 1.1;
+    user-select: none;
+  }
+  html[data-theme="light"] .speed-guide {
+    color: rgba(163, 163, 163, 0.7);
+  }
+
+  .speed-word {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    min-height: 3.2rem;
+    margin: 2px 0;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: clamp(1.35rem, 5vw, 2rem);
+    line-height: 1.2;
+    color: #e5e5e5;
+  }
+  html[data-theme="light"] .speed-word { color: #171717; }
+
+  :global(.speed-before) { text-align: right; padding-right: 0.08em; }
+  .speed-focus {
+    color: #34d399;
+    font-weight: 700;
+    text-shadow: 0 0 18px rgba(52, 211, 153, 0.35);
+  }
+  html[data-theme="light"] .speed-focus { color: #047857; }
+  :global(.speed-after) { text-align: left; padding-left: 0.08em; }
+
+  .speed-status {
+    margin: 6px 0 0;
+    text-align: center;
+    font-size: 0.78rem;
+    color: #737373;
+  }
+
+  .speed-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .speed-wpm-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #a3a3a3;
+  }
+  .speed-wpm {
+    min-width: 88px;
+    border-radius: 10px;
+    border: 1px solid rgba(64, 64, 64, 0.9);
+    background: rgba(23, 23, 23, 0.85);
+    color: #e5e5e5;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.85rem;
+  }
+  html[data-theme="light"] .speed-wpm {
+    background: #fff;
+    border-color: #d4d4d4;
+    color: #171717;
+  }
+  .speed-play {
+    border-radius: 9999px;
+    border: 1px solid rgba(16, 185, 129, 0.55);
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+    padding: 0.45rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .speed-play:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .speed-play.is-paused {
+    border-color: rgba(96, 165, 250, 0.55);
+    background: rgba(96, 165, 250, 0.12);
+    color: #93c5fd;
+  }
+
+  .speed-credit {
+    margin: 10px 0 0;
+    text-align: right;
+    font-size: 0.68rem;
+    color: #525252;
+  }
+  .speed-credit a {
+    color: #737373;
+    text-decoration: none;
+  }
+  .speed-credit a:hover { color: #60a5fa; text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .speed-widget {
+      left: 12px;
+      bottom: 76px;
+    }
+    .speed-fab {
+      width: 48px;
+      height: 48px;
+      font-size: 1.2rem;
+    }
+    .speed-panel-inner {
+      padding: 12px 14px 14px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .speed-panel { transition: none; }
+    .speed-fab { transition: none; }
+  }
+  html[data-motion="reduce"] .speed-panel { transition: none; }
+</style>
+
+<script>
+  import { createSpeedReader, extractParagraphText } from '../lib/speed-reader';
+
+  const STORAGE_KEY = 'rk-speed-wpm';
+
+  function initSpeedReader() {
+    const widget = document.getElementById('speed-reader-widget');
+    if (!widget || widget.dataset.speedBound) return;
+    widget.dataset.speedBound = 'true';
+
+    const fab = document.getElementById('speed-fab') as HTMLButtonElement | null;
+    const panel = document.getElementById('speed-reader-panel') as HTMLElement | null;
+    const closeBtn = document.getElementById('speed-close') as HTMLButtonElement | null;
+    const playBtn = document.getElementById('speed-play') as HTMLButtonElement | null;
+    const wpmSelect = document.getElementById('speed-wpm') as HTMLSelectElement | null;
+    const statusEl = document.getElementById('speed-status') as HTMLElement | null;
+    const beforeEl = document.querySelector('#speed-word .speed-before') as HTMLElement | null;
+    const focusEl = document.querySelector('#speed-word .speed-focus') as HTMLElement | null;
+    const afterEl = document.querySelector('#speed-word .speed-after') as HTMLElement | null;
+
+    if (!fab || !panel || !playBtn || !wpmSelect || !beforeEl || !focusEl || !afterEl) return;
+
+    let pageText = '';
+    let open = false;
+
+    const savedWpm = sessionStorage.getItem(STORAGE_KEY);
+    if (savedWpm && wpmSelect.querySelector(`option[value="${savedWpm}"]`)) {
+      wpmSelect.value = savedWpm;
+    }
+
+    const reader = createSpeedReader({
+      onWord(parts, index, total) {
+        beforeEl.textContent = parts.before;
+        focusEl.textContent = parts.focus;
+        afterEl.textContent = parts.after;
+        if (statusEl) {
+          statusEl.textContent = `Word ${index + 1} of ${total}`;
+        }
+      },
+      onDone() {
+        playBtn.textContent = 'Play';
+        playBtn.classList.add('is-paused');
+        playBtn.disabled = false;
+        if (statusEl) statusEl.textContent = 'Finished — tap Play to restart.';
+      },
+      onEmpty() {
+        beforeEl.textContent = '';
+        focusEl.textContent = '—';
+        afterEl.textContent = '';
+        if (statusEl) statusEl.textContent = 'No paragraph text found on this page.';
+        playBtn.disabled = true;
+      },
+    });
+
+    function currentWpm() {
+      return parseInt(wpmSelect.value, 10) || 350;
+    }
+
+    function refreshPageText() {
+      pageText = extractParagraphText();
+      playBtn.disabled = !pageText;
+      if (!pageText && statusEl) {
+        statusEl.textContent = 'No paragraph text found on this page.';
+      } else if (statusEl && !reader.isActive()) {
+        statusEl.textContent = 'Ready — tap Play to speed read all paragraphs.';
+      }
+    }
+
+    function setOpen(next: boolean) {
+      open = next;
+      fab.classList.toggle('is-active', open);
+      fab.setAttribute('aria-expanded', String(open));
+      panel.classList.toggle('is-open', open);
+      panel.hidden = !open;
+      panel.setAttribute('aria-hidden', String(!open));
+
+      if (open) {
+        refreshPageText();
+        closeBtn?.focus();
+      } else {
+        reader.stop();
+        playBtn.textContent = 'Play';
+        playBtn.classList.remove('is-paused');
+        playBtn.disabled = !pageText;
+        beforeEl.textContent = '';
+        focusEl.textContent = 'S';
+        afterEl.textContent = '';
+        if (statusEl) statusEl.textContent = 'Choose a WPM to start.';
+      }
+    }
+
+    function startReading() {
+      refreshPageText();
+      if (!pageText) return;
+      reader.start(pageText, currentWpm());
+      playBtn.textContent = 'Pause';
+      playBtn.classList.remove('is-paused');
+      playBtn.disabled = false;
+    }
+
+    fab.addEventListener('click', () => setOpen(!open));
+    closeBtn?.addEventListener('click', () => setOpen(false));
+
+    playBtn.addEventListener('click', () => {
+      if (!reader.isActive()) {
+        startReading();
+        return;
+      }
+      if (reader.isPaused()) {
+        reader.resume();
+        playBtn.textContent = 'Pause';
+        playBtn.classList.remove('is-paused');
+      } else {
+        reader.pause();
+        playBtn.textContent = 'Play';
+        playBtn.classList.add('is-paused');
+      }
+    });
+
+    wpmSelect.addEventListener('change', () => {
+      sessionStorage.setItem(STORAGE_KEY, wpmSelect.value);
+      if (reader.isActive()) reader.setWpm(currentWpm());
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && open) setOpen(false);
+    });
+  }
+
+  initSpeedReader();
+  document.addEventListener('astro:page-load', initSpeedReader);
+</script>

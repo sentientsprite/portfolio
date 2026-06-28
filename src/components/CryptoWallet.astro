@@ -1,0 +1,456 @@
+---
+/**
+ * CryptoWallet.astro — floating "C" widget: an in-browser Bitcoin keypair demo.
+ *
+ * Sits just left of the Future.fox mascot. Opening it lazy-loads yours-bitcoin
+ * (moneybutton/yours-bitcoin, MIT) from a CDN and generates a throwaway BIP39
+ * mnemonic → BIP32 key → address, entirely client-side. No funds, no network
+ * calls beyond loading the library, no server.
+ */
+---
+
+<div id="crypto-widget" class="crypto-widget">
+  <section
+    id="crypto-panel"
+    class="crypto-panel"
+    role="dialog"
+    aria-labelledby="crypto-title"
+    aria-hidden="true"
+    hidden
+  >
+    <header class="crypto-head">
+      <div>
+        <p id="crypto-title" class="crypto-title">Bitcoin keypair demo</p>
+        <p class="crypto-sub">Generated in your browser — throwaway keys, no funds</p>
+      </div>
+      <button type="button" id="crypto-close" class="crypto-icon-btn" aria-label="Close wallet demo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </header>
+
+    <div class="crypto-body">
+      <button type="button" id="crypto-generate" class="crypto-generate">
+        <span class="crypto-generate-label">Generate a wallet</span>
+      </button>
+
+      <p id="crypto-status" class="crypto-status">Tap generate to create a fresh Bitcoin keypair.</p>
+
+      <div id="crypto-result" class="crypto-result" hidden>
+        <div class="crypto-field">
+          <div class="crypto-field-head">
+            <span class="crypto-label">Recovery phrase (BIP39)</span>
+            <button type="button" class="crypto-copy" data-copy="mnemonic">Copy</button>
+          </div>
+          <output id="crypto-mnemonic" class="crypto-value crypto-mnemonic"></output>
+        </div>
+
+        <div class="crypto-field">
+          <div class="crypto-field-head">
+            <span class="crypto-label">Address (P2PKH)</span>
+            <button type="button" class="crypto-copy" data-copy="address">Copy</button>
+          </div>
+          <output id="crypto-address" class="crypto-value crypto-mono"></output>
+        </div>
+
+        <div class="crypto-field">
+          <div class="crypto-field-head">
+            <span class="crypto-label">Public key</span>
+            <button type="button" class="crypto-copy" data-copy="pubHex">Copy</button>
+          </div>
+          <output id="crypto-pub" class="crypto-value crypto-mono crypto-truncate"></output>
+        </div>
+
+        <div class="crypto-field">
+          <div class="crypto-field-head">
+            <span class="crypto-label">Private key (WIF)</span>
+            <div class="crypto-field-actions">
+              <button type="button" id="crypto-reveal" class="crypto-copy" aria-pressed="false">Reveal</button>
+              <button type="button" class="crypto-copy" data-copy="wif">Copy</button>
+            </div>
+          </div>
+          <output id="crypto-wif" class="crypto-value crypto-mono crypto-secret" data-hidden="true"></output>
+          <p class="crypto-path">Path <span id="crypto-path" class="crypto-mono"></span></p>
+        </div>
+
+        <p class="crypto-warn">
+          Demo only. Never fund an address whose private key has touched a webpage.
+        </p>
+      </div>
+
+      <p class="crypto-credit">
+        Powered by <a href="https://github.com/moneybutton/yours-bitcoin" target="_blank" rel="noopener noreferrer">yours-bitcoin</a>
+      </p>
+    </div>
+  </section>
+
+  <button
+    id="crypto-fab"
+    class="crypto-fab"
+    type="button"
+    aria-label="Bitcoin keypair demo"
+    aria-expanded="false"
+    aria-controls="crypto-panel"
+    title="Bitcoin keypair demo"
+  >
+    <span class="crypto-fab-c" aria-hidden="true">₿</span>
+  </button>
+</div>
+
+<style>
+  .crypto-widget {
+    position: fixed;
+    right: 130px;
+    bottom: 34px;
+    z-index: 60;
+  }
+
+  .crypto-fab {
+    width: 50px;
+    height: 50px;
+    display: grid;
+    place-items: center;
+    border-radius: 9999px;
+    border: 1px solid rgba(247, 147, 26, 0.6);
+    background: rgba(10, 10, 10, 0.85);
+    color: #f7931a;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    box-shadow:
+      0 0 0 1px rgba(247, 147, 26, 0.25),
+      0 0 18px -2px rgba(247, 147, 26, 0.6),
+      0 8px 24px -10px rgba(0, 0, 0, 0.8);
+    transition: transform 0.2s ease, box-shadow 0.25s ease, color 0.2s ease;
+  }
+  .crypto-fab-c {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    filter: drop-shadow(0 0 5px rgba(247, 147, 26, 0.7));
+  }
+  .crypto-fab:hover {
+    transform: translateY(-2px);
+    color: #fbbf24;
+    box-shadow:
+      0 0 0 1px rgba(247, 147, 26, 0.45),
+      0 0 26px 0 rgba(247, 147, 26, 0.85),
+      0 10px 28px -8px rgba(0, 0, 0, 0.85);
+  }
+  .crypto-fab.is-active {
+    color: #fcd34d;
+    border-color: rgba(251, 191, 36, 0.85);
+    box-shadow:
+      0 0 0 1px rgba(251, 191, 36, 0.5),
+      0 0 28px 0 rgba(247, 147, 26, 0.9);
+  }
+  .crypto-fab:focus-visible {
+    outline: 2px solid #f7931a;
+    outline-offset: 3px;
+  }
+
+  .crypto-panel {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 14px);
+    width: min(340px, calc(100vw - 32px));
+    max-height: min(70vh, 560px);
+    overflow-y: auto;
+    border-radius: 18px;
+    border: 1px solid rgba(247, 147, 26, 0.35);
+    background: rgba(12, 10, 6, 0.96);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.9);
+    transform: translateY(12px) scale(0.96);
+    transform-origin: bottom right;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+  }
+  .crypto-panel.is-open {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  html[data-theme="light"] .crypto-panel {
+    background: rgba(255, 252, 245, 0.98);
+    border-color: rgba(247, 147, 26, 0.45);
+  }
+
+  .crypto-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid rgba(64, 50, 24, 0.6);
+  }
+  .crypto-title {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fbbf24;
+  }
+  .crypto-sub {
+    margin: 2px 0 0;
+    font-size: 0.68rem;
+    color: #9a8a66;
+  }
+  html[data-theme="light"] .crypto-sub { color: #92745a; }
+
+  .crypto-icon-btn {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    border: 1px solid rgba(82, 64, 32, 0.8);
+    background: rgba(28, 22, 10, 0.8);
+    color: #d4c4a0;
+    cursor: pointer;
+  }
+  .crypto-icon-btn svg { width: 15px; height: 15px; }
+
+  .crypto-body { padding: 14px 16px 16px; }
+
+  .crypto-generate {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid rgba(247, 147, 26, 0.6);
+    background: linear-gradient(165deg, #f7931a 0%, #c2710d 100%);
+    color: #1a1206;
+    font-size: 0.9rem;
+    font-weight: 800;
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0 10px 24px -12px rgba(247, 147, 26, 0.8);
+  }
+  .crypto-generate:hover { box-shadow: 0 14px 30px -12px rgba(247, 147, 26, 0.95); }
+  .crypto-generate:active { transform: scale(0.97); }
+  .crypto-generate[disabled] { opacity: 0.6; cursor: progress; }
+
+  .crypto-status {
+    margin: 10px 0 0;
+    font-size: 0.74rem;
+    color: #9a8a66;
+    text-align: center;
+  }
+  .crypto-status.is-error { color: #f87171; }
+
+  .crypto-result { margin-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+
+  .crypto-field {
+    border: 1px solid rgba(64, 50, 24, 0.6);
+    border-radius: 12px;
+    padding: 9px 11px;
+    background: rgba(24, 18, 8, 0.6);
+  }
+  html[data-theme="light"] .crypto-field {
+    background: rgba(255, 247, 233, 0.9);
+    border-color: rgba(231, 211, 178, 0.9);
+  }
+  .crypto-field-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+  .crypto-field-actions { display: flex; gap: 6px; }
+  .crypto-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #b89a5e;
+  }
+  .crypto-copy {
+    border: 1px solid rgba(82, 64, 32, 0.8);
+    background: rgba(40, 30, 12, 0.7);
+    color: #e7d3a2;
+    font-size: 0.64rem;
+    font-weight: 600;
+    border-radius: 7px;
+    padding: 0.18rem 0.5rem;
+    cursor: pointer;
+  }
+  .crypto-copy:hover { color: #fbbf24; border-color: rgba(247, 147, 26, 0.6); }
+  html[data-theme="light"] .crypto-copy {
+    background: #fff;
+    border-color: #e7d3b2;
+    color: #92745a;
+  }
+
+  .crypto-value {
+    display: block;
+    font-size: 0.78rem;
+    color: #f5e9d0;
+    word-break: break-all;
+    line-height: 1.5;
+  }
+  html[data-theme="light"] .crypto-value { color: #2a1f0a; }
+  .crypto-mono { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; }
+  .crypto-mnemonic { font-weight: 600; letter-spacing: 0.01em; }
+  .crypto-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .crypto-secret[data-hidden="true"] {
+    filter: blur(6px);
+    user-select: none;
+  }
+  .crypto-path {
+    margin: 6px 0 0;
+    font-size: 0.66rem;
+    color: #9a8a66;
+  }
+
+  .crypto-warn {
+    margin: 2px 0 0;
+    font-size: 0.66rem;
+    color: #d49a6a;
+    line-height: 1.5;
+  }
+  .crypto-credit {
+    margin: 12px 0 0;
+    text-align: right;
+    font-size: 0.66rem;
+    color: #6b5a36;
+  }
+  .crypto-credit a { color: #9a8a66; text-decoration: none; }
+  .crypto-credit a:hover { color: #f7931a; text-decoration: underline; }
+
+  @media (max-width: 480px) {
+    .crypto-widget {
+      right: 96px;
+      bottom: 20px;
+    }
+    .crypto-fab { width: 44px; height: 44px; }
+    .crypto-fab-c { font-size: 1.3rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .crypto-panel { transition: none; }
+    .crypto-fab { transition: none; }
+    .crypto-generate { transition: none; }
+  }
+  html[data-motion="reduce"] .crypto-panel { transition: none; }
+</style>
+
+<script>
+  import { generateWallet } from '../lib/crypto-wallet';
+
+  function initCryptoWallet() {
+    const widget = document.getElementById('crypto-widget');
+    if (!widget || widget.dataset.cryptoBound) return;
+    widget.dataset.cryptoBound = 'true';
+
+    const fab = document.getElementById('crypto-fab') as HTMLButtonElement | null;
+    const panel = document.getElementById('crypto-panel') as HTMLElement | null;
+    const closeBtn = document.getElementById('crypto-close') as HTMLButtonElement | null;
+    const genBtn = document.getElementById('crypto-generate') as HTMLButtonElement | null;
+    const statusEl = document.getElementById('crypto-status') as HTMLElement | null;
+    const resultEl = document.getElementById('crypto-result') as HTMLElement | null;
+    const mnemonicEl = document.getElementById('crypto-mnemonic') as HTMLElement | null;
+    const addressEl = document.getElementById('crypto-address') as HTMLElement | null;
+    const pubEl = document.getElementById('crypto-pub') as HTMLElement | null;
+    const wifEl = document.getElementById('crypto-wif') as HTMLElement | null;
+    const pathEl = document.getElementById('crypto-path') as HTMLElement | null;
+    const revealBtn = document.getElementById('crypto-reveal') as HTMLButtonElement | null;
+
+    if (!fab || !panel || !genBtn || !resultEl) return;
+
+    let open = false;
+    const data: Record<string, string> = {};
+
+    function setOpen(next: boolean) {
+      open = next;
+      fab.classList.toggle('is-active', open);
+      fab.setAttribute('aria-expanded', String(open));
+      panel.classList.toggle('is-open', open);
+      panel.hidden = !open;
+      panel.setAttribute('aria-hidden', String(!open));
+      if (open) closeBtn?.focus();
+    }
+
+    async function generate() {
+      genBtn.disabled = true;
+      if (statusEl) {
+        statusEl.classList.remove('is-error');
+        statusEl.textContent = 'Loading crypto library…';
+      }
+      try {
+        const wallet = await generateWallet();
+        data.mnemonic = wallet.mnemonic;
+        data.address = wallet.address;
+        data.pubHex = wallet.pubHex;
+        data.wif = wallet.wif;
+
+        if (mnemonicEl) mnemonicEl.textContent = wallet.mnemonic;
+        if (addressEl) addressEl.textContent = wallet.address;
+        if (pubEl) pubEl.textContent = wallet.pubHex;
+        if (wifEl) {
+          wifEl.textContent = wallet.wif;
+          wifEl.dataset.hidden = 'true';
+        }
+        if (pathEl) pathEl.textContent = wallet.path;
+        if (revealBtn) {
+          revealBtn.textContent = 'Reveal';
+          revealBtn.setAttribute('aria-pressed', 'false');
+        }
+        resultEl.hidden = false;
+        if (statusEl) statusEl.textContent = 'Fresh keypair generated locally.';
+      } catch (err) {
+        if (statusEl) {
+          statusEl.classList.add('is-error');
+          statusEl.textContent = 'Could not load the crypto library. Check your connection and retry.';
+        }
+        console.error('[crypto-wallet]', err);
+      } finally {
+        genBtn.disabled = false;
+        const label = genBtn.querySelector('.crypto-generate-label');
+        if (label) label.textContent = 'Regenerate wallet';
+      }
+    }
+
+    fab.addEventListener('click', () => setOpen(!open));
+    closeBtn?.addEventListener('click', () => setOpen(false));
+    genBtn.addEventListener('click', generate);
+
+    revealBtn?.addEventListener('click', () => {
+      if (!wifEl) return;
+      const hidden = wifEl.dataset.hidden === 'true';
+      wifEl.dataset.hidden = hidden ? 'false' : 'true';
+      revealBtn.textContent = hidden ? 'Hide' : 'Reveal';
+      revealBtn.setAttribute('aria-pressed', String(hidden));
+    });
+
+    widget.querySelectorAll<HTMLButtonElement>('.crypto-copy[data-copy]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const key = btn.dataset.copy || '';
+        const value = data[key];
+        if (!value) return;
+        try {
+          await navigator.clipboard.writeText(value);
+          const prev = btn.textContent;
+          btn.textContent = 'Copied';
+          setTimeout(() => {
+            btn.textContent = prev;
+          }, 1200);
+        } catch {
+          /* clipboard unavailable */
+        }
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && open) setOpen(false);
+    });
+  }
+
+  initCryptoWallet();
+  document.addEventListener('astro:page-load', initCryptoWallet);
+</script>

@@ -9,6 +9,8 @@
 import '../styles/global.css';
 import FoxAssistant from '../components/FoxAssistant.astro';
 import AccessibilityWidget from '../components/AccessibilityWidget.astro';
+import SpeedReader from '../components/SpeedReader.astro';
+import CryptoWallet from '../components/CryptoWallet.astro';
 import VaultSuggestionForm from '../components/VaultSuggestionForm.astro';
 import JellyButton from '../components/JellyButton.astro';
 import { site } from '../config/site';
@@ -256,18 +258,15 @@ const structuredData = {
           <a href={withBase('/overview')} class="nav-link">Overview</a>
           <a href={withBase('/work')} class="nav-link">Work</a>
           <a href={withBase('/case-studies')} class="nav-link">Case Studies</a>
+          <a href={withBase('/resume')} class="nav-link">Resume</a>
           <a href={withBase('/blog')} class="nav-link">Blog</a>
           <a href={withBase('/contact')} class="nav-link">Contact</a>
         </nav>
 
         <div class="flex items-center gap-3">
-          <a
-            href={withBase('/contact#intake')}
-            data-magnetic
-            class="hidden rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400 sm:inline-block"
-          >
-            Build my system
-          </a>
+          <span class="hidden sm:inline-block">
+            <JellyButton href={withBase('/contact#intake')} label="Build my system" size="sm" />
+          </span>
           <button
             id="menu-toggle"
             aria-label="Toggle menu"
@@ -290,6 +289,7 @@ const structuredData = {
         <a href={withBase('/overview')} class="mobile-link">Overview</a>
         <a href={withBase('/work')} class="mobile-link">Work</a>
         <a href={withBase('/case-studies')} class="mobile-link">Case Studies</a>
+        <a href={withBase('/resume')} class="mobile-link">Resume</a>
         <a href={withBase('/blog')} class="mobile-link">Blog</a>
         <a href={withBase('/contact')} class="mobile-link">Contact</a>
         <a href={withBase('/contact#intake')} class="mobile-link text-emerald-400">Build my system</a>
@@ -461,14 +461,9 @@ const structuredData = {
               Live demos that show how the systems work.
             </h2>
           </div>
-          <a
-            data-reveal
-            href={withBase('/work')}
-            class="inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-lg font-bold text-neutral-950 shadow-lg transition hover:bg-neutral-200"
-          >
-            All work
-            <span class="text-2xl leading-none">→</span>
-          </a>
+          <div data-reveal>
+            <JellyButton href={withBase('/work')} label="All work" />
+          </div>
         </div>
 
         <div class="grid gap-6 md:grid-cols-2">
@@ -655,8 +650,14 @@ const structuredData = {
     <!-- Persistent chat-assistant mascot (placeholder for the AI-FAQ widget) -->
     <FoxAssistant />
 
+    <!-- Bitcoin keypair demo (yours-bitcoin) — floating "C" beside the fox -->
+    <CryptoWallet />
+
     <!-- Site-wide accessibility settings (theme + assistive display options) -->
     <AccessibilityWidget />
+
+    <!-- Spritz-style speed reader (Glance/OpenSpritz) -->
+    <SpeedReader />
 
     <!-- ===================== STYLES ===================== -->
     <style>

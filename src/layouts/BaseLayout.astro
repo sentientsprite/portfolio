@@ -4,6 +4,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FoxAssistant from '../components/FoxAssistant.astro';
 import AccessibilityWidget from '../components/AccessibilityWidget.astro';
+import SpeedReader from '../components/SpeedReader.astro';
+import CryptoWallet from '../components/CryptoWallet.astro';
 import { site } from '../config/site';
 import { withBase } from '../lib/url';
 
@@ -110,8 +112,14 @@ const structuredData = {
     <!-- Persistent chat-assistant mascot (placeholder for the AI-FAQ widget) -->
     <FoxAssistant />
 
+    <!-- Bitcoin keypair demo (yours-bitcoin) — floating "C" beside the fox -->
+    <CryptoWallet />
+
     <!-- Site-wide accessibility settings (theme + assistive display options) -->
     <AccessibilityWidget />
+
+    <!-- Spritz-style speed reader (Glance/OpenSpritz) -->
+    <SpeedReader />
 
     <!-- Magnetic CTA pull (desktop fine pointer) -->
     <script>
