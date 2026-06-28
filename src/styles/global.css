@@ -44,6 +44,23 @@ body {
   mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 25%, transparent 75%);
 }
 
+/* --- Homepage atmosphere + 2D touch fluid, shared on every page (no 3D) --- */
+.bg-atmosphere {
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgba(16, 185, 129, 0.12), transparent 70%),
+    radial-gradient(40% 40% at 80% 60%, rgba(20, 184, 166, 0.08), transparent 70%),
+    radial-gradient(50% 50% at 15% 80%, rgba(16, 185, 129, 0.06), transparent 70%),
+    #0a0a0a;
+}
+.touch-fluid {
+  opacity: 0.72;
+  mix-blend-mode: screen;
+}
+html[data-theme="light"] .touch-fluid {
+  opacity: 0.45;
+  mix-blend-mode: multiply;
+}
+
 /* --- Eyebrow / section label --- */
 .eyebrow {
   @apply mb-3 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.3em] text-emerald-400;

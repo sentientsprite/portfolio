@@ -98,9 +98,13 @@ const structuredData = {
       })();
     </script>
   </head>
-  <body class="min-h-screen flex flex-col">
-    <!-- Ambient futuristic background (shared across every page) -->
-    <div class="site-bg" aria-hidden="true"></div>
+  <body class="min-h-screen overflow-x-hidden flex flex-col">
+    <!-- Homepage theme backdrop (atmosphere + 2D touch fluid), minus the 3D scene -->
+    <div class="bg-atmosphere pointer-events-none fixed inset-0 z-[-2]" aria-hidden="true"></div>
+    <canvas
+      id="touch-fluid"
+      class="touch-fluid pointer-events-none fixed inset-0 z-[-1] h-full w-full"
+      aria-hidden="true"></canvas>
 
     <Header />
     <main class="flex-1">
@@ -122,6 +126,20 @@ const structuredData = {
       import { initMagneticButtons } from '../lib/magnetic-buttons';
       initMagneticButtons();
       document.addEventListener('astro:page-load', () => initMagneticButtons());
+    </script>
+
+    <!-- 2D touch-reactive ambient fluid (homepage theme, no 3D) -->
+    <script>
+      import { initTouchFluid } from '../lib/touch-fluid';
+      function bootFluid() {
+        const c = document.getElementById('touch-fluid') as HTMLCanvasElement | null;
+        if (c && !c.dataset.fluidBound) {
+          c.dataset.fluidBound = 'true';
+          initTouchFluid(c);
+        }
+      }
+      bootFluid();
+      document.addEventListener('astro:page-load', bootFluid);
     </script>
 
     <!-- Shared UX enhancements: nav scroll state, scroll reveals, card glow -->
