@@ -19,7 +19,6 @@
   >
     <div class="speed-panel-inner">
       <header class="speed-head">
-        <p id="speed-reader-title" class="speed-title">Speed read</p>
         <button type="button" id="speed-close" class="speed-icon-btn" aria-label="Close speed reader">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
             <path d="M6 6l12 12M18 6L6 18" />
@@ -55,10 +54,6 @@
         </select>
         <button type="button" id="speed-play" class="speed-play" disabled>Play</button>
       </div>
-
-      <p class="speed-credit">
-        Powered by <a href="https://github.com/Miserlou/Glance-Bookmarklet" target="_blank" rel="noopener noreferrer">Glance/OpenSpritz</a>
-      </p>
     </div>
   </section>
 
@@ -124,53 +119,47 @@
     outline-offset: 3px;
   }
 
+  /* Compact box anchored to the right of the "S" launcher (bottom-left stack). */
   .speed-panel {
     position: fixed;
-    inset: 0 0 auto 0;
+    left: 86px;
+    bottom: 80px;
     z-index: 70;
-    border-bottom: 1px solid rgba(38, 38, 38, 0.95);
+    width: min(300px, calc(100vw - 104px));
+    border: 1px solid rgba(96, 165, 250, 0.35);
+    border-radius: 16px;
     background: rgba(10, 10, 10, 0.94);
     backdrop-filter: blur(14px);
-    box-shadow: 0 18px 50px -24px rgba(0, 0, 0, 0.9);
-    transform: translateY(-104%);
+    box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.9);
+    transform: translateX(-10px) scale(0.97);
+    transform-origin: bottom left;
     opacity: 0;
     pointer-events: none;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
   }
   .speed-panel.is-open {
-    transform: translateY(0);
+    transform: translateX(0) scale(1);
     opacity: 1;
     pointer-events: auto;
   }
   html[data-theme="light"] .speed-panel {
     background: rgba(255, 255, 255, 0.96);
-    border-bottom-color: rgba(212, 212, 212, 0.95);
+    border-color: rgba(212, 212, 212, 0.95);
   }
 
   .speed-panel-inner {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 14px 18px 16px;
+    padding: 8px 14px 14px;
   }
 
   .speed-head {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 8px;
-  }
-  .speed-title {
-    margin: 0;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #60a5fa;
+    justify-content: flex-end;
+    margin-bottom: 2px;
   }
   .speed-icon-btn {
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
     display: grid;
     place-items: center;
     border-radius: 10px;
@@ -187,16 +176,18 @@
   }
 
   .speed-stage {
-    padding: 4px 0 10px;
+    padding: 0 0 8px;
   }
   .speed-guide {
     margin: 0;
     text-align: center;
     font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-    font-size: clamp(1rem, 4vw, 1.65rem);
+    font-size: 0.85rem;
     color: rgba(115, 115, 115, 0.45);
     line-height: 1.1;
     user-select: none;
+    overflow: hidden;
+    white-space: nowrap;
   }
   html[data-theme="light"] .speed-guide {
     color: rgba(163, 163, 163, 0.7);
@@ -206,10 +197,10 @@
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    min-height: 3.2rem;
+    min-height: 2.4rem;
     margin: 2px 0;
     font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-    font-size: clamp(1.35rem, 5vw, 2rem);
+    font-size: 1.4rem;
     line-height: 1.2;
     color: #e5e5e5;
   }
@@ -301,8 +292,13 @@
       height: 48px;
       font-size: 1.2rem;
     }
+    .speed-panel {
+      left: 70px;
+      bottom: 72px;
+      width: calc(100vw - 84px);
+    }
     .speed-panel-inner {
-      padding: 12px 14px 14px;
+      padding: 8px 12px 12px;
     }
   }
 
