@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import type { CollectionEntry } from 'astro:content';
 import { withBase } from '../lib/url';
+import { site } from '../config/site';
 
 interface Props {
   entry: CollectionEntry<'caseStudies'>;
@@ -14,9 +15,23 @@ const formattedDate = pubDate.toLocaleDateString('en-US', {
   month: 'long',
   day: 'numeric',
 });
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  keywords: (tags ?? []).join(', '),
+  ...(heroImage ? { image: `${site.url}${heroImage.startsWith('/') ? '' : '/'}${heroImage}` } : {}),
+  author: { '@type': 'Person', name: site.name, url: site.url },
+  publisher: { '@type': 'Person', name: site.name, url: site.url },
+  about: outcome ? `Outcome: ${outcome}` : undefined,
+};
 ---
 
 <BaseLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} is:inline />
   <article class="mx-auto max-w-3xl px-4 py-16">
     <header class="mb-10">
       <span class="text-sm font-medium text-emerald-400">Case Study</span>

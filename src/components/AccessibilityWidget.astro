@@ -1,0 +1,572 @@
+---
+/**
+ * AccessibilityWidget.astro — site-wide accessibility settings panel.
+ *
+ * A neon "universal access" icon (bottom-left) opens a panel of assistive
+ * display settings. The headline control toggles the native Dark Mode off for a
+ * standard Light Mode (white background / black text). Other controls help
+ * low-vision, dyslexic, color-blind, and motion-sensitive visitors.
+ *
+ * Preferences persist for the browser SESSION only (sessionStorage), so every
+ * fresh session loads in Dark Mode first. An inline <head> script applies saved
+ * settings before paint to avoid a flash; this widget mirrors that state into
+ * the controls and writes changes back.
+ */
+---
+
+<!-- Color-vision filter matrices (used by html[data-colorblind="…"] in CSS) -->
+<svg class="a11y-filters" aria-hidden="true" focusable="false" width="0" height="0">
+  <defs>
+    <filter id="cb-protanopia">
+      <feColorMatrix type="matrix" values="0.567 0.433 0 0 0  0.558 0.442 0 0 0  0 0.242 0.758 0 0  0 0 0 1 0" />
+    </filter>
+    <filter id="cb-deuteranopia">
+      <feColorMatrix type="matrix" values="0.625 0.375 0 0 0  0.7 0.3 0 0 0  0 0.3 0.7 0 0  0 0 0 1 0" />
+    </filter>
+    <filter id="cb-tritanopia">
+      <feColorMatrix type="matrix" values="0.95 0.05 0 0 0  0 0.433 0.567 0 0  0 0.475 0.525 0 0  0 0 0 1 0" />
+    </filter>
+  </defs>
+</svg>
+
+<div id="a11y-widget" class="a11y-widget">
+  <!-- Settings panel -->
+  <section
+    id="a11y-panel"
+    class="a11y-panel"
+    role="dialog"
+    aria-labelledby="a11y-panel-title"
+    aria-hidden="true"
+    hidden
+  >
+    <header class="a11y-panel-head">
+      <div>
+        <p id="a11y-panel-title" class="a11y-panel-title">Accessibility</p>
+        <p class="a11y-panel-sub">Display settings for this session</p>
+      </div>
+      <button type="button" id="a11y-close" class="a11y-icon-btn" aria-label="Close accessibility settings">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </header>
+
+    <div class="a11y-panel-body">
+      <!-- Theme -->
+      <label class="a11y-row" for="a11y-theme">
+        <span class="a11y-row-text">
+          <span class="a11y-row-label">Light mode</span>
+          <span class="a11y-row-hint">White background, black text</span>
+        </span>
+        <input type="checkbox" id="a11y-theme" class="a11y-switch" role="switch" />
+      </label>
+
+      <!-- Text size -->
+      <div class="a11y-row">
+        <span class="a11y-row-text">
+          <span class="a11y-row-label">Text size</span>
+          <span class="a11y-row-hint">Enlarge all text</span>
+        </span>
+        <div class="a11y-stepper" role="group" aria-label="Text size">
+          <button type="button" id="a11y-text-dec" class="a11y-step" aria-label="Decrease text size">A−</button>
+          <span id="a11y-text-val" class="a11y-step-val" aria-live="polite">100%</span>
+          <button type="button" id="a11y-text-inc" class="a11y-step" aria-label="Increase text size">A+</button>
+        </div>
+      </div>
+
+      <!-- High contrast -->
+      <label class="a11y-row" for="a11y-contrast">
+        <span class="a11y-row-text">
+          <span class="a11y-row-label">High contrast</span>
+          <span class="a11y-row-hint">Stronger text & borders</span>
+        </span>
+        <input type="checkbox" id="a11y-contrast" class="a11y-switch" role="switch" />
+      </label>
+
+      <!-- Readable font -->
+      <label class="a11y-row" for="a11y-font">
+        <span class="a11y-row-text">
+          <span class="a11y-row-label">Readable font</span>
+          <span class="a11y-row-hint">Dyslexia-friendly typeface</span>
+        </span>
+        <input type="checkbox" id="a11y-font" class="a11y-switch" role="switch" />
+      </label>
+
+      <!-- Underline links -->
+      <label class="a11y-row" for="a11y-links">
+        <span class="a11y-row-text">
+          <span class="a11y-row-label">Underline links</span>
+          <span class="a11y-row-hint">Always show link underlines</span>
+        </span>
+        <input type="checkbox" id="a11y-links" class="a11y-switch" role="switch" />
+      </label>
+
+      <!-- Reduce motion -->
+      <label class="a11y-row" for="a11y-motion">
+        <span class="a11y-row-text">
+          <span class="a11y-row-label">Reduce motion</span>
+          <span class="a11y-row-hint">Pause animations & transitions</span>
+        </span>
+        <input type="checkbox" id="a11y-motion" class="a11y-switch" role="switch" />
+      </label>
+
+      <!-- Color vision -->
+      <label class="a11y-row" for="a11y-colorblind">
+        <span class="a11y-row-text">
+          <span class="a11y-row-label">Color vision</span>
+          <span class="a11y-row-hint">Color-blind support filter</span>
+        </span>
+        <select id="a11y-colorblind" class="a11y-select">
+          <option value="none">None</option>
+          <option value="protanopia">Protanopia</option>
+          <option value="deuteranopia">Deuteranopia</option>
+          <option value="tritanopia">Tritanopia</option>
+        </select>
+      </label>
+    </div>
+
+    <footer class="a11y-panel-foot">
+      <button type="button" id="a11y-reset" class="a11y-reset">Reset all settings</button>
+    </footer>
+  </section>
+
+  <!-- Trigger: universal access symbol with neon glow -->
+  <button
+    id="a11y-toggle"
+    class="a11y-fab"
+    type="button"
+    aria-label="Accessibility settings"
+    aria-expanded="false"
+    aria-controls="a11y-panel"
+    title="Accessibility settings"
+  >
+    <svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="10.2" fill="none" stroke="currentColor" stroke-width="1.5" />
+      <circle cx="12" cy="6.4" r="1.6" fill="currentColor" />
+      <path d="M5.4 9.2c2.4 1 11.8 1 13.2 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+      <path d="M12 8.6v5.1M12 13.7l-2.7 5.2M12 13.7l2.7 5.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+    </svg>
+  </button>
+</div>
+
+<style>
+  .a11y-filters {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .a11y-widget {
+    position: fixed;
+    left: 22px;
+    bottom: 18px;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  /* ---- Neon trigger ---- */
+  .a11y-fab {
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    border-radius: 9999px;
+    border: 1px solid rgba(16, 185, 129, 0.55);
+    background: rgba(10, 10, 10, 0.85);
+    color: #34d399;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    box-shadow:
+      0 0 0 1px rgba(16, 185, 129, 0.25),
+      0 0 18px -2px rgba(16, 185, 129, 0.65),
+      0 8px 24px -10px rgba(0, 0, 0, 0.8);
+    transition: transform 0.2s ease, box-shadow 0.25s ease, color 0.2s ease;
+  }
+  .a11y-fab svg {
+    width: 30px;
+    height: 30px;
+    filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.8));
+  }
+  .a11y-fab:hover {
+    transform: translateY(-2px);
+    color: #6ee7b7;
+    box-shadow:
+      0 0 0 1px rgba(16, 185, 129, 0.4),
+      0 0 26px 0 rgba(16, 185, 129, 0.8),
+      0 12px 30px -10px rgba(0, 0, 0, 0.85);
+  }
+  .a11y-fab::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: inherit;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    opacity: 0.7;
+    animation: a11y-pulse 2.6s ease-out infinite;
+    pointer-events: none;
+  }
+  @keyframes a11y-pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    70% { transform: scale(1.35); opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  /* ---- Panel ---- */
+  .a11y-panel {
+    width: min(340px, calc(100vw - 32px));
+    max-height: min(560px, calc(100vh - 120px));
+    display: flex;
+    flex-direction: column;
+    border-radius: 18px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    background: rgba(12, 12, 12, 0.94);
+    backdrop-filter: blur(16px);
+    box-shadow:
+      0 24px 60px -20px rgba(0, 0, 0, 0.85),
+      0 0 40px -12px rgba(16, 185, 129, 0.25);
+    overflow: hidden;
+    transform: translateY(12px) scale(0.96);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.26s ease, transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .a11y-widget.is-open .a11y-panel {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .a11y-panel[hidden] { display: none; }
+  .a11y-widget.is-open .a11y-panel[hidden] { display: flex; }
+
+  .a11y-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(38, 38, 38, 0.9);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), transparent 65%);
+  }
+  .a11y-panel-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ecfdf5;
+  }
+  .a11y-panel-sub {
+    margin-top: 2px;
+    font-size: 11px;
+    color: #9ca3af;
+  }
+  .a11y-icon-btn {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    border: 1px solid rgba(64, 64, 64, 0.8);
+    background: rgba(23, 23, 23, 0.8);
+    color: #a3a3a3;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .a11y-icon-btn svg { width: 16px; height: 16px; }
+  .a11y-icon-btn:hover { color: #6ee7b7; border-color: rgba(16, 185, 129, 0.4); }
+
+  .a11y-panel-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 14px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .a11y-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 4px;
+    border-bottom: 1px solid rgba(38, 38, 38, 0.6);
+    cursor: pointer;
+  }
+  .a11y-row:last-child { border-bottom: 0; }
+  .a11y-row-text { display: flex; flex-direction: column; gap: 2px; }
+  .a11y-row-label { font-size: 13.5px; font-weight: 600; color: #e5e5e5; }
+  .a11y-row-hint { font-size: 11px; color: #8a8a8a; }
+
+  /* Toggle switch */
+  .a11y-switch {
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    background: rgba(64, 64, 64, 0.9);
+    border: 1px solid rgba(82, 82, 82, 0.9);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .a11y-switch::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #d4d4d4;
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background 0.2s;
+  }
+  .a11y-switch:checked {
+    background: rgba(16, 185, 129, 0.55);
+    border-color: rgba(16, 185, 129, 0.7);
+  }
+  .a11y-switch:checked::after {
+    transform: translateX(18px);
+    background: #ecfdf5;
+  }
+  .a11y-switch:focus-visible { outline: 2px solid #34d399; outline-offset: 2px; }
+
+  /* Stepper */
+  .a11y-stepper { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .a11y-step {
+    width: 34px;
+    height: 30px;
+    border-radius: 9px;
+    border: 1px solid rgba(64, 64, 64, 0.9);
+    background: rgba(23, 23, 23, 0.85);
+    color: #d4d4d4;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .a11y-step:hover { color: #6ee7b7; border-color: rgba(16, 185, 129, 0.45); }
+  .a11y-step:disabled { opacity: 0.4; cursor: not-allowed; }
+  .a11y-step-val { min-width: 42px; text-align: center; font-size: 12px; color: #a7f3d0; font-variant-numeric: tabular-nums; }
+
+  /* Select */
+  .a11y-select {
+    flex-shrink: 0;
+    padding: 7px 10px;
+    border-radius: 9px;
+    border: 1px solid rgba(64, 64, 64, 0.9);
+    background: rgba(23, 23, 23, 0.9);
+    color: #e5e5e5;
+    font-size: 12.5px;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .a11y-select:focus-visible { outline: 2px solid #34d399; outline-offset: 2px; }
+
+  .a11y-panel-foot {
+    padding: 12px 16px 14px;
+    border-top: 1px solid rgba(38, 38, 38, 0.9);
+  }
+  .a11y-reset {
+    width: 100%;
+    padding: 9px 14px;
+    border-radius: 9999px;
+    border: 1px solid rgba(64, 64, 64, 0.9);
+    background: rgba(23, 23, 23, 0.85);
+    color: #d4d4d4;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .a11y-reset:hover { color: #6ee7b7; border-color: rgba(16, 185, 129, 0.45); }
+
+  @media (max-width: 480px) {
+    .a11y-widget { left: 12px; bottom: 12px; }
+    .a11y-fab { width: 48px; height: 48px; }
+    .a11y-fab svg { width: 26px; height: 26px; }
+  }
+
+  /* The widget chrome itself should stay steady even when the user enables
+     reduce-motion for page content. */
+  html[data-motion="reduce"] .a11y-fab::after { animation: none; }
+</style>
+
+<script>
+  const STORAGE_KEY = 'rk-a11y';
+  const SCALES = [1, 1.125, 1.25, 1.4];
+
+  type A11yState = {
+    theme: 'dark' | 'light';
+    contrast: boolean;
+    font: boolean;
+    links: boolean;
+    motion: boolean;
+    textScale: number;
+    colorblind: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
+  };
+
+  function defaultState(): A11yState {
+    return {
+      theme: 'dark',
+      contrast: false,
+      font: false,
+      links: false,
+      motion: false,
+      textScale: 1,
+      colorblind: 'none',
+    };
+  }
+
+  function loadState(): A11yState {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (raw) return { ...defaultState(), ...JSON.parse(raw) };
+    } catch {}
+    return defaultState();
+  }
+
+  function saveState(state: A11yState) {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch {}
+  }
+
+  /** Apply state to <html> via data-* attributes + the text-scale variable. */
+  function applyState(state: A11yState) {
+    const de = document.documentElement;
+    de.toggleAttribute('data-theme', false);
+    if (state.theme === 'light') de.setAttribute('data-theme', 'light');
+    else de.removeAttribute('data-theme');
+
+    state.contrast ? de.setAttribute('data-contrast', 'high') : de.removeAttribute('data-contrast');
+    state.font ? de.setAttribute('data-font', 'readable') : de.removeAttribute('data-font');
+    state.links ? de.setAttribute('data-links', 'underline') : de.removeAttribute('data-links');
+    state.motion ? de.setAttribute('data-motion', 'reduce') : de.removeAttribute('data-motion');
+
+    if (state.colorblind && state.colorblind !== 'none') {
+      de.setAttribute('data-colorblind', state.colorblind);
+    } else {
+      de.removeAttribute('data-colorblind');
+    }
+
+    de.style.setProperty('--a11y-text-scale', String(state.textScale));
+  }
+
+  function initA11yWidget() {
+    const widget = document.getElementById('a11y-widget');
+    const toggle = document.getElementById('a11y-toggle');
+    const panel = document.getElementById('a11y-panel');
+    const closeBtn = document.getElementById('a11y-close');
+    if (!widget || !toggle || !panel || !closeBtn) return;
+    if (widget.dataset.init) return;
+    widget.dataset.init = '1';
+
+    const themeEl = document.getElementById('a11y-theme') as HTMLInputElement | null;
+    const contrastEl = document.getElementById('a11y-contrast') as HTMLInputElement | null;
+    const fontEl = document.getElementById('a11y-font') as HTMLInputElement | null;
+    const linksEl = document.getElementById('a11y-links') as HTMLInputElement | null;
+    const motionEl = document.getElementById('a11y-motion') as HTMLInputElement | null;
+    const cbEl = document.getElementById('a11y-colorblind') as HTMLSelectElement | null;
+    const textDec = document.getElementById('a11y-text-dec') as HTMLButtonElement | null;
+    const textInc = document.getElementById('a11y-text-inc') as HTMLButtonElement | null;
+    const textVal = document.getElementById('a11y-text-val');
+    const resetBtn = document.getElementById('a11y-reset');
+
+    let state = loadState();
+
+    function syncControls() {
+      if (themeEl) themeEl.checked = state.theme === 'light';
+      if (contrastEl) contrastEl.checked = state.contrast;
+      if (fontEl) fontEl.checked = state.font;
+      if (linksEl) linksEl.checked = state.links;
+      if (motionEl) motionEl.checked = state.motion;
+      if (cbEl) cbEl.value = state.colorblind;
+      const idx = SCALES.indexOf(state.textScale);
+      if (textVal) textVal.textContent = `${Math.round(state.textScale * 100)}%`;
+      if (textDec) textDec.disabled = idx <= 0;
+      if (textInc) textInc.disabled = idx >= SCALES.length - 1;
+    }
+
+    function commit() {
+      applyState(state);
+      saveState(state);
+      syncControls();
+    }
+
+    // Apply persisted state immediately (head script already did, but re-assert).
+    applyState(state);
+    syncControls();
+
+    // ---- Panel open/close ----
+    let open = false;
+    function setOpen(next: boolean) {
+      open = next;
+      widget.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      panel.setAttribute('aria-hidden', String(!open));
+      if (open) {
+        panel.hidden = false;
+        themeEl?.focus();
+      } else {
+        window.setTimeout(() => {
+          if (!open) panel.hidden = true;
+        }, 280);
+      }
+    }
+    toggle.addEventListener('click', () => setOpen(!open));
+    closeBtn.addEventListener('click', () => setOpen(false));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && open) setOpen(false);
+    });
+    document.addEventListener('click', (e) => {
+      if (open && !widget.contains(e.target as Node)) setOpen(false);
+    });
+
+    // ---- Control wiring ----
+    themeEl?.addEventListener('change', () => {
+      state.theme = themeEl.checked ? 'light' : 'dark';
+      commit();
+    });
+    contrastEl?.addEventListener('change', () => {
+      state.contrast = contrastEl.checked;
+      commit();
+    });
+    fontEl?.addEventListener('change', () => {
+      state.font = fontEl.checked;
+      commit();
+    });
+    linksEl?.addEventListener('change', () => {
+      state.links = linksEl.checked;
+      commit();
+    });
+    motionEl?.addEventListener('change', () => {
+      state.motion = motionEl.checked;
+      commit();
+    });
+    cbEl?.addEventListener('change', () => {
+      state.colorblind = cbEl.value as A11yState['colorblind'];
+      commit();
+    });
+    textDec?.addEventListener('click', () => {
+      const idx = Math.max(0, SCALES.indexOf(state.textScale) - 1);
+      state.textScale = SCALES[idx];
+      commit();
+    });
+    textInc?.addEventListener('click', () => {
+      const idx = Math.min(SCALES.length - 1, SCALES.indexOf(state.textScale) + 1);
+      state.textScale = SCALES[idx];
+      commit();
+    });
+    resetBtn?.addEventListener('click', () => {
+      state = defaultState();
+      commit();
+    });
+  }
+
+  initA11yWidget();
+  document.addEventListener('astro:page-load', initA11yWidget);
+</script>

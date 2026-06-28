@@ -17,6 +17,11 @@ export interface ProjectOverride {
   hidden?: boolean;
   description?: string;
   techStack?: string[];
+  /**
+   * Representative outcome metrics (value + short label). Framed as typical/
+   * representative results, not guaranteed client figures.
+   */
+  metrics?: { value: string; label: string }[];
   /** When set, this project appears as a module inside the named growth system. */
   growthSystemId?: string;
   /** Short label for the module's role in the growth system flow. */
@@ -57,6 +62,11 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'A fully responsive landing page template designed around conversion best practices: a benefit-driven hero, social proof, clear pricing, and a focused call-to-action. A/B tested copy and visuals drove a 45% lift in conversions for the original client. This is the top of the Lead-to-Revenue stack — where paid and organic traffic becomes a tracked lead.',
     techStack: ['HTML', 'CSS', 'JavaScript', 'SEO'],
+    metrics: [
+      { value: '45%', label: 'Conversion lift' },
+      { value: '<1s', label: 'Load time' },
+      { value: '100%', label: 'Mobile responsive' },
+    ],
   },
   {
     repoName: 'fieldsync-scheduler',
@@ -72,6 +82,11 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'FieldSync converts interest into booked appointments. The customer view is a conversion-focused booking flow; the backend runs HubSpot sync, traffic-aware drive times, conflict checks, and technician SMS confirmation. In the full growth system, scheduler bookings are attributed back to the landing page and campaign that sourced the lead.',
     techStack: ['Node.js', 'PostgreSQL', 'HubSpot', 'Google Maps', 'Twilio'],
+    metrics: [
+      { value: '30%', label: 'Fewer no-shows' },
+      { value: '24/7', label: 'Self-serve booking' },
+      { value: '0', label: 'Double-bookings' },
+    ],
   },
   {
     repoName: 'email-automation',
@@ -85,6 +100,11 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'Leads who are not ready to book enter segmented nurture sequences scored on behavior. High-intent contacts route to sales; everyone else gets automated follow-up. In the integrated stack, this layer keeps pipeline warm while the scheduler handles ready-to-buy leads.',
     techStack: ['Zapier', 'HubSpot', 'Klaviyo', 'Python'],
+    metrics: [
+      { value: '80%', label: 'Follow-up automated' },
+      { value: '24/7', label: 'Always-on nurture' },
+      { value: '5 hrs/wk', label: 'Manual work saved' },
+    ],
   },
   {
     repoName: 'spryte',
@@ -99,6 +119,11 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'Spryte helps sales and marketing prioritize who to pursue. It evaluates prospect websites, surfaces gaps, and outputs a scored opportunity with outreach angles. In the growth system, it complements inbound capture by giving outbound teams the same data-driven rigor.',
     techStack: ['Next.js', 'AI Audit', 'Lead Scoring', 'SEO', 'Zod'],
+    metrics: [
+      { value: '10x', label: 'Faster prospect audits' },
+      { value: '100%', label: 'Prospects scored' },
+      { value: '1 click', label: 'Outreach angles' },
+    ],
   },
   {
     repoName: 'roi-attribution-dashboard',
@@ -119,6 +144,7 @@ export const projectOverrides: ProjectOverride[] = [
     displayName: 'Anonymous Feedback Board',
     category: 'product',
     featured: false,
+    screenshot: 'images/projects/feedback-board.png',
     demoPath: 'demos/feedback-board/index.html',
     sourceUrl: '',
     description:
@@ -126,6 +152,19 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'A simple tool for collecting unfiltered team feedback without attribution anxiety. Everyone posts into one running chat thread; messages are color-coded and timestamped but never linked to identity. Useful for internal retros, culture pulse checks, or client teams who want candid input. The portfolio demo seeds sample messages and persists posts in-browser; production deployments wire up shared real-time storage so the whole team sees the same board.',
     techStack: ['HTML', 'CSS', 'JavaScript', 'Real-time UX'],
+  },
+  {
+    repoName: 'accessibility-suite',
+    displayName: 'Accessibility Suite',
+    category: 'product',
+    featured: true,
+    demoUrl: 'https://sentientsprite.github.io/portfolio/',
+    sourceUrl: '',
+    description:
+      'Site-wide accessibility settings: one-tap Light/Dark mode, adjustable text size, high-contrast mode, dyslexia-friendly font, link underlines, reduced motion, and color-blind filters — behind the universal-access icon, persisted per session.',
+    details:
+      'A drop-in accessibility layer for any site. The headline control swaps the default dark theme for a standard white-background / black-text light mode by inverting the design-token color ramp, so the entire UI flips without rewriting components. Additional controls cover low-vision (text scaling, high contrast), dyslexia (legible typeface, looser line spacing), motor/vestibular (reduced motion), and color vision (protanopia / deuteranopia / tritanopia filters via SVG color matrices). Preferences apply before first paint to avoid a flash and persist for the browser session, so each new visit starts in dark mode. Try it live — tap the neon access icon at the bottom-left of this site.',
+    techStack: ['Accessibility', 'WCAG', 'Tailwind v4', 'Design Tokens', 'TypeScript'],
   },
   {
     repoName: 'prana',
@@ -151,7 +190,7 @@ export const projectOverrides: ProjectOverride[] = [
     description:
       'Private AI-powered second brain with Obsidian vault structure — inbox capture, daily briefs, weekly connections, graph view, and Chief of Staff chat.',
     details:
-      'Zephyr implements the Chief of Staff knowledge system: a structured vault (INBOX → CAPTURES → CONNECTIONS → PROJECTS → VELLUM), frictionless capture, one-click inbox processing, daily briefs, weekly connection synthesis, an interactive note graph, and a persistent VELLUM system-prompt editor. This is a personal tool I run locally against my Obsidian vault — not a public live demo. Visitors can leave ideas via the suggestion box at the bottom of the home page; I import those into `01-CAPTURES/suggestions` in the vault.',
+      'Zephyr implements the Chief of Staff knowledge system: a structured vault (INBOX → CAPTURES → CONNECTIONS → PROJECTS → VELLUM), frictionless capture, one-click inbox processing, daily briefs, weekly connection synthesis, an interactive note graph, and a persistent VELLUM system-prompt editor. Zephyr (via Obsidian) is a private tool I use locally — not a public app. If you have an idea, pattern, suggestion, or question for me, drop it in the suggestion box at the bottom of the home page.',
     techStack: ['Next.js', 'AI PKM', 'Obsidian Vault', 'Graph View', 'Workflows'],
   },
   {

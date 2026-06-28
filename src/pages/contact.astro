@@ -3,26 +3,37 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import SocialFeeds from '../components/SocialFeeds.astro';
+import GrowthIntakeForm from '../components/GrowthIntakeForm.astro';
 import { site } from '../config/site';
 ---
 
-<BaseLayout title="Contact" description="Get in touch for projects and collaborations.">
-  <div class="mx-auto max-w-6xl px-4 py-16">
-    <SectionHeading eyebrow="Contact" title="Let's connect" subtitle="Interested in working together? Reach out via email or connect on social media." />
+<BaseLayout
+  title="Contact"
+  description="Start a growth system project with Raymond King. Share your goals through the quick intake form, or reach out by email and social."
+>
+  <div class="mx-auto max-w-4xl px-4 py-16">
+    <SectionHeading
+      eyebrow="Start a project"
+      title="Let's build your growth system"
+      subtitle="Answer a few quick questions and I'll map the website, automation, CRM follow-up, and ROI tracking your business needs."
+    />
 
-    <div class="mt-8" data-animate>
-      <SocialLinks />
+    <div class="mt-10" data-animate>
+      <GrowthIntakeForm />
     </div>
 
     <div
-      class="glow-card mt-12 overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-neutral-900/40 to-neutral-950 p-8 text-center backdrop-blur-sm sm:p-12"
+      class="glow-card mt-10 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/40 p-8 text-center backdrop-blur-sm sm:p-10"
       data-animate
     >
-      <h3 class="text-xl font-semibold text-neutral-100">Send an email</h3>
-      <p class="mx-auto mt-2 max-w-md text-neutral-400">The fastest way to reach me for project inquiries.</p>
+      <h3 class="text-lg font-semibold text-neutral-100">Prefer to reach out directly?</h3>
+      <p class="mx-auto mt-2 max-w-md text-sm text-neutral-400">Email is the fastest way to get me for project inquiries.</p>
       <a href={`mailto:${site.email}`} class="btn btn-primary mt-6">
         {site.email}
       </a>
+      <div class="mt-8">
+        <SocialLinks />
+      </div>
     </div>
 
     <div class="mt-12" data-animate>

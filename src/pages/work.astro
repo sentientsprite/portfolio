@@ -29,7 +29,30 @@ const grouped = showroom.reduce<Record<string, typeof showroom>>((acc, project) 
 }, {});
 
 const categoryOrder: WorkCategory[] = ['product', 'marketing', 'development', 'automation'];
+
+const siteOrigin = 'https://sentientsprite.github.io/portfolio';
+const catalogProjects = projects.filter((p) => p.category !== 'meta');
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Raymond King — Work & Live Demos',
+  description:
+    'Growth automation systems and live demos: websites, CRM workflows, booking flows, follow-up automation, and ROI dashboards.',
+  itemListElement: catalogProjects.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'CreativeWork',
+      name: p.displayName,
+      description: p.description,
+      url: `${siteOrigin}/work/${p.slug}`,
+      keywords: (p.techStack ?? []).join(', '),
+    },
+  })),
+};
 ---
+
+<script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} is:inline />
 
 <BaseLayout
   title="Work"
@@ -39,7 +62,7 @@ const categoryOrder: WorkCategory[] = ['product', 'marketing', 'development', 'a
     <SectionHeading
       eyebrow="Portfolio"
       title="Work"
-      subtitle="Live demos and growth automation systems organized by business outcome: capture leads, automate follow-up, book appointments, and measure ROI."
+      subtitle="It's one connected system: a click becomes a tracked lead, books an appointment, gets automated follow-up, and shows up as measured ROI. Explore each live module below."
     />
 
   {

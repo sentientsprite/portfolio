@@ -215,7 +215,7 @@ export function buildChatbotConfig(): ChatbotConfig {
           'vault',
           'vellum',
         ],
-        response: `Obsidian Based Second Brain (Zephyr) is my private AI knowledge system with an Obsidian-style vault: inbox capture, daily briefs, weekly connections, a graph view, and Chief of Staff chat. It's not a public live demo — but you can leave a suggestion at the bottom of the home page and I'll pull it into my vault.`,
+        response: `Obsidian Based Second Brain (Zephyr) is my private AI knowledge system with an Obsidian-style vault: inbox capture, daily briefs, weekly connections, a graph view, and Chief of Staff chat. Zephyr (via Obsidian) is a private tool I use locally — not a public app. If you have an idea, pattern, suggestion, or question for me, drop it in the suggestion box at the bottom of the home page.`,
         links: [
           { label: 'Leave a suggestion', href: withBase('/#suggest') },
           { label: 'Work detail', href: withBase('/work/zephyr') },

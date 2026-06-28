@@ -1,0 +1,39 @@
+---
+import JellyButton from './JellyButton.astro';
+import { withBase } from '../lib/url';
+import { site } from '../config/site';
+
+interface Props {
+  /** Project name, used to personalize the custom-build email subject. */
+  projectName: string;
+}
+
+const { projectName } = Astro.props;
+const customSubject = encodeURIComponent(`Custom version of ${projectName}`);
+const customBody = encodeURIComponent(
+  `Hi Raymond,\n\nI saw the ${projectName} demo and want a version tailored to my business.\n\nHere's what I'm working with:`,
+);
+const mailto = `mailto:${site.email}?subject=${customSubject}&body=${customBody}`;
+---
+
+<section
+  class="mt-14 overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-neutral-900/40 to-neutral-950 p-8 text-center backdrop-blur-sm sm:p-12"
+  data-animate
+>
+  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Like what you see?</p>
+  <h2 class="mx-auto mt-3 max-w-xl text-balance text-2xl font-semibold tracking-tight text-neutral-100 sm:text-3xl">
+    Let's build this into your business
+  </h2>
+  <p class="mx-auto mt-3 max-w-lg text-neutral-400">
+    Book a free build audit and I'll map how a system like this fits your funnel — or request a custom version of this exact tool.
+  </p>
+  <div class="mt-8 flex flex-wrap items-center justify-center gap-5">
+    <JellyButton href={withBase('/contact#intake')} eyebrow="Free intake" label="Book a build audit" />
+    <a
+      href={mailto}
+      class="rounded-full border border-neutral-700 px-8 py-3.5 text-sm font-medium text-neutral-200 transition hover:border-emerald-400/50 hover:text-emerald-300"
+    >
+      Request a custom version
+    </a>
+  </div>
+</section>

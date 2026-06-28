@@ -4,6 +4,7 @@ import { getMergedProjects, type MergedProject } from '../../lib/github';
 import { categoryLabels } from '../../data/projects';
 import { growthSystemById } from '../../data/growth-systems';
 import { withBase, resolveDemoUrl } from '../../lib/url';
+import WorkCTA from '../../components/WorkCTA.astro';
 
 export async function getStaticPaths() {
   const projects = await getMergedProjects();
@@ -178,6 +179,8 @@ const heroImage = project.screenshot ? withBase(`/${project.screenshot}`) : null
         </section>
       )
     }
+
+    {!isMeta && <WorkCTA projectName={project.displayName} />}
 
     <div class="mt-12 border-t border-neutral-800 pt-8">
       <a

@@ -8,7 +8,9 @@
  */
 import '../styles/global.css';
 import FoxAssistant from '../components/FoxAssistant.astro';
+import AccessibilityWidget from '../components/AccessibilityWidget.astro';
 import VaultSuggestionForm from '../components/VaultSuggestionForm.astro';
+import JellyButton from '../components/JellyButton.astro';
 import { site } from '../config/site';
 import { withBase } from '../lib/url';
 import { resolveDemoUrl, slugify } from '../lib/url';
@@ -17,6 +19,42 @@ import { growthSystemById } from '../data/growth-systems';
 
 const pageTitle = site.name;
 const description = site.description;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const ogImage = `${site.url}/${site.photo}`;
+
+// Visible FAQ — also emitted as FAQPage structured data for AI Overviews / Gemini.
+const faqs = [
+  {
+    q: 'What does Raymond King do?',
+    a: 'Raymond King is a Growth Automation Builder. He builds AI-assisted growth systems for business owners — conversion websites, CRM workflows, automated email and SMS follow-up, booking flows, and ROI dashboards — connected into one lead-to-revenue system.',
+  },
+  {
+    q: 'What is the Lead-to-Revenue Growth System?',
+    a: 'It is a connected 5-step stack: capture intent on a conversion landing page, book appointments instantly, sync and score leads in a CRM, nurture automatically with email and SMS, and measure ROI across channels with an attribution dashboard.',
+  },
+  {
+    q: 'Who is this for?',
+    a: 'Business owners, founders, agencies, and local service operators who get traffic but lose leads to manual follow-up, missed bookings, or unclear ROI.',
+  },
+  {
+    q: 'How do projects start?',
+    a: 'Through a short intake form on the contact page. You share your goals, current bottleneck, timeline, and budget, and Raymond follows up with a clear next step. There is no obligation.',
+  },
+  {
+    q: 'Can Raymond track which marketing channels actually pay off?',
+    a: 'Yes. The ROI Attribution Dashboard unifies Google Analytics, CRM revenue, and ad spend so you can see cost per lead, ROAS, and attributed revenue by channel in one place.',
+  },
+];
+
+const faqStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
 
 // Products & launches — three flagship products, in order.
 const showcaseOrder = ['fieldsync-scheduler', 'spryte', 'prana'];
@@ -141,9 +179,44 @@ const structuredData = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <title>{pageTitle}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqStructuredData)} />
+    <!-- Apply saved accessibility settings before first paint (no flash). -->
+    <script is:inline>
+      (function () {
+        var de = document.documentElement;
+        de.classList.add('js');
+        try {
+          var raw = sessionStorage.getItem('rk-a11y');
+          if (!raw) return;
+          var s = JSON.parse(raw);
+          if (s.theme === 'light') de.setAttribute('data-theme', 'light');
+          if (s.contrast) de.setAttribute('data-contrast', 'high');
+          if (s.font) de.setAttribute('data-font', 'readable');
+          if (s.links) de.setAttribute('data-links', 'underline');
+          if (s.motion) de.setAttribute('data-motion', 'reduce');
+          if (s.colorblind && s.colorblind !== 'none') de.setAttribute('data-colorblind', s.colorblind);
+          if (s.textScale) de.style.setProperty('--a11y-text-scale', String(s.textScale));
+        } catch (e) {}
+      })();
+    </script>
   </head>
 
   <body class="studio-body min-h-screen overflow-x-hidden bg-neutral-950 text-neutral-100 antialiased">
@@ -183,7 +256,7 @@ const structuredData = {
 
         <div class="flex items-center gap-3">
           <a
-            href="#contact"
+            href={withBase('/contact#intake')}
             class="hidden rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400 sm:inline-block"
           >
             Build my system
@@ -212,7 +285,7 @@ const structuredData = {
         <a href={withBase('/case-studies')} class="mobile-link">Case Studies</a>
         <a href={withBase('/blog')} class="mobile-link">Blog</a>
         <a href={withBase('/contact')} class="mobile-link">Contact</a>
-        <a href="#contact" class="mobile-link text-emerald-400">Build my system</a>
+        <a href={withBase('/contact#intake')} class="mobile-link text-emerald-400">Build my system</a>
       </div>
     </header>
 
@@ -243,15 +316,14 @@ const structuredData = {
             CRM workflows, automated follow-up, booking flows, and ROI dashboards that show what is working.
           </p>
 
-          <div data-hero="line" class="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <div data-hero="line" class="mt-10 flex flex-wrap items-center justify-center gap-5">
+            <JellyButton
+              href={withBase('/contact#intake')}
+              eyebrow="Free intake"
+              label="Build my growth system"
+            />
             <a
-              href="#contact"
-              class="group relative overflow-hidden rounded-full bg-emerald-500 px-7 py-3 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400"
-            >
-              <span class="relative z-10">Build my growth system</span>
-            </a>
-            <a
-              href={growthDetailUrl}
+              href="#growth"
               class="rounded-full border border-neutral-700 px-7 py-3 text-sm font-medium text-neutral-200 transition hover:border-emerald-400/50 hover:text-emerald-300"
             >
               See the growth system
@@ -293,90 +365,8 @@ const structuredData = {
         </div>
       </section>
 
-      <!-- ===================== SERVICES ===================== -->
-      <section id="services" class="relative mx-auto max-w-6xl px-4 py-28">
-        <div class="mb-16 max-w-2xl">
-          <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">What I do</p>
-          <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
-            Practical systems for getting, booking, and keeping leads.
-          </h2>
-        </div>
-
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((svc) => (
-            <article
-              data-reveal
-              data-tilt
-              class="tilt-card group relative rounded-2xl border border-neutral-800 bg-neutral-900/40 p-7 backdrop-blur-sm"
-            >
-              <div class="tilt-inner">
-                <div class="mb-5 grid h-12 w-12 place-items-center rounded-xl bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-400/20 transition group-hover:bg-emerald-500/20">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d={svc.icon} />
-                  </svg>
-                </div>
-                <h3 class="mb-2 text-lg font-medium text-neutral-100">{svc.title}</h3>
-                <p class="text-sm leading-relaxed text-neutral-400">{svc.body}</p>
-              </div>
-              <div class="card-glow"></div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <!-- ===================== SHOWCASE / GALLERY ===================== -->
-      <section id="showcase" class="relative mx-auto max-w-6xl px-4 py-28">
-        <div class="mb-16 flex flex-wrap items-end justify-between gap-6">
-          <div class="max-w-2xl">
-            <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">Selected work</p>
-            <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
-              Live demos that show how the systems work.
-            </h2>
-          </div>
-          <a
-            data-reveal
-            href={withBase('/work')}
-            class="inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-lg font-bold text-neutral-950 shadow-lg transition hover:bg-neutral-200"
-          >
-            All work
-            <span class="text-2xl leading-none">→</span>
-          </a>
-        </div>
-
-        <div class="grid gap-6 md:grid-cols-2">
-          {showcase.map((proj, i) => (
-            <a
-              href={proj.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-reveal
-              data-tilt
-              class="tilt-card group relative overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/40 p-8 backdrop-blur-sm"
-            >
-              <div class="tilt-inner">
-                <div class="mb-6 flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-neutral-800 bg-gradient-to-br from-neutral-900 to-neutral-950">
-                  <span class="showcase-orb" style={`--hue:${150 + i * 18}`}></span>
-                </div>
-                <h3 class="mb-2 text-xl font-medium text-neutral-100 transition group-hover:text-emerald-300">
-                  {proj.name}
-                </h3>
-                <p class="mb-5 line-clamp-2 text-sm leading-relaxed text-neutral-400">{proj.description}</p>
-                <div class="flex flex-wrap gap-2">
-                  {proj.tech.slice(0, 4).map((t) => (
-                    <span class="rounded-full border border-neutral-800 bg-neutral-950/60 px-2.5 py-1 text-[11px] text-neutral-400">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <div class="card-glow"></div>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      <!-- ===================== INTEGRATED GROWTH STACK (compact) ===================== -->
-      <section class="relative mx-auto max-w-6xl px-4 pb-20">
+      <!-- ===================== INTEGRATED GROWTH STACK (compact) — primary offer ===================== -->
+      <section id="growth" class="relative mx-auto max-w-6xl px-4 py-28">
         <div
           data-reveal
           class="overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/[0.07] via-neutral-900/50 to-neutral-950 p-7 sm:p-9"
@@ -454,6 +444,88 @@ const structuredData = {
         </div>
       </section>
 
+      <!-- ===================== SHOWCASE / GALLERY (live demos) ===================== -->
+      <section id="showcase" class="relative mx-auto max-w-6xl px-4 py-28">
+        <div class="mb-16 flex flex-wrap items-end justify-between gap-6">
+          <div class="max-w-2xl">
+            <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">Selected work</p>
+            <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
+              Live demos that show how the systems work.
+            </h2>
+          </div>
+          <a
+            data-reveal
+            href={withBase('/work')}
+            class="inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-lg font-bold text-neutral-950 shadow-lg transition hover:bg-neutral-200"
+          >
+            All work
+            <span class="text-2xl leading-none">→</span>
+          </a>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          {showcase.map((proj, i) => (
+            <a
+              href={proj.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-reveal
+              data-tilt
+              class="tilt-card group relative overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/40 p-8 backdrop-blur-sm"
+            >
+              <div class="tilt-inner">
+                <div class="mb-6 flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-neutral-800 bg-gradient-to-br from-neutral-900 to-neutral-950">
+                  <span class="showcase-orb" style={`--hue:${150 + i * 18}`}></span>
+                </div>
+                <h3 class="mb-2 text-xl font-medium text-neutral-100 transition group-hover:text-emerald-300">
+                  {proj.name}
+                </h3>
+                <p class="mb-5 line-clamp-2 text-sm leading-relaxed text-neutral-400">{proj.description}</p>
+                <div class="flex flex-wrap gap-2">
+                  {proj.tech.slice(0, 4).map((t) => (
+                    <span class="rounded-full border border-neutral-800 bg-neutral-950/60 px-2.5 py-1 text-[11px] text-neutral-400">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div class="card-glow"></div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <!-- ===================== SERVICES ===================== -->
+      <section id="services" class="relative mx-auto max-w-6xl px-4 py-28">
+        <div class="mb-16 max-w-2xl">
+          <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">What I do</p>
+          <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
+            Practical systems for getting, booking, and keeping leads.
+          </h2>
+        </div>
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((svc) => (
+            <article
+              data-reveal
+              data-tilt
+              class="tilt-card group relative rounded-2xl border border-neutral-800 bg-neutral-900/40 p-7 backdrop-blur-sm"
+            >
+              <div class="tilt-inner">
+                <div class="mb-5 grid h-12 w-12 place-items-center rounded-xl bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-400/20 transition group-hover:bg-emerald-500/20">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d={svc.icon} />
+                  </svg>
+                </div>
+                <h3 class="mb-2 text-lg font-medium text-neutral-100">{svc.title}</h3>
+                <p class="text-sm leading-relaxed text-neutral-400">{svc.body}</p>
+              </div>
+              <div class="card-glow"></div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <!-- ===================== ABOUT / TESTIMONIALS ===================== -->
       <section id="about" class="relative mx-auto max-w-6xl px-4 py-28">
         <div class="grid items-center gap-16 lg:grid-cols-2">
@@ -497,6 +569,32 @@ const structuredData = {
         </div>
       </section>
 
+      <!-- ===================== FAQ (answer-first content for AI Overviews) ===================== -->
+      <section id="faq" class="relative mx-auto max-w-3xl px-4 py-24">
+        <div class="mb-12 text-center">
+          <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">FAQ</p>
+          <h2 data-reveal class="text-3xl font-semibold tracking-tight sm:text-4xl">
+            Common questions
+          </h2>
+        </div>
+        <div class="space-y-3">
+          {faqs.map((f) => (
+            <details
+              data-reveal
+              class="group rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5 backdrop-blur-sm transition hover:border-emerald-500/30"
+            >
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-medium text-neutral-100">
+                {f.q}
+                <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-neutral-700 text-emerald-400 transition group-open:rotate-45">
+                  +
+                </span>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-neutral-400">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
       <!-- ===================== CTA ===================== -->
       <section id="contact" class="relative mx-auto max-w-6xl px-4 py-28">
         <div
@@ -509,18 +607,17 @@ const structuredData = {
           <p class="mx-auto mt-5 max-w-xl text-neutral-400">
             Tell me where leads are getting lost. I will help map the website, automation, CRM follow-up, and ROI tracking needed to close the loop.
           </p>
-          <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <div class="mt-10 flex flex-wrap items-center justify-center gap-5">
+            <JellyButton
+              href={withBase('/contact#intake')}
+              eyebrow="Free intake"
+              label="Build my growth system"
+            />
             <a
               href={`mailto:${site.email}`}
-              class="rounded-full bg-emerald-500 px-8 py-3.5 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400"
-            >
-              Build my growth system
-            </a>
-            <a
-              href={withBase('/contact')}
               class="rounded-full border border-neutral-700 px-8 py-3.5 text-sm font-medium text-neutral-200 transition hover:border-emerald-400/50 hover:text-emerald-300"
             >
-              Contact page
+              Or just email me
             </a>
           </div>
         </div>
@@ -549,6 +646,9 @@ const structuredData = {
 
     <!-- Persistent chat-assistant mascot (placeholder for the AI-FAQ widget) -->
     <FoxAssistant />
+
+    <!-- Site-wide accessibility settings (theme + assistive display options) -->
+    <AccessibilityWidget />
 
     <!-- ===================== STYLES ===================== -->
     <style>

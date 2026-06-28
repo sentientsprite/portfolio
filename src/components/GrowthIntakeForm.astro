@@ -1,0 +1,241 @@
+---
+/**
+ * GrowthIntakeForm.astro — qualification intake for the "Build my growth system" CTA.
+ *
+ * Static-site friendly: on submit it composes a structured email (mailto) to
+ * Raymond with all answers pre-filled, so there is no backend dependency or
+ * stored secret. Anchor id="intake" so CTAs can deep-link to it.
+ */
+import { site } from '../config/site';
+
+const needs = [
+  'New website or landing page',
+  'Lead capture + CRM setup',
+  'Booking / scheduling flow',
+  'Email & SMS follow-up automation',
+  'ROI / attribution dashboard',
+  'Not sure yet — help me scope it',
+];
+
+const timelines = ['ASAP', 'Next 1–3 months', '3–6 months', 'Just exploring'];
+const budgets = ['Not sure yet', 'Under $2k', '$2k–$5k', '$5k–$15k', '$15k+'];
+---
+
+<section
+  id="intake"
+  class="glow-card scroll-mt-24 overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/[0.08] via-neutral-900/50 to-neutral-950 p-6 sm:p-9"
+  data-intake
+  data-email={site.email}
+>
+  <p class="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">Free intake</p>
+  <h2 class="mt-2 text-2xl font-bold tracking-tight text-neutral-100 sm:text-3xl">
+    Build my growth system
+  </h2>
+  <p class="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-400">
+    Tell me where leads are getting lost. A few quick answers and I will map the
+    website, automation, CRM follow-up, and ROI tracking your business needs — then
+    follow up with a clear next step. No obligation.
+  </p>
+
+  <form class="mt-7 grid gap-5" data-intake-form novalidate>
+    <div class="grid gap-5 sm:grid-cols-2">
+      <div>
+        <label for="intake-name" class="mb-1.5 block text-xs font-medium text-neutral-400">
+          Name
+        </label>
+        <input
+          id="intake-name"
+          name="name"
+          type="text"
+          required
+          maxlength="80"
+          autocomplete="name"
+          placeholder="Your name"
+          class="w-full rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+        />
+      </div>
+      <div>
+        <label for="intake-email" class="mb-1.5 block text-xs font-medium text-neutral-400">
+          Email
+        </label>
+        <input
+          id="intake-email"
+          name="email"
+          type="email"
+          required
+          maxlength="120"
+          autocomplete="email"
+          placeholder="you@business.com"
+          class="w-full rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+        />
+      </div>
+    </div>
+
+    <div class="grid gap-5 sm:grid-cols-2">
+      <div>
+        <label for="intake-business" class="mb-1.5 block text-xs font-medium text-neutral-400">
+          Business name <span class="text-neutral-600">(optional)</span>
+        </label>
+        <input
+          id="intake-business"
+          name="business"
+          type="text"
+          maxlength="120"
+          autocomplete="organization"
+          placeholder="Company or brand"
+          class="w-full rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+        />
+      </div>
+      <div>
+        <label for="intake-website" class="mb-1.5 block text-xs font-medium text-neutral-400">
+          Current website <span class="text-neutral-600">(optional)</span>
+        </label>
+        <input
+          id="intake-website"
+          name="website"
+          type="text"
+          maxlength="160"
+          autocomplete="url"
+          placeholder="example.com"
+          class="w-full rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+        />
+      </div>
+    </div>
+
+    <fieldset>
+      <legend class="mb-2 block text-xs font-medium text-neutral-400">What do you need? (pick any)</legend>
+      <div class="grid gap-2 sm:grid-cols-2">
+        {needs.map((need) => (
+          <label class="flex cursor-pointer items-center gap-2.5 rounded-lg border border-neutral-800 bg-neutral-950/60 px-3 py-2.5 text-sm text-neutral-300 transition hover:border-emerald-500/30 hover:text-neutral-100">
+            <input type="checkbox" name="needs" value={need} class="h-4 w-4 shrink-0 accent-emerald-500" />
+            <span>{need}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+
+    <div>
+      <label for="intake-bottleneck" class="mb-1.5 block text-xs font-medium text-neutral-400">
+        What is the biggest bottleneck right now?
+      </label>
+      <textarea
+        id="intake-bottleneck"
+        name="bottleneck"
+        rows="4"
+        maxlength="2000"
+        placeholder="e.g. We get traffic but few leads, follow-up is manual, we can't tell which channels actually pay off…"
+        class="w-full resize-y rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+      ></textarea>
+    </div>
+
+    <div class="grid gap-5 sm:grid-cols-2">
+      <div>
+        <label for="intake-timeline" class="mb-1.5 block text-xs font-medium text-neutral-400">
+          Timeline
+        </label>
+        <select
+          id="intake-timeline"
+          name="timeline"
+          class="w-full rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+        >
+          {timelines.map((t) => <option value={t}>{t}</option>)}
+        </select>
+      </div>
+      <div>
+        <label for="intake-budget" class="mb-1.5 block text-xs font-medium text-neutral-400">
+          Budget range
+        </label>
+        <select
+          id="intake-budget"
+          name="budget"
+          class="w-full rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+        >
+          {budgets.map((b) => <option value={b}>{b}</option>)}
+        </select>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-4 pt-1">
+      <button
+        type="submit"
+        class="inline-flex items-center gap-2 rounded-full bg-emerald-500 px-7 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
+        data-intake-submit
+      >
+        Send my intake
+        <span aria-hidden="true">&rarr;</span>
+      </button>
+      <p class="text-xs text-neutral-500" data-intake-status aria-live="polite"></p>
+    </div>
+    <p class="text-[11px] leading-relaxed text-neutral-600">
+      Submitting opens your email app with the details pre-filled and sends to {site.email}.
+      Prefer to write directly? Email me anytime.
+    </p>
+  </form>
+</section>
+
+<script>
+  function initIntake() {
+    document.querySelectorAll<HTMLElement>('[data-intake]').forEach((root) => {
+      const form = root.querySelector<HTMLFormElement>('[data-intake-form]');
+      const status = root.querySelector('[data-intake-status]');
+      const email = root.dataset.email ?? '';
+      if (!form || form.dataset.bound) return;
+      form.dataset.bound = 'true';
+
+      const setStatus = (msg: string, tone: 'muted' | 'ok' | 'warn') => {
+        if (!status) return;
+        status.textContent = msg;
+        status.className =
+          tone === 'ok'
+            ? 'text-xs text-emerald-400'
+            : tone === 'warn'
+              ? 'text-xs text-amber-400'
+              : 'text-xs text-neutral-500';
+      };
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const data = new FormData(form);
+        const name = String(data.get('name') ?? '').trim();
+        const fromEmail = String(data.get('email') ?? '').trim();
+
+        if (!name || !fromEmail) {
+          setStatus('Please add your name and email so I can reply.', 'warn');
+          return;
+        }
+
+        const business = String(data.get('business') ?? '').trim();
+        const website = String(data.get('website') ?? '').trim();
+        const bottleneck = String(data.get('bottleneck') ?? '').trim();
+        const timeline = String(data.get('timeline') ?? '').trim();
+        const budget = String(data.get('budget') ?? '').trim();
+        const selectedNeeds = data.getAll('needs').map(String);
+
+        const lines = [
+          `Name: ${name}`,
+          `Email: ${fromEmail}`,
+          business ? `Business: ${business}` : null,
+          website ? `Website: ${website}` : null,
+          '',
+          'Needs:',
+          selectedNeeds.length ? selectedNeeds.map((n) => `  - ${n}`).join('\n') : '  - (not specified)',
+          '',
+          `Biggest bottleneck:\n${bottleneck || '  (not specified)'}`,
+          '',
+          `Timeline: ${timeline}`,
+          `Budget: ${budget}`,
+        ].filter((l) => l !== null);
+
+        const subject = `Growth system intake — ${business || name}`;
+        const body = lines.join('\n');
+        const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+        window.location.href = mailto;
+        setStatus('Opening your email app… if nothing happens, email me directly.', 'ok');
+      });
+    });
+  }
+
+  initIntake();
+  document.addEventListener('astro:page-load', initIntake);
+</script>
