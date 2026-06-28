@@ -184,6 +184,11 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'Prana brings marketing operations into one terminal-style workspace. It combines product information, competitor analysis, brand voice, AI chat, SEO/GEO recommendations, article workflows, Reddit/Hacker News opportunity feeds, and analytics into a single operating room for local growth.',
     techStack: ['AI Agents', 'Next.js', 'Tauri', 'SEO/GEO', 'Analytics'],
+    metrics: [
+      { value: '1', label: 'Unified CMO terminal' },
+      { value: '10x', label: 'Faster content workflows' },
+      { value: 'Live', label: 'Opportunity feeds' },
+    ],
   },
   {
     repoName: 'zephyr',
