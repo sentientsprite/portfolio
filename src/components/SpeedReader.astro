@@ -72,13 +72,15 @@
 </div>
 
 <style>
-  /* Anchored just under the top-left logo/home button, aligned to the
-     centered nav-shell's left edge (max-w-6xl + px-5). */
+  /* Anchored just under the top-right "Build my system" button, aligned to
+     the centered nav-shell's right edge (max-w-6xl + px-5). */
   .speed-widget {
     position: fixed;
-    left: max(20px, calc((100vw - 1152px) / 2 + 20px));
+    right: max(20px, calc((100vw - 1152px) / 2 + 20px));
     top: 70px;
     z-index: 60;
+    display: flex;
+    justify-content: flex-end;
   }
 
   /* Blue jelly button launcher — thin vertical profile. */
@@ -172,10 +174,10 @@
     }
   }
 
-  /* Compact box that drops straight down from under the curved tab. */
+  /* Compact box that drops straight down from under the launcher. */
   .speed-panel {
     position: fixed;
-    left: max(20px, calc((100vw - 1152px) / 2 + 20px));
+    right: max(20px, calc((100vw - 1152px) / 2 + 20px));
     top: 112px;
     z-index: 70;
     width: min(300px, calc(100vw - 40px));
@@ -337,14 +339,14 @@
 
   @media (max-width: 640px) {
     .speed-widget {
-      left: 16px;
+      right: 16px;
       top: 66px;
     }
     .speed-fab__body {
       padding: 0.24rem 0.85rem;
     }
     .speed-panel {
-      left: 16px;
+      right: 16px;
       top: 104px;
       width: calc(100vw - 32px);
     }
