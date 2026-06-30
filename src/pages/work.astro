@@ -48,6 +48,15 @@ const grouped = showroom.reduce<Record<string, typeof showroom>>((acc, project) 
 
 const categoryOrder: WorkCategory[] = ['automation', 'fun'];
 
+const sectionIntros: Partial<Record<WorkCategory, string>> = {
+  automation:
+    'Workflows that do the repetitive work — capturing leads, routing them, and sending follow-up — so the business runs without manual babysitting.',
+  fun: 'Side builds and experiments where I try new tech and ideas for the craft of it.',
+};
+
+const productIntro =
+  'Full product builds and working demos behind the marketing systems — apps and dashboards you can open, inspect, and judge directly.';
+
 const siteOrigin = 'https://sentientsprite.github.io/portfolio';
 const catalogProjects = projects.filter((p) => p.category !== 'meta');
 const itemListSchema = {
@@ -55,7 +64,7 @@ const itemListSchema = {
   '@type': 'ItemList',
   name: 'Raymond King — Work & Live Demos',
   description:
-    'Growth automation systems and live demos: websites, CRM workflows, booking flows, follow-up automation, and ROI dashboards.',
+    'Marketing systems and live demos: websites, CRM workflows, booking flows, follow-up automation, and attribution dashboards.',
   itemListElement: catalogProjects.map((p, i) => ({
     '@type': 'ListItem',
     position: i + 1,
@@ -74,13 +83,13 @@ const itemListSchema = {
 
 <BaseLayout
   title="Work"
-  description="Live demos and growth automation systems from Raymond King: websites, CRM workflows, booking flows, automation, and ROI dashboards for business owners."
+  description="Live demos and marketing systems from Raymond King: websites, CRM workflows, booking flows, automation, and attribution dashboards for business owners."
 >
   <div class="mx-auto max-w-6xl px-4 py-16">
     <SectionHeading
       eyebrow="Portfolio"
       title="Work"
-      subtitle="It's one connected system: a click becomes a tracked lead, books an appointment, gets automated follow-up, and shows up as measured ROI. Explore each live module below."
+      subtitle="This page is built around working demos: a click can become a tracked lead, move toward a booking, receive automated follow-up, and show up in attribution reporting. Explore each module below."
     />
 
   {
@@ -96,7 +105,8 @@ const itemListSchema = {
     {
       productSystems.length > 0 && (
         <section class="mb-16">
-          <h3 class="mb-6 text-xl font-semibold text-neutral-100" data-animate>Product Systems</h3>
+          <h3 class="mb-2 text-xl font-semibold text-neutral-100" data-animate>Product Systems</h3>
+          <p class="mb-6 max-w-2xl text-sm text-neutral-400" data-animate>{productIntro}</p>
           <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {productSystems.map((project) => (
               <ProjectCard project={project} />
@@ -112,7 +122,10 @@ const itemListSchema = {
         if (!items?.length) return null;
         return (
           <section class="mb-16">
-            <h3 class="mb-6 text-xl font-semibold text-neutral-100" data-animate>{categoryLabels[category]}</h3>
+            <h3 class="mb-2 text-xl font-semibold text-neutral-100" data-animate>{categoryLabels[category]}</h3>
+            {sectionIntros[category] && (
+              <p class="mb-6 max-w-2xl text-sm text-neutral-400" data-animate>{sectionIntros[category]}</p>
+            )}
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((project) => (
                 <ProjectCard project={project} />
@@ -126,9 +139,9 @@ const itemListSchema = {
     {
       meta.length > 0 && (
         <section class="border-t border-neutral-800 pt-12">
-          <h3 class="mb-2 text-lg font-semibold text-neutral-100">Web Design</h3>
-          <p class="mb-6 text-sm text-neutral-500">
-            Reusable UI patterns and interactive features built into this site — open a card for details, then try the live icons on any page.
+          <h3 class="mb-2 text-xl font-semibold text-neutral-100" data-animate>Web Design</h3>
+          <p class="mb-6 max-w-2xl text-sm text-neutral-400" data-animate>
+            Reusable UI patterns and interactive features I built into this site itself — every one is live right now. Open a card for the how-and-why, then try the real thing on any page.
           </p>
           <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {meta.map((project) => (

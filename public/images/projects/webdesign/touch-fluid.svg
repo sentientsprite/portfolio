@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" fill="none">
+  <rect width="1200" height="675" fill="#040707"/>
+  <defs>
+    <radialGradient id="b1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="b2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="b3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g style="mix-blend-mode:screen">
+    <circle cx="430" cy="300" r="240" fill="url(#b1)"/>
+    <circle cx="720" cy="360" r="280" fill="url(#b2)"/>
+    <circle cx="610" cy="220" r="190" fill="url(#b3)"/>
+    <circle cx="850" cy="240" r="150" fill="url(#b1)"/>
+  </g>
+  <!-- finger trail -->
+  <path d="M300 460 Q520 360 760 440" stroke="#ccfbf1" stroke-opacity="0.5" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <circle cx="760" cy="440" r="14" fill="#ccfbf1" fill-opacity="0.8"/>
+  <text x="60" y="620" fill="#fafafa" font-family="system-ui,sans-serif" font-size="40" font-weight="700">Touch-Reactive Fluid</text>
+</svg>

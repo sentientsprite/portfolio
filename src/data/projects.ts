@@ -46,9 +46,9 @@ export const projectOverrides: ProjectOverride[] = [
     demoPath: 'demos/growth-system/index.html',
     sourceUrl: '',
     description:
-      'Full-stack growth infrastructure: landing page capture, lead scoring, scheduler booking, nurture automation, prospect audits, and ROI attribution — all tracked from click to revenue.',
+      'Working marketing-system demo: landing page capture, lead scoring, scheduler booking, nurture automation, prospect audits, and attribution reporting.',
     details:
-      'This is the integrated story behind the individual demos. A business owner gets one connected system instead of disconnected tools: traffic lands on a conversion page, forms sync to the CRM with source attribution, high-intent leads book instantly through the scheduler, lower-intent leads enter automated nurture flows, sales gets scored prospect audits to prioritize outreach, and the ROI Attribution Dashboard closes the loop — tying Google Analytics, CRM revenue, and ad spend to channel-level ROI. Open the interactive showcase to walk the full customer journey, owner view, and tech stack.',
+      'This is the integrated story behind the individual demos. It shows how a business owner can replace disconnected tools with one connected workflow: traffic lands on a conversion page, forms sync to the CRM with source attribution, ready leads move toward booking through the scheduler, lower-intent leads enter automated nurture flows, sales gets scored prospect audits to prioritize outreach, and the attribution dashboard closes the reporting loop by tying Google Analytics, CRM revenue, and ad spend to channel-level visibility. Open the interactive showcase to walk the demo customer journey, owner view, and tech stack.',
     techStack: ['Landing Pages', 'HubSpot', 'Scheduling', 'Email Automation', 'ROI Attribution'],
   },
   {
@@ -59,12 +59,12 @@ export const projectOverrides: ProjectOverride[] = [
     growthSystemStage: 'Capture intent',
     demoPath: 'demos/landing-page/index.html',
     description:
-      'High-converting, SEO-optimized landing page for a wellness brand — built for speed and conversions.',
+      'Conversion-focused, SEO-aware landing page demo for a wellness brand — built for speed, clarity, and lead capture.',
     details:
-      'A fully responsive landing page template designed around conversion best practices: a benefit-driven hero, social proof, clear pricing, and a focused call-to-action. A/B tested copy and visuals drove a 45% lift in conversions for the original client. This is the top of the Lead-to-Revenue stack — where paid and organic traffic becomes a tracked lead.',
+      'A fully responsive landing page template designed around conversion best practices: a benefit-driven hero, social proof, clear pricing, and a focused call-to-action. Related case-study work showed a 45% conversion lift for a wellness landing-page redesign; this public demo uses representative content to show the pattern. This is the top of the Lead-to-Revenue stack — where paid and organic traffic becomes a tracked lead.',
     techStack: ['HTML', 'CSS', 'JavaScript', 'SEO'],
     metrics: [
-      { value: '45%', label: 'Conversion lift' },
+      { value: '45%', label: 'Case-study lift' },
       { value: '<1s', label: 'Load time' },
       { value: '100%', label: 'Mobile responsive' },
     ],
@@ -97,12 +97,12 @@ export const projectOverrides: ProjectOverride[] = [
     growthSystemStage: 'Nurture automatically',
     demoPath: 'demos/email-funnel/index.html',
     description:
-      'Interactive Zapier-HubSpot lead-scoring funnel that automated 80% of nurture emails.',
+      'Interactive Zapier-HubSpot lead-scoring funnel demo for automated nurture and follow-up routing.',
     details:
-      'Leads who are not ready to book enter segmented nurture sequences scored on behavior. High-intent contacts route to sales; everyone else gets automated follow-up. In the integrated stack, this layer keeps pipeline warm while the scheduler handles ready-to-buy leads.',
+      'Leads who are not ready to book enter segmented nurture sequences scored on behavior. High-intent contacts route to sales; everyone else gets automated follow-up. Related automation work has handled 80% of nurture emails in a case-study context; this demo shows the workflow pattern without exposing private client data.',
     techStack: ['Zapier', 'HubSpot', 'Klaviyo', 'Python'],
     metrics: [
-      { value: '80%', label: 'Follow-up automated' },
+      { value: '80%', label: 'Case-study automation' },
       { value: '24/7', label: 'Always-on nurture' },
       { value: '5 hrs/wk', label: 'Manual work saved' },
     ],
@@ -116,7 +116,7 @@ export const projectOverrides: ProjectOverride[] = [
     demoPath: 'demos/spryte-audit/index.html',
     sourceUrl: '',
     description:
-      'AI-assisted lead audit tool for turning prospect websites into scored opportunities and prioritized outreach recommendations.',
+      'AI-assisted lead audit demo for turning prospect websites into scored opportunities and prioritized outreach recommendations.',
     details:
       'Spryte helps sales and marketing prioritize who to pursue. It evaluates prospect websites, surfaces gaps, and outputs a scored opportunity with outreach angles. In the growth system, it complements inbound capture by giving outbound teams the same data-driven rigor.',
     techStack: ['Next.js', 'AI Audit', 'Lead Scoring', 'SEO', 'Zod'],
@@ -135,14 +135,14 @@ export const projectOverrides: ProjectOverride[] = [
     demoPath: 'demos/roi-attribution-dashboard/index.html',
     sourceUrl: '',
     description:
-      'Channel-level ROI dashboard that unifies Google Analytics, CRM revenue, and ad spend so owners see what actually drives profit.',
+      'Channel-level attribution dashboard demo that unifies Google Analytics, CRM revenue, and ad spend into one reporting view.',
     details:
-      'The measurement layer of the Lead-to-Revenue stack. This dashboard pulls session and conversion data from Google Analytics, closed-won revenue from the CRM, and spend from Google Ads and Meta into one view. Owners compare ROAS, cost per lead, and attributed revenue by channel — organic, paid search, paid social, email, and direct — without juggling five separate tools. Simulated demo data; production builds wire live GA4, HubSpot, and ad platform APIs.',
+      'The measurement layer of the Lead-to-Revenue stack. This dashboard shows how session and conversion data from Google Analytics, closed-won revenue from the CRM, and spend from Google Ads and Meta can sit in one view. Owners can compare ROAS, cost per lead, and attributed revenue by channel — organic, paid search, paid social, email, and direct — without juggling five separate tools. Demo data is simulated; production builds require live access to GA4, HubSpot, and ad platform APIs.',
     techStack: ['Google Analytics', 'HubSpot CRM', 'Google Ads', 'Meta Ads', 'Attribution'],
     metrics: [
       { value: '5\u21921', label: 'Tools unified' },
-      { value: '100%', label: 'Spend attributed' },
-      { value: 'Live', label: 'Channel ROI' },
+      { value: 'Demo', label: 'Spend modeled' },
+      { value: 'View', label: 'Channel reporting' },
     ],
   },
   {
@@ -164,6 +164,7 @@ export const projectOverrides: ProjectOverride[] = [
     displayName: 'Accessibility Suite',
     category: 'meta',
     featured: false,
+    screenshot: 'images/projects/webdesign/accessibility-suite.svg',
     demoUrl: 'https://sentientsprite.github.io/portfolio/',
     sourceUrl: '',
     description:
@@ -171,6 +172,11 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'A drop-in accessibility layer for any site. The headline control swaps the default dark theme for a standard white-background / black-text light mode by inverting the design-token color ramp, so the entire UI flips without rewriting components. Additional controls cover low-vision (text scaling, high contrast), dyslexia (legible typeface, looser line spacing), motor/vestibular (reduced motion), and color vision (protanopia / deuteranopia / tritanopia filters via SVG color matrices). Preferences apply before first paint to avoid a flash and persist for the browser session, so each new visit starts in dark mode. Try it live — tap the neon access icon at the bottom-left of this site.',
     techStack: ['Accessibility', 'WCAG', 'Tailwind v4', 'Design Tokens', 'TypeScript'],
+    metrics: [
+      { value: '7', label: 'Assistive controls' },
+      { value: '3', label: 'Color-vision filters' },
+      { value: '0', label: 'Flash on load' },
+    ],
   },
   {
     repoName: 'prana',
@@ -263,18 +269,25 @@ export const projectOverrides: ProjectOverride[] = [
     displayName: 'This Website',
     category: 'meta',
     featured: false,
+    screenshot: 'images/projects/webdesign/this-website.svg',
     demoUrl: 'https://sentientsprite.github.io/portfolio/',
     description:
       'The live showroom you are browsing — built with Astro and Tailwind CSS, deployed to GitHub Pages.',
     details:
       'This site is open source. It uses Astro for static, near-zero-JS pages, Tailwind for styling, Markdown content collections for writing, and a build-time GitHub API integration for stats.',
     techStack: ['Astro', 'Tailwind CSS', 'TypeScript'],
+    metrics: [
+      { value: '94', label: 'Lighthouse perf' },
+      { value: '0', label: 'Layout shift (CLS)' },
+      { value: 'Static', label: 'Near-zero JS' },
+    ],
   },
   {
     repoName: 'jelly-button',
     displayName: 'Jelly Button',
     category: 'meta',
     featured: false,
+    screenshot: 'images/projects/webdesign/jelly-button.svg',
     demoUrl: 'https://sentientsprite.github.io/portfolio/',
     sourceUrl: '',
     description:
@@ -282,25 +295,37 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'Inspired by tactile jelly CTAs on high-end landing pages, this component layers a raised glossy cap over a darker “socket” so the button visibly presses down on click. A reactive ripple originates from the exact pointer position, and a spring wobble animation retriggers on rapid taps. Used as the primary CTA across project pages and the homepage hero. Try it live — click any “Let\'s Build” or “Book a build audit” jelly button on this site.',
     techStack: ['CSS', '3D UI', 'Micro-interactions', 'Astro'],
+    metrics: [
+      { value: '0 KB', label: 'Extra JS deps' },
+      { value: 'Pure CSS', label: 'Depth + gloss' },
+      { value: 'Safe', label: 'Reduced-motion' },
+    ],
   },
   {
     repoName: 'speed-reader',
     displayName: 'Speed Reader',
     category: 'meta',
     featured: false,
+    screenshot: 'images/projects/webdesign/speed-reader.svg',
     demoUrl: 'https://sentientsprite.github.io/portfolio/',
     sourceUrl: '',
     description:
       'Spritz-style speed reading for any page: pulls all paragraph text and flashes it word-by-word at a chosen WPM, with the optimal recognition letter highlighted.',
     details:
-      'Adapted from Glance/OpenSpritz (MIT). Tap the blue S icon to open a reader bar that harvests visible <p> copy from the page main content, preprocesses words for punctuation-aware pacing, and displays each word with the Spritz pivot letter in emerald. WPM is adjustable (200–800) and saved for the session. Pause, resume, or close with Escape. No external APIs — a self-contained reader engine. Try it live — tap the S icon at the bottom-left of any page.',
+      'Adapted from Glance/OpenSpritz (MIT). Tap the blue speed-read button to open a reader bar that harvests visible <p> copy from the page main content, preprocesses words for punctuation-aware pacing, and displays each word with the Spritz pivot letter in emerald. WPM is adjustable (200–800) and saved for the session. Pause, resume, or close with Escape. No external APIs — a self-contained reader engine. Try it live — tap the speed-read button at the top-right of any page.',
     techStack: ['Glance/OpenSpritz', 'Spritz', 'TypeScript', 'Astro'],
+    metrics: [
+      { value: '200–800', label: 'WPM range' },
+      { value: '1 tap', label: 'On any page' },
+      { value: '0', label: 'External APIs' },
+    ],
   },
   {
     repoName: 'future-fox',
     displayName: 'Future.fox',
     category: 'meta',
     featured: false,
+    screenshot: 'images/projects/webdesign/future-fox.svg',
     demoUrl: 'https://sentientsprite.github.io/portfolio/',
     sourceUrl: '',
     description:
@@ -308,12 +333,18 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'Future.fox is a persistent site guide disguised as a Firefox-style mascot. The fox runs in 3 seconds after page load, watches pointer movement with obvious eye tracking, and dozes off after 5 seconds of mouse inactivity. Opening the chat reveals an intent-matched FAQ bot filled with portfolio content — services, growth system, demos, case studies, and contact paths — plus dynamic quick-reply chips and markdown-lite responses. Conversation state persists across page navigation for the session. Try it live — tap the fox at the bottom-right of any page.',
     techStack: ['Chatbot', 'Intent Matching', 'SVG Animation', 'Session Storage', 'Astro'],
+    metrics: [
+      { value: 'FAQ', label: 'Intent-matched bot' },
+      { value: 'Eyes', label: 'Track the cursor' },
+      { value: 'Session', label: 'Context kept' },
+    ],
   },
   {
     repoName: 'touch-fluid',
     displayName: 'Touch-Reactive Fluid',
     category: 'meta',
     featured: false,
+    screenshot: 'images/projects/webdesign/touch-fluid.svg',
     demoUrl: 'https://sentientsprite.github.io/portfolio/',
     sourceUrl: '',
     description:
@@ -321,5 +352,48 @@ export const projectOverrides: ProjectOverride[] = [
     details:
       'Inspired by WebGL fluid backgrounds but implemented as a ~150-line Canvas 2D layer — no heavy simulation, no extra dependencies. Several blobs drift with spring physics; touch and pointer movement add impulses and attraction, with a brighter cursor glow on mobile for obvious feedback. Sits between the atmospheric gradient and the Three.js neural-net canvas using screen blend mode. Respects reduced-motion settings and pauses when the tab is hidden. Try it live — drag your finger across the homepage hero on mobile.',
     techStack: ['Canvas 2D', 'Touch UX', 'Physics', 'Performance', 'TypeScript'],
+    metrics: [
+      { value: '~150', label: 'Lines of code' },
+      { value: '0', label: 'Dependencies' },
+      { value: 'Touch', label: 'Reactive on mobile' },
+    ],
+  },
+  {
+    repoName: 'magnetic-cta',
+    displayName: 'Magnetic CTAs',
+    category: 'meta',
+    featured: false,
+    screenshot: 'images/projects/webdesign/magnetic-cta.svg',
+    demoUrl: 'https://sentientsprite.github.io/portfolio/',
+    sourceUrl: '',
+    description:
+      'Primary buttons that gently lean toward your cursor as it approaches, then spring back when it leaves — a subtle "pull" that makes the key actions feel alive on desktop.',
+    details:
+      'A tiny pointer-tracking layer that gives the most important buttons a magnetic feel. As a fine pointer nears a target, the button translates a few pixels toward the cursor via CSS custom properties (no layout reflow), eased with a springy curve, and releases on pointer-leave. It only activates for fine pointers (mouse/trackpad), stays completely off for touch, and disables itself under reduced-motion preferences. Applied to the hero and project CTAs. Try it live — slowly move your mouse toward any green button on this site.',
+    techStack: ['Pointer Events', 'CSS Variables', 'Micro-interactions', 'TypeScript'],
+    metrics: [
+      { value: 'Desktop', label: 'Fine-pointer only' },
+      { value: '0', label: 'Layout shift' },
+      { value: 'Safe', label: 'Reduced-motion' },
+    ],
+  },
+  {
+    repoName: 'neural-hero',
+    displayName: '3D Neural Hero',
+    category: 'meta',
+    featured: false,
+    screenshot: 'images/projects/webdesign/neural-hero.svg',
+    demoUrl: 'https://sentientsprite.github.io/portfolio/',
+    sourceUrl: '',
+    description:
+      'The homepage signature: a live Three.js neural network of the lead-to-revenue pipeline — gradient nodes, organic curved edges, and pulses traveling the connections.',
+    details:
+      'The hero is a real-time WebGL scene built with Three.js that visualizes the growth system as a neural network. Nodes use a blue→purple gradient, connections are quadratic-bezier curves rather than straight lines for an organic feel, and occasional pulses travel along the edges. The layout stays vertical on both desktop and mobile for readability, holds to content width down the page, and is paired with GSAP/Lenis scroll motion. It is the one piece intentionally exclusive to the homepage — every other page inherits the lighter atmosphere + 2D fluid instead. Try it live — it is the animation behind the homepage headline.',
+    techStack: ['Three.js', 'WebGL', 'GSAP', 'Lenis', 'TypeScript'],
+    metrics: [
+      { value: 'WebGL', label: 'Real-time 3D' },
+      { value: 'Bezier', label: 'Organic edges' },
+      { value: 'Homepage', label: 'Signature hero' },
+    ],
   },
 ];

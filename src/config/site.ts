@@ -1,10 +1,10 @@
 export const site = {
   name: 'Raymond King',
-  title: 'Growth Automation Builder',
+  title: 'Marketing Systems Builder',
   url: 'https://sentientsprite.github.io/portfolio',
   photo: 'images/raymond-king.png',
   description:
-    'Raymond King builds AI-assisted growth systems that help businesses capture leads, automate follow-up, book appointments, and measure ROI.',
+    'Raymond King builds practical marketing systems that connect websites, CRM workflows, follow-up automation, booking flows, and reporting dashboards.',
   githubUsername: 'sentientsprite',
   email: 'raymondtheking@proton.me',
   social: {
@@ -16,16 +16,16 @@ export const site = {
   /** Public intake for Zephyr portfolio suggestions (API only — not the full app). */
   zephyrSuggestApi: 'https://zephyr-lyart-beta.vercel.app/api/suggest',
   skills: [
-    'Growth Automation',
+    'Marketing Systems',
     'Lead-to-Revenue Systems',
     'Conversion Websites',
     'CRM Workflows',
     'Email & SMS Automation',
     'Google Analytics',
     'Google Ads',
-    'ROI Dashboards',
-    'AI-Assisted Tools',
+    'Attribution Dashboards',
+    'AI-Assisted Workflows',
     'SEO & SEM',
   ],
-  bio: `I build AI-assisted growth systems for business owners who need more than a website. My work connects conversion pages, CRM workflows, email follow-up, booking flows, and ROI dashboards so leads are captured, nurtured, booked, and measured.`,
+  bio: `I build practical marketing systems for business owners who need more than a website. My work connects conversion pages, CRM workflows, email follow-up, booking flows, and reporting dashboards so leads are captured, followed up with, booked, and measured clearly.`,
 } as const;

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" fill="none">
+  <rect width="1200" height="675" fill="#050709"/>
+  <rect width="1200" height="675" fill="url(#bg)" opacity="0.9"/>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#1d4ed8" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#050709" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="260" y="260" width="680" height="150" rx="20" fill="#0a0f1a" stroke="#3b82f6" stroke-opacity="0.35"/>
+  <line x1="600" y1="270" x2="600" y2="296" stroke="#60a5fa" stroke-width="3"/>
+  <line x1="600" y1="374" x2="600" y2="400" stroke="#60a5fa" stroke-width="3"/>
+  <text x="600" y="352" text-anchor="middle" font-family="ui-monospace,monospace" font-size="56" font-weight="800">
+    <tspan fill="#e5edff">refac</tspan><tspan fill="#34d399">t</tspan><tspan fill="#e5edff">oring</tspan>
+  </text>
+  <rect x="180" y="320" width="60" height="6" rx="3" fill="#3b82f6" fill-opacity="0.5"/>
+  <rect x="150" y="340" width="90" height="6" rx="3" fill="#3b82f6" fill-opacity="0.3"/>
+  <rect x="960" y="320" width="60" height="6" rx="3" fill="#3b82f6" fill-opacity="0.5"/>
+  <rect x="960" y="340" width="90" height="6" rx="3" fill="#3b82f6" fill-opacity="0.3"/>
+  <text x="600" y="200" text-anchor="middle" fill="#93c5fd" font-family="ui-monospace,monospace" font-size="20" letter-spacing="3">450 WPM &#183; SPRITZ</text>
+  <text x="60" y="620" fill="#fafafa" font-family="system-ui,sans-serif" font-size="40" font-weight="700">Speed Reader</text>
+</svg>

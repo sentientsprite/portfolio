@@ -27,23 +27,23 @@ const ogImage = `${site.url}/${site.photo}`;
 const faqs = [
   {
     q: 'What does Raymond King do?',
-    a: 'Raymond King is a Growth Automation Builder. He builds AI-assisted growth systems for business owners — conversion websites, CRM workflows, automated email and SMS follow-up, booking flows, and ROI dashboards — connected into one lead-to-revenue system.',
+    a: 'Raymond King is a Marketing Systems Builder. He builds practical systems for business owners — conversion websites, CRM workflows, automated email and SMS follow-up, booking flows, and reporting dashboards — connected into one lead-to-revenue workflow.',
   },
   {
     q: 'What is the Lead-to-Revenue Growth System?',
-    a: 'It is a connected 5-step stack: capture intent on a conversion landing page, book appointments instantly, sync and score leads in a CRM, nurture automatically with email and SMS, and measure ROI across channels with an attribution dashboard.',
+    a: 'It is a connected 5-step demo stack: capture intent on a conversion landing page, support appointment booking, sync and score leads in a CRM, nurture automatically with email and SMS, and report channel performance with an attribution dashboard.',
   },
   {
     q: 'Who is this for?',
-    a: 'Business owners, founders, agencies, and local service operators who get traffic but lose leads to manual follow-up, missed bookings, or unclear ROI.',
+    a: 'Business owners, founders, agencies, and local service operators who get traffic but lose leads to manual follow-up, missed bookings, or unclear reporting.',
   },
   {
     q: 'How do projects start?',
     a: 'Through a short intake form on the contact page. You share your goals, current bottleneck, timeline, and budget, and Raymond follows up with a clear next step. There is no obligation.',
   },
   {
-    q: 'Can Raymond track which marketing channels actually pay off?',
-    a: 'Yes. The ROI Attribution Dashboard unifies Google Analytics, CRM revenue, and ad spend so you can see cost per lead, ROAS, and attributed revenue by channel in one place.',
+    q: 'Can Raymond help track which marketing channels are working?',
+    a: 'Yes. The attribution dashboard demo shows how Google Analytics, CRM revenue, and ad spend can be brought into one reporting view for cost per lead, ROAS, and attributed revenue by channel. Demo data is simulated; production builds require access to the client tools.',
   },
 ];
 
@@ -89,7 +89,7 @@ const growthDetailUrl = withBase('/work/growth-system');
 const services = [
   {
     title: 'Lead-to-Revenue Systems',
-    body: 'Landing pages, CRM capture, booking flows, nurture automation, and ROI dashboards connected into one practical growth stack.',
+    body: 'Landing pages, CRM capture, booking flows, nurture automation, and reporting dashboards connected into one practical marketing stack.',
     icon: 'M21 21l-4.35-4.35M11 19a8 8 0 110-16 8 8 0 010 16z',
   },
   {
@@ -98,8 +98,8 @@ const services = [
     icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
   },
   {
-    title: 'AI-Assisted Automation',
-    body: 'Workflow automation for forms, CRM updates, lead scoring, follow-up, reminders, and handoffs that would otherwise eat the day.',
+    title: 'AI-Assisted Workflows',
+    body: 'Practical workflow support for forms, CRM updates, lead scoring, follow-up, reminders, and handoffs that would otherwise eat the day.',
     icon: 'M13 10V3L4 14h7v7l9-11h-7z',
   },
   {
@@ -113,24 +113,24 @@ const services = [
     icon: 'M12 2a10 10 0 100 20 10 10 0 000-20zM12 8v4l3 3',
   },
   {
-    title: 'Analytics & ROI Tracking',
-    body: 'Dashboards that connect traffic, leads, booked appointments, ad spend, and CRM revenue into a clear story of what is working.',
+    title: 'Analytics & Attribution',
+    body: 'Dashboards that connect traffic, leads, booked appointments, ad spend, and CRM revenue into clearer channel reporting.',
     icon: 'M4 19h16M7 16V8m5 8V4m5 12v-6',
   },
 ];
 
 const stats = [
-  { value: '45%', label: 'Avg. conversion lift' },
-  { value: '80%', label: 'Nurture emails automated' },
+  { value: '45%', label: 'Case-study lift' },
+  { value: '80%', label: 'Case-study automation' },
   { value: '5', label: 'Growth-system modules' },
-  { value: 'ROI', label: 'Tracked to revenue' },
+  { value: 'Demo', label: 'Attribution view' },
 ];
 
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
   '@id': `${site.url}/#raymond-king`,
-  name: 'Raymond King - Growth Automation Builder',
+  name: 'Raymond King - Marketing Systems Builder',
   url: site.url,
   description,
   email: site.email,
@@ -146,28 +146,28 @@ const structuredData = {
   areaServed: 'United States',
   audience: {
     '@type': 'BusinessAudience',
-    audienceType: 'Business owners who need leads, automation, booking flows, CRM follow-up, and ROI tracking',
+    audienceType: 'Business owners who need lead capture, automation, booking flows, CRM follow-up, and clearer marketing reporting',
   },
   serviceType: [
     'Lead-to-revenue growth systems',
     'Conversion websites and landing pages',
-    'AI-assisted workflow automation',
+    'AI-assisted workflow support',
     'CRM and follow-up automation',
-    'Analytics and ROI dashboards',
+    'Analytics and attribution dashboards',
   ],
   makesOffer: [
     {
       '@type': 'Offer',
       name: 'Lead-to-Revenue Growth System',
       description:
-        'A connected growth stack that captures leads, syncs CRM data, books appointments, automates follow-up, and measures channel ROI.',
+        'A connected marketing stack that captures leads, syncs CRM data, supports booking, automates follow-up, and reports channel performance.',
       url: `${site.url}/work/growth-system`,
     },
     {
       '@type': 'Offer',
       name: 'Conversion Website and Automation Build',
       description:
-        'A high-converting website or landing page connected to forms, CRM workflows, and follow-up automation.',
+        'A conversion-focused website or landing page connected to forms, CRM workflows, and follow-up automation.',
       url: `${site.url}/contact`,
     },
   ],
@@ -250,7 +250,7 @@ const structuredData = {
       >
         <a href="#hero" class="group flex items-center gap-2 font-semibold tracking-tight">
           <span class="grid h-8 w-8 place-items-center rounded-lg bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-400/30 transition group-hover:bg-emerald-500/25">RK</span>
-          <span class="hidden text-sm text-neutral-200 sm:inline">{site.name} · Growth Automation</span>
+          <span class="hidden text-sm text-neutral-200 sm:inline">{site.name} · Marketing Systems</span>
         </a>
 
         <nav class="hidden items-center gap-7 md:flex" aria-label="Main">
@@ -304,13 +304,13 @@ const structuredData = {
             class="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/5 px-4 py-1.5 text-xs uppercase tracking-[0.3em] text-emerald-300"
           >
             <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400"></span>
-            Growth Automation Builder
+            Marketing Systems Builder
           </p>
 
           <h1 class="text-balance text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl md:text-8xl">
             <span data-hero="line" class="block">Turn traffic into</span>
             <span data-hero="line" class="block bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 bg-clip-text text-transparent">
-              booked revenue
+              booked leads
             </span>
           </h1>
 
@@ -318,8 +318,9 @@ const structuredData = {
             data-hero="line"
             class="mx-auto mt-7 max-w-2xl text-pretty text-base text-neutral-400 sm:text-lg"
           >
-            I build AI-assisted growth systems for business owners: conversion websites,
-            CRM workflows, automated follow-up, booking flows, and ROI dashboards that show what is working.
+            I build practical marketing systems — conversion sites, automated follow-up,
+            booking flows, and reporting dashboards — that help more leads get captured,
+            followed up with, and understood.
           </p>
 
           <div data-hero="line" class="mt-10 flex flex-wrap items-center justify-center gap-5">
@@ -338,10 +339,11 @@ const structuredData = {
           </div>
 
           <section class="sr-only" aria-label="AI-readable portfolio summary">
-            Raymond King is a Growth Automation Builder who helps business owners
-            capture leads, automate follow-up, book appointments, and measure ROI.
+            Raymond King is a Marketing Systems Builder who helps business owners
+            capture leads, automate follow-up, support appointment booking, and improve
+            marketing reporting.
             Services include conversion websites, lead-to-revenue growth systems,
-            AI-assisted automation, CRM workflows, email and SMS follow-up, and
+            AI-assisted workflows, CRM workflows, email and SMS follow-up, and
             analytics dashboards. Contact Raymond King at {site.email}.
           </section>
         </div>
@@ -446,7 +448,7 @@ const structuredData = {
           <div class="max-w-2xl">
             <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">Selected work</p>
             <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
-              Live demos that shows how the tools works.
+              Live demos that show how the tools work.
             </h2>
           </div>
           <div data-reveal>
@@ -523,7 +525,7 @@ const structuredData = {
           <div>
             <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">About</p>
             <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
-              One operator, full stack of growth.
+              One operator, practical marketing systems.
             </h2>
             <p data-reveal class="mt-6 text-pretty leading-relaxed text-neutral-400">
               {site.bio}
@@ -593,10 +595,10 @@ const structuredData = {
           class="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-neutral-900/40 to-neutral-950 p-12 text-center backdrop-blur-sm sm:p-20"
         >
           <h2 class="mx-auto max-w-2xl text-balance text-4xl font-semibold tracking-tight sm:text-6xl">
-            Ready to turn more leads into booked revenue?
+            Ready to find where leads are getting lost?
           </h2>
           <p class="mx-auto mt-5 max-w-xl text-neutral-400">
-            Tell me where leads are getting lost. I will help map the website, automation, CRM follow-up, and ROI tracking needed to close the loop.
+            Tell me where leads are slipping through. In a free consult we review the current funnel, identify the bottleneck, and decide whether a website, automation, booking, or reporting fix is the right next step.
           </p>
           <div class="mt-10 flex flex-wrap items-center justify-center gap-5">
             <JellyButton

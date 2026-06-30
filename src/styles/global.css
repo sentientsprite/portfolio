@@ -19,31 +19,6 @@ body {
    Design system — dark futuristic theme shared across the whole site.
    =========================================================================== */
 
-/* --- Ambient page background (fixed, sits behind all content) --- */
-.site-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(60% 50% at 50% -5%, rgba(16, 185, 129, 0.1), transparent 70%),
-    radial-gradient(45% 45% at 85% 12%, rgba(20, 184, 166, 0.07), transparent 70%),
-    radial-gradient(55% 55% at 8% 92%, rgba(16, 185, 129, 0.05), transparent 70%),
-    #0a0a0a;
-}
-/* Subtle perspective grid, faded out toward the edges */
-.site-bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 64px 64px;
-  -webkit-mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 25%, transparent 75%);
-  mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 25%, transparent 75%);
-}
-
 /* --- Homepage atmosphere + 2D touch fluid, shared on every page (no 3D) --- */
 .bg-atmosphere {
   background:
@@ -331,18 +306,6 @@ html[data-theme="light"] .text-emerald-300 {
 }
 
 /* Custom (hardcoded) dark surfaces → light equivalents. */
-html[data-theme="light"] .site-bg {
-  background:
-    radial-gradient(60% 50% at 50% -5%, rgba(16, 185, 129, 0.12), transparent 70%),
-    radial-gradient(45% 45% at 85% 12%, rgba(20, 184, 166, 0.1), transparent 70%),
-    radial-gradient(55% 55% at 8% 92%, rgba(16, 185, 129, 0.08), transparent 70%),
-    #f7f8f8;
-}
-html[data-theme="light"] .site-bg::before {
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
-}
 html[data-theme="light"] .bg-atmosphere {
   background:
     radial-gradient(60% 50% at 50% 0%, rgba(16, 185, 129, 0.12), transparent 70%),

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" fill="none">
+  <rect width="1200" height="675" fill="#050708"/>
+  <rect width="1200" height="675" fill="url(#bg)" opacity="0.9"/>
+  <defs>
+    <radialGradient id="bg" cx="55%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#15803d" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#050708" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fur" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+  </defs>
+  <rect x="640" y="210" width="380" height="120" rx="24" fill="#0a140d" stroke="#22c55e" stroke-opacity="0.35"/>
+  <text x="668" y="262" fill="#86efac" font-family="system-ui,sans-serif" font-size="22" font-weight="600">Hi! Ask me anything</text>
+  <text x="668" y="296" fill="#737373" font-family="system-ui,sans-serif" font-size="18">about the work &#8594;</text>
+  <g transform="translate(360 360)">
+    <path d="M-110 -40 L-150 -130 L-70 -80 Z" fill="url(#fur)"/>
+    <path d="M110 -40 L150 -130 L70 -80 Z" fill="url(#fur)"/>
+    <path d="M0 120 C-130 90 -130 -60 0 -90 C130 -60 130 90 0 120 Z" fill="url(#fur)"/>
+    <path d="M0 120 C-60 100 -60 20 0 0 C60 20 60 100 0 120 Z" fill="#dcfce7"/>
+    <circle cx="-45" cy="0" r="16" fill="#052e16"/>
+    <circle cx="45" cy="0" r="16" fill="#052e16"/>
+    <circle cx="-40" cy="-4" r="5" fill="#fff"/>
+    <circle cx="50" cy="-4" r="5" fill="#fff"/>
+    <circle cx="0" cy="58" r="11" fill="#052e16"/>
+  </g>
+  <text x="60" y="620" fill="#fafafa" font-family="system-ui,sans-serif" font-size="40" font-weight="700">Future.fox</text>
+</svg>

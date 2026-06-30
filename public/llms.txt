@@ -1,30 +1,35 @@
-# Raymond King — Growth Automation Builder
+# Raymond King — Marketing Systems Builder
 
-> Raymond King builds AI-assisted growth systems that help business owners
-> capture leads, automate follow-up, book appointments, and measure ROI.
-> The work spans conversion websites, CRM workflows, email/SMS automation,
-> booking flows, and ROI/attribution dashboards — connected into one
-> lead-to-revenue system rather than disconnected tools.
+> Raymond King builds practical marketing systems that help business owners
+> capture leads, automate follow-up, support appointment booking, and improve
+> reporting. The work spans conversion websites, CRM workflows, email/SMS
+> automation, booking flows, and attribution dashboards — connected into one
+> lead-to-revenue workflow rather than disconnected tools.
 
 ## Who this is for
 Business owners, founders, agencies, and operators who get traffic but lose
-leads to manual follow-up, missed bookings, or unclear ROI.
+leads to manual follow-up, missed bookings, or unclear reporting.
 
 ## Core offer: Lead-to-Revenue Growth System
-A connected 5-step stack:
+A connected 5-step demo stack:
 1. Capture intent — conversion landing page + form capture
 2. Book instantly — scheduling / booking flow
 3. CRM + lead scoring — route and prioritize leads automatically
 4. Nurture automatically — email & SMS follow-up sequences
-5. Measure ROI — attribution dashboard tying Google Analytics, CRM revenue, and ad spend to channel-level ROI
+5. Report attribution — dashboard tying Google Analytics, CRM revenue, and ad spend to channel-level reporting
 
 ## Services
 - Lead-to-revenue growth systems
 - Conversion websites and landing pages
-- AI-assisted workflow automation
+- AI-assisted workflow support
 - CRM and follow-up automation (email + SMS)
-- Analytics and ROI/attribution dashboards
+- Analytics and attribution dashboards
 - Interactive tools and product demos
+
+## Demo note
+Public demos use representative or simulated data where needed. Production
+builds require access to the client's live tools such as GA4, CRM, ad accounts,
+email/SMS platforms, and booking software.
 
 ## Key pages
 - Home: https://sentientsprite.github.io/portfolio/

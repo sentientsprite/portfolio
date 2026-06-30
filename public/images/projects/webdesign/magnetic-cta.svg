@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" fill="none">
+  <rect width="1200" height="675" fill="#060509"/>
+  <rect width="1200" height="675" fill="url(#bg)" opacity="0.9"/>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#6d28d9" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#060509" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="btn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <!-- pulled button, slightly offset toward cursor -->
+  <rect x="420" y="290" width="360" height="100" rx="50" fill="url(#btn)" transform="translate(26 -10)"/>
+  <text x="600" y="346" text-anchor="middle" fill="#04261b" font-family="system-ui,sans-serif" font-size="30" font-weight="800" transform="translate(26 -10)">Book a build audit</text>
+  <!-- magnetic field rings -->
+  <circle cx="790" cy="300" r="120" fill="none" stroke="#a78bfa" stroke-opacity="0.25" stroke-width="3" stroke-dasharray="6 12"/>
+  <circle cx="790" cy="300" r="180" fill="none" stroke="#a78bfa" stroke-opacity="0.15" stroke-width="3" stroke-dasharray="6 16"/>
+  <!-- pull vector -->
+  <path d="M880 360 L805 312" stroke="#c4b5fd" stroke-width="4" stroke-linecap="round"/>
+  <!-- cursor -->
+  <path d="M880 350 L880 410 L897 393 L908 416 L918 411 L907 389 L930 389 Z" fill="#ffffff"/>
+  <text x="600" y="200" text-anchor="middle" fill="#c4b5fd" font-family="ui-monospace,monospace" font-size="20" letter-spacing="3">CURSOR-AWARE CTA</text>
+  <text x="60" y="620" fill="#fafafa" font-family="system-ui,sans-serif" font-size="40" font-weight="700">Magnetic CTAs</text>
+</svg>

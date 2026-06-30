@@ -28,30 +28,30 @@ export const growthSystems: GrowthSystem[] = [
   {
     id: 'lead-to-revenue',
     name: 'Lead-to-Revenue Growth System',
-    tagline: 'From click to customer — tracked, automated, and measurable.',
+    tagline: 'From click to lead — captured, followed up with, and reported clearly.',
     pitch:
-      'A full-stack growth stack for business owners who need more than a website. Capture intent on a conversion landing page, score and route leads automatically, book appointments without phone tag, nurture prospects who are not ready yet, audit new opportunities with data, and measure ROI across every channel in one attribution dashboard — all connected through CRM sync and analytics.',
+      'A working marketing-system demo for business owners who need more than a website. It shows how a conversion landing page, CRM sync, booking flow, follow-up automation, prospect audit, and attribution dashboard can fit together so leads are captured, routed, followed up with, and reported clearly.',
     salesPitch:
-      'More than a website — a system that turns clicks into booked revenue, then proves which channels actually pay off with GA4, CRM, and ad spend in one ROI view.',
+      'More than a website — a demoable system that shows how clicks become leads, how follow-up gets handled, and how GA4, CRM, and ad spend can feed one attribution view.',
     demoPath: 'demos/growth-system/index.html',
     modules: [
       {
         repoName: 'landing-page-template',
         role: 'capture',
         stageLabel: 'Capture intent',
-        ownerBenefit: 'High-converting landing pages with tracked forms and clear CTAs.',
+        ownerBenefit: 'Conversion-focused landing pages with tracked forms and clear CTAs.',
       },
       {
         repoName: 'fieldsync-scheduler',
         role: 'convert',
         stageLabel: 'Book instantly',
-        ownerBenefit: 'Self-serve scheduling that reduces drop-off and fills the calendar.',
+        ownerBenefit: 'Self-serve scheduling that reduces friction between interest and booking.',
       },
       {
         repoName: 'email-automation',
         role: 'nurture',
         stageLabel: 'Nurture automatically',
-        ownerBenefit: 'Behavior-based email flows that follow up 24/7 without manual chasing.',
+        ownerBenefit: 'Behavior-based email flows that keep follow-up from becoming manual chasing.',
       },
       {
         repoName: 'spryte',
@@ -62,15 +62,15 @@ export const growthSystems: GrowthSystem[] = [
       {
         repoName: 'roi-attribution-dashboard',
         role: 'measure',
-        stageLabel: 'Measure ROI',
-        ownerBenefit: 'One dashboard tying Google Analytics, CRM revenue, and ad spend to channel-level ROI.',
+        stageLabel: 'Report attribution',
+        ownerBenefit: 'One dashboard tying Google Analytics, CRM revenue, and ad spend to channel-level reporting.',
       },
     ],
     outcomes: [
-      { value: '45%', label: 'Conversion lift' },
-      { value: '80%', label: 'Follow-up automated' },
-      { value: '40%', label: 'Faster response' },
-      { value: '100%', label: 'Attribution tracked' },
+      { value: '5', label: 'Connected demos' },
+      { value: 'CRM', label: 'Sync model' },
+      { value: '24/7', label: 'Follow-up flow' },
+      { value: 'Demo', label: 'Attribution view' },
     ],
   },
 ];

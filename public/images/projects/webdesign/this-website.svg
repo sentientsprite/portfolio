@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" fill="none">
+  <rect width="1200" height="675" fill="#050708"/>
+  <rect width="1200" height="675" fill="url(#bg)" opacity="0.9"/>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.14"/>
+      <stop offset="60%" stop-color="#059669" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#050708" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- browser frame -->
+  <rect x="240" y="150" width="720" height="380" rx="18" fill="#0a0f0d" stroke="#ffffff" stroke-opacity="0.08"/>
+  <rect x="240" y="150" width="720" height="56" rx="18" fill="#ffffff" fill-opacity="0.04"/>
+  <circle cx="280" cy="178" r="9" fill="#f87171"/>
+  <circle cx="312" cy="178" r="9" fill="#fbbf24"/>
+  <circle cx="344" cy="178" r="9" fill="#34d399"/>
+  <rect x="400" y="166" width="520" height="24" rx="12" fill="#ffffff" fill-opacity="0.06"/>
+  <text x="424" y="184" fill="#6ee7b7" font-family="ui-monospace,monospace" font-size="15">sentientsprite.github.io/portfolio</text>
+  <!-- content -->
+  <rect x="280" y="240" width="280" height="28" rx="6" fill="#34d399" fill-opacity="0.7"/>
+  <rect x="280" y="288" width="420" height="16" rx="6" fill="#ffffff" fill-opacity="0.12"/>
+  <rect x="280" y="316" width="360" height="16" rx="6" fill="#ffffff" fill-opacity="0.1"/>
+  <rect x="280" y="372" width="160" height="46" rx="23" fill="#10b981"/>
+  <rect x="740" y="250" width="180" height="180" rx="14" fill="#ffffff" fill-opacity="0.04" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text x="830" y="330" text-anchor="middle" fill="#6ee7b7" font-family="ui-monospace,monospace" font-size="60" font-weight="700">&lt;/&gt;</text>
+  <text x="830" y="370" text-anchor="middle" fill="#737373" font-family="ui-monospace,monospace" font-size="16">Astro</text>
+  <text x="60" y="620" fill="#fafafa" font-family="system-ui,sans-serif" font-size="40" font-weight="700">This Website</text>
+</svg>

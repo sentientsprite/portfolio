@@ -116,7 +116,7 @@ export function buildChatbotConfig(): ChatbotConfig {
           'what can you help with',
           'what do you specialize in',
         ],
-        response: `Raymond builds AI-assisted growth systems for business owners who need more leads, cleaner follow-up, booked appointments, and ROI visibility. Typical engagements cover:\n\n• Lead-to-revenue systems — landing page, CRM capture, scheduler, nurture, and ROI dashboard\n• Conversion websites — fast pages built around inquiry, booking, purchase, or qualified lead capture\n• AI-assisted automation — forms, CRM updates, lead scoring, reminders, and handoffs\n• CRM and follow-up — email/SMS nurture, lead routing, appointment reminders, and pipeline hygiene\n• Analytics and ROI tracking — dashboards that connect traffic, ad spend, leads, bookings, and CRM revenue\n• Interactive tools and demos — practical proof-of-concepts for founders and business owners`,
+        response: `Raymond builds practical marketing systems for business owners who need cleaner lead capture, follow-up, booking flows, and reporting. Typical engagements cover:\n\n• Lead-to-revenue systems — landing page, CRM capture, scheduler, nurture, and attribution dashboard\n• Conversion websites — fast pages built around inquiry, booking, purchase, or qualified lead capture\n• AI-assisted workflows — forms, CRM updates, lead scoring, reminders, and handoffs\n• CRM and follow-up — email/SMS nurture, lead routing, appointment reminders, and pipeline hygiene\n• Analytics and attribution — dashboards that connect traffic, ad spend, leads, bookings, and CRM revenue\n• Interactive tools and demos — practical proof-of-concepts for founders and business owners`,
         links: [
           { label: 'Services section', href: withBase('/#services') },
           { label: 'Work showroom', href: withBase('/work') },
@@ -165,7 +165,7 @@ export function buildChatbotConfig(): ChatbotConfig {
           'field service',
           'schedule',
         ],
-        response: `FieldSync Scheduler is a dual-view field-service booking system. Customers get a high-converting booking form; operators get a dispatch console with HubSpot sync, drive-time math, conflict blocking, and SMS confirmation. It's the "Book instantly" layer in the Lead-to-Revenue stack.`,
+        response: `FieldSync Scheduler is a dual-view field-service booking system. Customers get a conversion-focused booking flow; operators get a dispatch console with HubSpot sync, drive-time math, conflict blocking, and SMS confirmation. It's the "Book instantly" layer in the Lead-to-Revenue stack.`,
         links: [
           { label: 'Live demo', href: withBase('/demos/fieldsync-scheduler/index.html') },
           { label: 'Work detail', href: withBase('/work/fieldsync-scheduler') },
@@ -236,7 +236,7 @@ export function buildChatbotConfig(): ChatbotConfig {
           'roas',
           'measure',
         ],
-        response: `The ROI Attribution Dashboard is the measurement layer of the growth stack. It unifies Google Analytics session data, CRM closed-won revenue, and Google/Meta ad spend into one channel-level ROI view — so owners see what actually drives profit instead of juggling five tools.`,
+        response: `The ROI Attribution Dashboard is the reporting layer of the growth stack. It shows how Google Analytics session data, CRM closed-won revenue, and Google/Meta ad spend can sit in one channel-level attribution view. The public demo uses simulated data; a production build needs access to the client's live tools.`,
         links: [
           { label: 'Live demo', href: withBase('/demos/roi-attribution-dashboard/index.html') },
           { label: 'Work detail', href: withBase('/work/roi-attribution-dashboard') },
@@ -289,7 +289,7 @@ export function buildChatbotConfig(): ChatbotConfig {
           'show me case studies',
           'do you have proof',
         ],
-        response: `Selected measurable outcomes:\n\n• E-commerce landing redesign — 45% conversion lift, 28% bounce reduction (wellness brand)\n• Email automation funnel — 80% of nurture emails automated, 35% engagement boost\n• Google Ads overhaul — 3× ROAS within 90 days for a tech startup\n• Epicvue campaigns — 300% conversion surge in peak season, $10k/mo ad budget → 400+ B2B leads\n\nRaymond focuses on systems that compound — not campaigns that fade.`,
+        response: `Selected case-study outcomes:\n\n• E-commerce landing redesign — 45% conversion lift, 28% bounce reduction (wellness brand)\n• Email automation funnel — 80% of nurture emails automated, 35% engagement boost\n• Google Ads overhaul — 3× ROAS within 90 days for a tech startup\n• Epicvue campaigns — 300% conversion surge in peak season, $10k/mo ad budget → 400+ B2B leads\n\nThese are case-study examples, not guarantees. Raymond focuses on systems that make the funnel easier to inspect, improve, and maintain.`,
         links: [
           { label: 'Case studies', href: withBase('/case-studies') },
           { label: 'Stats on home', href: withBase('/#services') },
@@ -331,7 +331,7 @@ export function buildChatbotConfig(): ChatbotConfig {
           'klaviyo',
           'sms',
         ],
-        response: `Automation is how Raymond keeps pipelines running 24/7. Examples include Zapier–HubSpot lead scoring, behavior-based nurture sequences (80% automated in a B2B case study), FieldSync SMS confirmations, and Python scripts that cut manual work by 60% for freelance clients.`,
+        response: `Automation is how Raymond reduces manual follow-up and handoff work. Examples include Zapier–HubSpot lead scoring, behavior-based nurture sequences (80% automated in a B2B case study), FieldSync SMS confirmations, and Python scripts that cut manual work in freelance projects.`,
         links: [
           { label: 'Email funnel demo', href: withBase('/demos/email-funnel/index.html') },
           { label: 'Email case study', href: withBase('/case-studies/automated-email-funnel') },

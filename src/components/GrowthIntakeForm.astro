@@ -24,15 +24,15 @@ const budgets = ['Not sure yet', 'Under $2k', '$2k–$5k', '$5k–$15k', '$15k+'
 const consultSteps = [
   {
     title: 'We schedule your consult',
-    body: 'Pick a time that works. I’ll confirm by email — no back-and-forth.',
+    body: 'I reply by email to confirm fit, answer quick questions, and schedule a time if the project makes sense.',
   },
   {
     title: 'We meet for an hour',
-    body: 'We talk through your business, your marketing, and where leads are slipping.',
+    body: 'We talk through your business, current tools, lead flow, follow-up, and where the system is breaking down.',
   },
   {
-    title: 'You get a plan',
-    body: 'I map a clear growth plan for your situation. Whether you hire me to build it is entirely up to you.',
+    title: 'You get a next-step recommendation',
+    body: 'I outline a practical build path or explain why a smaller fix is enough. Hiring me to build it is optional.',
   },
 ];
 ---
@@ -48,9 +48,10 @@ const consultSteps = [
     Book a free consult
   </h2>
   <p class="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-400">
-    A free, no-obligation hour to talk through your business and marketing. Share a
-    few details below and I’ll reach out to schedule it — then map a growth plan
-    built for where leads are actually getting lost.
+    A free, no-obligation consult to talk through your business and marketing system.
+    Share a few details below and I’ll follow up by email. The goal is to identify
+    where leads are getting lost and whether a website, automation, booking, or
+    reporting fix is the right next step.
   </p>
 
   <form class="mt-7 grid gap-5" data-intake-form novalidate>
@@ -168,7 +169,7 @@ const consultSteps = [
         name="bottleneck"
         rows="4"
         maxlength="2000"
-        placeholder="e.g. We get traffic but few leads, follow-up is manual, we can't tell which channels actually pay off…"
+        placeholder="e.g. We get traffic but few leads, follow-up is manual, we can't tell which channels deserve attention…"
         class="w-full resize-y rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
       ></textarea>
     </div>

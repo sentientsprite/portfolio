@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" fill="none">
+  <rect width="1200" height="675" fill="#050708"/>
+  <rect width="1200" height="675" fill="url(#bg)" opacity="0.9"/>
+  <defs>
+    <radialGradient id="bg" cx="35%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#059669" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#050708" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- universal access symbol -->
+  <g transform="translate(300 330)">
+    <circle r="150" fill="none" stroke="#34d399" stroke-width="10" stroke-opacity="0.6"/>
+    <circle cy="-86" r="22" fill="#34d399"/>
+    <path d="M-100 -34 H100" stroke="#34d399" stroke-width="16" stroke-linecap="round"/>
+    <path d="M0 -34 V40" stroke="#34d399" stroke-width="16" stroke-linecap="round"/>
+    <path d="M0 40 L-58 130 M0 40 L58 130" stroke="#34d399" stroke-width="16" stroke-linecap="round" fill="none"/>
+  </g>
+  <!-- toggle rows -->
+  <g font-family="system-ui,sans-serif" font-size="22" fill="#d4d4d4">
+    <rect x="620" y="200" width="430" height="64" rx="14" fill="#ffffff" fill-opacity="0.04" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="648" y="240">Light / Dark mode</text>
+    <rect x="980" y="216" width="56" height="32" rx="16" fill="#10b981"/>
+    <circle cx="1020" cy="232" r="13" fill="#fff"/>
+
+    <rect x="620" y="288" width="430" height="64" rx="14" fill="#ffffff" fill-opacity="0.04" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="648" y="328">High contrast</text>
+    <rect x="980" y="304" width="56" height="32" rx="16" fill="#10b981"/>
+    <circle cx="1020" cy="320" r="13" fill="#fff"/>
+
+    <rect x="620" y="376" width="430" height="64" rx="14" fill="#ffffff" fill-opacity="0.04" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="648" y="416">Color-vision filters</text>
+    <rect x="980" y="392" width="56" height="32" rx="16" fill="#3f3f46"/>
+    <circle cx="996" cy="408" r="13" fill="#fff"/>
+  </g>
+  <text x="60" y="620" fill="#fafafa" font-family="system-ui,sans-serif" font-size="40" font-weight="700">Accessibility Suite</text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" fill="none">
+  <rect width="1200" height="675" fill="#050610"/>
+  <rect width="1200" height="675" fill="url(#bg)" opacity="0.95"/>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.18"/>
+      <stop offset="55%" stop-color="#8b5cf6" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#050610" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <radialGradient id="node" cx="40%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#93c5fd"/>
+      <stop offset="60%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </radialGradient>
+  </defs>
+  <!-- curved edges -->
+  <g stroke="url(#edge)" stroke-opacity="0.55" stroke-width="3" fill="none">
+    <path d="M250 170 Q420 250 560 200"/>
+    <path d="M560 200 Q700 150 820 260"/>
+    <path d="M250 170 Q360 340 470 420"/>
+    <path d="M560 200 Q520 360 600 470"/>
+    <path d="M820 260 Q760 400 880 470"/>
+    <path d="M470 420 Q560 520 600 470"/>
+    <path d="M600 470 Q740 520 880 470"/>
+    <path d="M470 420 Q330 470 300 560"/>
+  </g>
+  <!-- traveling pulses -->
+  <circle cx="490" cy="210" r="6" fill="#bae6fd"/>
+  <circle cx="650" cy="430" r="6" fill="#e9d5ff"/>
+  <!-- nodes -->
+  <g>
+    <circle cx="250" cy="170" r="26" fill="url(#node)"/>
+    <circle cx="560" cy="200" r="34" fill="url(#node)"/>
+    <circle cx="820" cy="260" r="28" fill="url(#node)"/>
+    <circle cx="470" cy="420" r="24" fill="url(#node)"/>
+    <circle cx="600" cy="470" r="30" fill="url(#node)"/>
+    <circle cx="880" cy="470" r="22" fill="url(#node)"/>
+    <circle cx="300" cy="560" r="20" fill="url(#node)"/>
+  </g>
+  <text x="60" y="620" fill="#fafafa" font-family="system-ui,sans-serif" font-size="40" font-weight="700">3D Neural Hero</text>
+</svg>

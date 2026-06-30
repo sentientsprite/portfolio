@@ -89,7 +89,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0 0 5px; /* the cap's downward "throw" on press */
+    padding: 0 0 2px; /* the cap's downward "throw" on press */
     border: 0;
     background: none;
     cursor: pointer;
@@ -101,7 +101,7 @@
     inset: 0;
     border-radius: 999px;
     background: linear-gradient(165deg, #1e3a8a 0%, #0b1f52 100%);
-    box-shadow: 0 5px 12px -8px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.45);
     z-index: 0;
   }
   .speed-fab__body {
@@ -110,7 +110,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.26rem 0.95rem;
+    padding: 0.34rem 0.95rem 0.28rem;
     border-radius: 999px;
     background:
       linear-gradient(
@@ -121,7 +121,7 @@
       ),
       linear-gradient(165deg, #3b82f6 0%, #1d4ed8 100%);
     box-shadow: 0 -6px 12px -10px rgba(8, 24, 68, 0.7) inset;
-    transform: translateY(-5px);
+    transform: translateY(-2px);
     transition: transform 0.16s cubic-bezier(0.2, 0.85, 0.3, 1), box-shadow 0.16s ease;
     will-change: transform;
   }
@@ -136,10 +136,10 @@
   }
   @media (hover: hover) {
     .speed-fab:hover .speed-fab__body {
-      transform: translateY(-6px);
+      transform: translateY(-3px);
     }
     .speed-fab:hover .speed-fab__base {
-      box-shadow: 0 7px 14px -8px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 2px 3px -1px rgba(0, 0, 0, 0.5);
     }
   }
   .speed-fab:active .speed-fab__body,
@@ -165,7 +165,7 @@
   @media (prefers-reduced-motion: reduce) {
     .speed-fab__body,
     .speed-fab:hover .speed-fab__body {
-      transform: translateY(-5px);
+      transform: translateY(-2px);
       transition: box-shadow 0.16s ease;
     }
     .speed-fab:active .speed-fab__body,
