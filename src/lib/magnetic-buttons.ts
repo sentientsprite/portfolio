@@ -3,6 +3,8 @@
  * Buttons lean slightly toward the cursor when it is nearby.
  */
 
+import { initJellyButtons } from './jelly-buttons';
+
 const SELECTORS = '[data-jelly], [data-magnetic]';
 const MAX_PULL = 0.38; // fraction of offset toward cursor at closest range
 const RANGE = 1.35; // multiplier on element size for activation radius
@@ -51,4 +53,6 @@ export function initMagneticButtons(root: ParentNode = document): void {
     el.addEventListener('pointermove', onMove);
     el.addEventListener('pointerleave', onLeave);
   });
+
+  initJellyButtons(root);
 }
