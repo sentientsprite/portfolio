@@ -123,22 +123,47 @@ const structuredData = {
 
     <!-- Magnetic CTA pull (desktop fine pointer) -->
     <script>
-      import { initMagneticButtons } from '../lib/magnetic-buttons';
-      initMagneticButtons();
-      document.addEventListener('astro:page-load', () => initMagneticButtons());
+      function idle(delay = 1500): Promise<void> {
+        return new Promise((resolve) => {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => resolve(), { timeout: delay });
+          } else {
+            setTimeout(resolve, 100);
+          }
+        });
+      }
+      async function bootMagnetic() {
+        await idle();
+        const { initMagneticButtons } = await import('../lib/magnetic-buttons');
+        initMagneticButtons();
+      }
+      bootMagnetic().catch(console.error);
+      document.addEventListener('astro:page-load', () => {
+        import('../lib/magnetic-buttons').then(({ initMagneticButtons }) => initMagneticButtons());
+      });
     </script>
 
     <!-- 2D touch-reactive ambient fluid (homepage theme, no 3D) -->
     <script>
-      import { initTouchFluid } from '../lib/touch-fluid';
-      function bootFluid() {
+      function idleFluid(delay = 1500): Promise<void> {
+        return new Promise((resolve) => {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => resolve(), { timeout: delay });
+          } else {
+            setTimeout(resolve, 100);
+          }
+        });
+      }
+      async function bootFluid() {
+        await idleFluid();
+        const { initTouchFluid } = await import('../lib/touch-fluid');
         const c = document.getElementById('touch-fluid') as HTMLCanvasElement | null;
         if (c && !c.dataset.fluidBound) {
           c.dataset.fluidBound = 'true';
           initTouchFluid(c);
         }
       }
-      bootFluid();
+      bootFluid().catch(console.error);
       document.addEventListener('astro:page-load', bootFluid);
     </script>
 

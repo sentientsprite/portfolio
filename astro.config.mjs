@@ -10,8 +10,23 @@ export default defineConfig({
   base: '/portfolio',
   output: 'static',
 
+  build: {
+    inlineStylesheets: 'always',
+  },
+
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      sourcemap: 'hidden',
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/three')) return 'three';
+            if (id.includes('node_modules/gsap')) return 'gsap';
+          },
+        },
+      },
+    },
   },
 
   integrations: [sitemap()],

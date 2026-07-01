@@ -626,7 +626,7 @@ const structuredData = {
       <!-- ===================== FOOTER ===================== -->
       <footer class="relative border-t border-neutral-900 px-4 py-12">
         <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 sm:flex-row">
-          <p class="text-sm text-neutral-500">© {new Date().getFullYear()} {site.name}. Built with Astro + Three.js.</p>
+          <p class="text-sm text-neutral-400">© {new Date().getFullYear()} {site.name}. Built with Astro + Three.js.</p>
           <div class="flex items-center gap-6 text-sm">
             <a href={site.social.github} class="nav-link" target="_blank" rel="noopener">GitHub</a>
             <a href={site.social.linkedin} class="nav-link" target="_blank" rel="noopener">LinkedIn</a>
@@ -780,46 +780,74 @@ const structuredData = {
       html[data-motion="reduce"] .touch-fluid { display: none; }
     </style>
 
-    <!-- ===================== SCRIPT (Three.js + GSAP + Lenis) ===================== -->
+    <!-- ===================== SCRIPT (Three.js + GSAP + Lenis) — deferred ===================== -->
     <script>
-      import * as THREE from 'three';
-      import { gsap } from 'gsap';
-      import { ScrollTrigger } from 'gsap/ScrollTrigger';
-      import Lenis from 'lenis';
-      import { initTouchFluid } from '../lib/touch-fluid';
-      import { initMagneticButtons } from '../lib/magnetic-buttons';
-
-      gsap.registerPlugin(ScrollTrigger);
-
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
-      const isTouch = window.matchMedia('(hover: none)').matches;
-
-      /* ----------------------------------------------------------------------
-       * 1. SMOOTH SCROLL (Lenis) + ScrollTrigger sync
-       * -------------------------------------------------------------------- */
-      let lenis: Lenis | null = null;
-      if (!prefersReduced) {
-        lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => lenis!.raf(time * 1000));
-        gsap.ticker.lagSmoothing(0);
+      function idle(delay = 2000): Promise<void> {
+        return new Promise((resolve) => {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => resolve(), { timeout: delay });
+          } else {
+            setTimeout(resolve, 120);
+          }
+        });
       }
 
-      /* ----------------------------------------------------------------------
-       * 2. THREE.JS SCENE — neural-net sales pipeline
-       * -------------------------------------------------------------------- */
-      const canvas = document.getElementById('scene') as HTMLCanvasElement | null;
+      async function bootStudioHome() {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const isTouch = window.matchMedia('(hover: none)').matches;
+        const skip3D = prefersReduced || isMobile;
 
-      // Pointer state (normalized -0.5..0.5), shared by scene + parallax
-      const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
-      window.addEventListener('pointermove', (e) => {
-        pointer.tx = e.clientX / window.innerWidth - 0.5;
-        pointer.ty = e.clientY / window.innerHeight - 0.5;
-      });
+        await idle(skip3D ? 800 : 2000);
 
-      function initScene() {
-        if (!canvas) return hideLoader();
+        const [{ initTouchFluid }, { initMagneticButtons }] = await Promise.all([
+          import('../lib/touch-fluid'),
+          import('../lib/magnetic-buttons'),
+        ]);
+
+        const fluidCanvas = document.getElementById('touch-fluid') as HTMLCanvasElement | null;
+        if (fluidCanvas && !fluidCanvas.dataset.fluidBound) {
+          fluidCanvas.dataset.fluidBound = 'true';
+          initTouchFluid(fluidCanvas);
+        }
+        initMagneticButtons();
+
+        const [{ gsap }, { ScrollTrigger }, lenisMod] = await Promise.all([
+          import('gsap'),
+          import('gsap/ScrollTrigger'),
+          prefersReduced ? Promise.resolve({ default: null }) : import('lenis'),
+        ]);
+        gsap.registerPlugin(ScrollTrigger);
+
+        let lenis: import('lenis').default | null = null;
+        if (!prefersReduced && lenisMod.default) {
+          lenis = new lenisMod.default({ lerp: 0.1, smoothWheel: true });
+          lenis.on('scroll', ScrollTrigger.update);
+          gsap.ticker.add((time) => lenis!.raf(time * 1000));
+          gsap.ticker.lagSmoothing(0);
+        }
+
+        const canvas = document.getElementById('scene') as HTMLCanvasElement | null;
+        const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+        window.addEventListener('pointermove', (e) => {
+          pointer.tx = e.clientX / window.innerWidth - 0.5;
+          pointer.ty = e.clientY / window.innerHeight - 0.5;
+        });
+
+        function hideLoader() {
+          const loader = document.getElementById('loader');
+          if (loader) loader.classList.add('is-hidden');
+          ScrollTrigger.refresh();
+        }
+
+        async function initScene() {
+          if (skip3D || !canvas) {
+            canvas?.classList.add('hidden');
+            hideLoader();
+            return;
+          }
+
+          const THREE = await import('three');
 
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x0a0a0a, 0.035);
@@ -1118,22 +1146,14 @@ const structuredData = {
           else animate();
         });
 
-        // Hide loader once the first frame is on screen
         requestAnimationFrame(hideLoader);
-      }
+        }
 
-      function hideLoader() {
-        const loader = document.getElementById('loader');
-        if (loader) loader.classList.add('is-hidden');
-        // Recalculate scroll positions once layout is final
-        ScrollTrigger.refresh();
-      }
-
-      /* ----------------------------------------------------------------------
-       * 3. GSAP ENTRANCE + SCROLL REVEALS
-       * -------------------------------------------------------------------- */
-      function initAnimations() {
-        // Hero entrance
+        function initAnimations() {
+          if (prefersReduced) {
+            gsap.set('[data-hero="line"], [data-reveal]', { opacity: 1, y: 0 });
+            return;
+          }
         gsap.from('[data-hero="line"]', {
           y: 40,
           opacity: 0,
@@ -1206,15 +1226,15 @@ const structuredData = {
         }
       }
 
-      /* ---- Boot ---- */
-      const fluidCanvas = document.getElementById('touch-fluid') as HTMLCanvasElement | null;
-      if (fluidCanvas) initTouchFluid(fluidCanvas);
-      initMagneticButtons();
-      document.addEventListener('astro:page-load', () => initMagneticButtons());
+        await initScene();
+        initAnimations();
+        initUI();
+      }
 
-      initScene();
-      initAnimations();
-      initUI();
+      bootStudioHome().catch((err) => console.error('Studio home boot failed', err));
+      document.addEventListener('astro:page-load', () => {
+        import('../lib/magnetic-buttons').then(({ initMagneticButtons }) => initMagneticButtons());
+      });
     </script>
   </body>
 </html>

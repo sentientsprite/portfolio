@@ -76,15 +76,15 @@ const chatbotJson = JSON.stringify(chatbot);
     id="fox-assistant"
     class="fox-root"
     type="button"
-    aria-label="Open chat assistant"
+    aria-labelledby="fox-assistant-label"
     aria-expanded="false"
     aria-controls="fox-chat"
     title="Chat with Future.fox"
   >
-    <span class="fox-bubble" aria-hidden="true">Ask me anything!</span>
+    <span id="fox-assistant-label" class="fox-bubble">Ask me anything!</span>
 
-    <span class="fox-bob">
-      <span class="fox-zzz" aria-hidden="true"><i>z</i><i>z</i><i>z</i></span>
+    <span class="fox-bob" aria-hidden="true">
+      <span class="fox-zzz"><i>z</i><i>z</i><i>z</i></span>
 
       <svg class="fox-svg" viewBox="0 0 120 120" role="img" aria-hidden="true" focusable="false">
         <ellipse cx="60" cy="114" rx="30" ry="5" fill="#020617" opacity="0.4" />
