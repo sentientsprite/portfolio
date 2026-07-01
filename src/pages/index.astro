@@ -1100,7 +1100,6 @@ const structuredData = {
         };
 
         const packetCount = isMobile ? 12 : 34;
-        const packetPos = new Float32Array(packetCount * 3);
         const packets: { edge: number; t: number; speed: number }[] = [];
         for (let i = 0; i < packetCount; i++) {
           packets.push({
@@ -1109,21 +1108,31 @@ const structuredData = {
             speed: 0.14 + Math.random() * 0.12,
           });
         }
-        const packetGeo = new THREE.BufferGeometry();
-        packetGeo.setAttribute('position', new THREE.BufferAttribute(packetPos, 3));
-        const packetMesh = new THREE.Points(
-          packetGeo,
-          new THREE.PointsMaterial({
-            color: 0x99f6e4,
-            size: isMobile ? 0.17 : 0.2,
-            transparent: true,
-            opacity: 0.95,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false,
-            sizeAttenuation: true,
-          }),
-        );
-        net.add(packetMesh);
+        const packetDotGeo = new THREE.SphereGeometry(0.09, 8, 8);
+        const packetDotMat = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
+          transparent: true,
+          opacity: 0.95,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+          depthTest: false,
+        });
+        const packetDots: THREE.Mesh[] = [];
+        for (let i = 0; i < packetCount; i++) {
+          const dot = new THREE.Mesh(packetDotGeo, packetDotMat);
+          dot.renderOrder = 5;
+          net.add(dot);
+          packetDots.push(dot);
+        }
+
+        function placePacket(i: number, p: (typeof packets)[0]) {
+          const pts = edgesMeta[p.edge].pts;
+          const f = p.t * (pts.length - 1);
+          const idx = Math.min(Math.floor(f), pts.length - 2);
+          tmp.copy(pts[idx]).lerp(pts[idx + 1], f - idx);
+          packetDots[i].position.copy(tmp);
+        }
+        for (let i = 0; i < packets.length; i++) placePacket(i, packets[i]);
 
         /* --- Lights (tuned to keep nodes reading blue/purple) --- */
         scene.add(new THREE.AmbientLight(0x55608a, 0.95));
@@ -1202,15 +1211,8 @@ const structuredData = {
               }
               p.t = 0;
             }
-            const pts = edgesMeta[p.edge].pts;
-            const f = p.t * (pts.length - 1);
-            const idx = Math.min(Math.floor(f), pts.length - 2);
-            tmp.copy(pts[idx]).lerp(pts[idx + 1], f - idx);
-            packetPos[i * 3] = tmp.x;
-            packetPos[i * 3 + 1] = tmp.y;
-            packetPos[i * 3 + 2] = tmp.z;
+            placePacket(i, p);
           }
-          packetGeo.attributes.position.needsUpdate = true;
 
           // Subtle idle sway
           net.rotation.y = Math.sin(t * 0.25) * 0.12;
