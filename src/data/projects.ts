@@ -247,6 +247,24 @@ export const projectOverrides: ProjectOverride[] = [
     techStack: ['Analytics', 'SEMrush', 'Data Viz'],
   },
   {
+    repoName: 'provable-roulette',
+    displayName: 'Provable Roulette',
+    category: 'fun',
+    featured: true,
+    demoPath: 'demos/provable-roulette/index.html',
+    sourceUrl: '',
+    description:
+      '3D European roulette with real chip betting, provably fair spins, and dual SHA-256 validation — every result auditable in the browser.',
+    details:
+      'The same verifiable-randomness architecture as Provable Blackjack, applied to European single-zero roulette. Place straight, color, odd/even, high/low, dozen, and column bets with casino chips ($5–$500) from a $1,000 bankroll. Each spin layers three entropy sources — OS CSPRNG, commit-reveal server seed, and the drand public beacon — mixed via SHA-256 into a combined seed that deterministically selects the winning pocket (SHA-256 mod 37). A 3D perspective wheel animates to the verifiable result. Two on-screen validations run every round: (1) spin randomness — commitment match, seed mixing, and pocket derivation reproducibility; and (2) hash chain + proof-of-work mining bound to the full round payload including all bets and payout. Fully client-side static build.',
+    techStack: ['Next.js', 'TypeScript', 'Web Crypto', 'drand', 'SHA-256 PoW'],
+    metrics: [
+      { value: '3', label: 'Entropy sources' },
+      { value: '2', label: 'Crypto validations' },
+      { value: '37', label: 'European pockets' },
+    ],
+  },
+  {
     repoName: 'provable-blackjack',
     displayName: 'Provable Blackjack',
     category: 'fun',
