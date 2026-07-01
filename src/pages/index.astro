@@ -887,9 +887,9 @@ const structuredData = {
         }
 
         async function initScene() {
+          try {
           if (skip3D || !canvas) {
             canvas?.classList.add('hidden');
-            hideLoader();
             return;
           }
 
@@ -1056,6 +1056,8 @@ const structuredData = {
         );
         net.add(edges);
 
+        const tmp = new THREE.Vector3();
+
         // Data packets: enter at the top node and chain edge-to-edge down the diamond
         const topEdgeIndices = edgesMeta
           .map((edge, ei) => (edge.fromLayer === 0 ? ei : -1))
@@ -1152,7 +1154,6 @@ const structuredData = {
 
         /* --- Render loop --- */
         const clock = new THREE.Clock();
-        const tmp = new THREE.Vector3();
         let frameId = 0;
         let lastT = 0;
 
@@ -1216,6 +1217,11 @@ const structuredData = {
         });
 
         requestAnimationFrame(hideLoader);
+          } catch (err) {
+            console.error('3D scene init failed', err);
+            canvas?.classList.add('hidden');
+            hideLoader();
+          }
         }
 
         function initAnimations() {
@@ -1296,6 +1302,7 @@ const structuredData = {
       }
 
         await initScene();
+        if (skip3D || !document.getElementById('scene')) hideLoader();
         initAnimations();
         initUI();
       }
