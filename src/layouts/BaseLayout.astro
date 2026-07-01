@@ -1,17 +1,200 @@
 ---
-/**
- * @deprecated Use CinematicLayout directly. Kept as a thin alias for compatibility.
- */
-import CinematicLayout from './CinematicLayout.astro';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FoxAssistant from '../components/FoxAssistant.astro';
+import AccessibilityWidget from '../components/AccessibilityWidget.astro';
+import SpeedReader from '../components/SpeedReader.astro';
+import { site } from '../config/site';
+import { withBase } from '../lib/url';
 
 interface Props {
   title?: string;
   description?: string;
 }
 
-const props = Astro.props as Props;
+const {
+  title = site.name,
+  description = site.description,
+} = Astro.props;
+
+const pageTitle = title === site.name ? site.name : `${title} | ${site.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const ogImage = `${site.url}/${site.photo}`;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${site.url}/#raymond-king`,
+  name: 'Raymond King - Marketing Systems Builder',
+  url: site.url,
+  description: site.description,
+  email: site.email,
+  image: `${site.url}/${site.photo}`,
+  founder: {
+    '@type': 'Person',
+    name: site.name,
+    jobTitle: site.title,
+    email: site.email,
+    sameAs: [site.social.github, site.social.linkedin, site.social.x],
+    knowsAbout: site.skills,
+  },
+  areaServed: 'United States',
+  audience: {
+    '@type': 'BusinessAudience',
+    audienceType: 'Business owners who need lead capture, automation, booking flows, CRM follow-up, and clearer marketing reporting',
+  },
+  serviceType: [
+    'Lead-to-revenue growth systems',
+    'Conversion websites and landing pages',
+    'AI-assisted workflow support',
+    'CRM and follow-up automation',
+    'Analytics and attribution dashboards',
+  ],
+};
 ---
 
-<CinematicLayout title={props.title} description={props.description}>
-  <slot />
-</CinematicLayout>
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <title>{pageTitle}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <!-- Add `js` class ASAP so reveal animations only hide when JS is available,
+         and apply saved accessibility settings before first paint (no flash). -->
+    <script is:inline>
+      (function () {
+        var de = document.documentElement;
+        de.classList.add('js');
+        try {
+          var raw = sessionStorage.getItem('rk-a11y');
+          if (!raw) return;
+          var s = JSON.parse(raw);
+          if (s.theme === 'light') de.setAttribute('data-theme', 'light');
+          if (s.contrast) de.setAttribute('data-contrast', 'high');
+          if (s.font) de.setAttribute('data-font', 'readable');
+          if (s.links) de.setAttribute('data-links', 'underline');
+          if (s.motion) de.setAttribute('data-motion', 'reduce');
+          if (s.colorblind && s.colorblind !== 'none') de.setAttribute('data-colorblind', s.colorblind);
+          if (s.textScale) de.style.setProperty('--a11y-text-scale', String(s.textScale));
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen overflow-x-hidden flex flex-col">
+    <!-- Homepage theme backdrop (atmosphere + 2D touch fluid), minus the 3D scene -->
+    <div class="bg-atmosphere pointer-events-none fixed inset-0 z-[-2]" aria-hidden="true"></div>
+    <canvas
+      id="touch-fluid"
+      class="touch-fluid pointer-events-none fixed inset-0 z-[-1] h-full w-full"
+      aria-hidden="true"></canvas>
+
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- Persistent chat-assistant mascot (placeholder for the AI-FAQ widget) -->
+    <FoxAssistant />
+
+    <!-- Site-wide accessibility settings (theme + assistive display options) -->
+    <AccessibilityWidget />
+
+    <!-- Spritz-style speed reader (Glance/OpenSpritz) -->
+    <SpeedReader />
+
+    <!-- Magnetic CTA pull (desktop fine pointer) -->
+    <script>
+      import { initMagneticButtons } from '../lib/magnetic-buttons';
+      initMagneticButtons();
+      document.addEventListener('astro:page-load', () => initMagneticButtons());
+    </script>
+
+    <!-- 2D touch-reactive ambient fluid (homepage theme, no 3D) -->
+    <script>
+      import { initTouchFluid } from '../lib/touch-fluid';
+      function bootFluid() {
+        const c = document.getElementById('touch-fluid') as HTMLCanvasElement | null;
+        if (c && !c.dataset.fluidBound) {
+          c.dataset.fluidBound = 'true';
+          initTouchFluid(c);
+        }
+      }
+      bootFluid();
+      document.addEventListener('astro:page-load', bootFluid);
+    </script>
+
+    <!-- Shared UX enhancements: nav scroll state, scroll reveals, card glow -->
+    <script>
+      function initEnhancements() {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isTouch = window.matchMedia('(hover: none)').matches;
+
+        // 1. Glass navbar on scroll
+        const header = document.getElementById('site-header');
+        const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 24);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        // 2. Scroll-reveal via IntersectionObserver
+        const revealEls = document.querySelectorAll('[data-animate]');
+        if (prefersReduced || !('IntersectionObserver' in window)) {
+          revealEls.forEach((el) => el.classList.add('is-visible'));
+        } else {
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry, i) => {
+                if (!entry.isIntersecting) return;
+                const el = entry.target as HTMLElement;
+                // Stagger siblings revealed together for a nicer cascade
+                el.style.transitionDelay = `${Math.min(i * 60, 240)}ms`;
+                el.classList.add('is-visible');
+                io.unobserve(el);
+              });
+            },
+            { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+          );
+          revealEls.forEach((el) => io.observe(el));
+        }
+
+        // 3. Pointer-tracked glow on cards
+        if (!isTouch) {
+          document.querySelectorAll<HTMLElement>('.glow-card').forEach((card) => {
+            card.addEventListener('pointermove', (e) => {
+              const r = card.getBoundingClientRect();
+              card.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+              card.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
+            });
+          });
+        }
+
+        // 4. Mobile menu toggle (declarative <details> handles most; this closes on nav)
+        const menu = document.getElementById('mobile-menu');
+        menu?.querySelectorAll('a').forEach((a) =>
+          a.addEventListener('click', () => menu.removeAttribute('open')),
+        );
+      }
+
+      initEnhancements();
+      document.addEventListener('astro:page-load', initEnhancements);
+    </script>
+  </body>
+</html>

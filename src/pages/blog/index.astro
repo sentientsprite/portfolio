@@ -1,5 +1,5 @@
 ---
-import CinematicLayout from '../../layouts/CinematicLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import BlogCard from '../../components/BlogCard.astro';
 import { fetchMediumPosts, mediumProfileUrl } from '../../lib/medium';
@@ -9,27 +9,23 @@ const dateFmt = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<CinematicLayout title="Blog" description="Articles and essays by Raymond King on Medium.">
-  <div class="work-catalog">
-    <header class="work-catalog-header flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <p class="cinema-section-label mb-0">Writing</p>
-        <h1 class="work-catalog-title">Blog</h1>
-        <p class="mt-3 max-w-xl text-neutral-500">Latest essays — published on Medium.</p>
-      </div>
+<BaseLayout title="Blog" description="Articles and essays by Raymond King on Medium.">
+  <div class="mx-auto max-w-6xl px-4 py-16">
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+      <SectionHeading eyebrow="Writing" title="Blog" subtitle="Latest writing, published on Medium" />
       <a
         href={mediumProfileUrl}
         target="_blank"
         rel="noopener noreferrer"
-        class="btn-cinema btn-cinema-ghost shrink-0"
+        class="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-400"
       >
         Follow on Medium &nearr;
       </a>
-    </header>
+    </div>
 
     {
       posts.length > 0 ? (
-        <div class="grid gap-6 border-t border-[#1a1a1a] pt-12 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <BlogCard
               title={post.title}
@@ -44,13 +40,15 @@ const dateFmt = (d: Date) =>
           ))}
         </div>
       ) : (
-        <div class="border border-[#1a1a1a] bg-[#0a0a0a] p-10 text-center">
-          <p class="text-neutral-500">Posts are published on Medium.</p>
+        <div class="mt-8 rounded-xl border border-neutral-800 bg-neutral-900/50 p-8 text-center">
+          <p class="text-neutral-400">
+            Posts are published on Medium. Visit the profile to read the latest.
+          </p>
           <a
             href={mediumProfileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="btn-cinema btn-cinema-primary mt-6 inline-flex"
+            class="mt-4 inline-flex rounded-lg bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-neutral-950 transition-colors hover:bg-emerald-400"
           >
             Read on Medium &nearr;
           </a>
@@ -58,4 +56,4 @@ const dateFmt = (d: Date) =>
       )
     }
   </div>
-</CinematicLayout>
+</BaseLayout>

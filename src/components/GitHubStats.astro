@@ -8,22 +8,22 @@ interface Props {
 const { stats } = Astro.props;
 ---
 
-<div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
-  <div class="border border-[#1a1a1a] bg-[#0a0a0a] p-5 text-center">
-    <p class="font-display text-3xl font-bold text-[#f5c77a]">{stats.publicRepos}</p>
-    <p class="mt-1 text-xs uppercase tracking-wider text-neutral-600">Repositories</p>
+<div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+  <div class="rounded-xl border border-neutral-800 bg-neutral-900/50 p-5 text-center">
+    <p class="text-3xl font-bold text-emerald-400">{stats.publicRepos}</p>
+    <p class="mt-1 text-sm text-neutral-500">Repositories</p>
   </div>
-  <div class="border border-[#1a1a1a] bg-[#0a0a0a] p-5 text-center">
-    <p class="font-display text-3xl font-bold text-[#f5c77a]">{stats.totalStars}</p>
-    <p class="mt-1 text-xs uppercase tracking-wider text-neutral-600">Total stars</p>
+  <div class="rounded-xl border border-neutral-800 bg-neutral-900/50 p-5 text-center">
+    <p class="text-3xl font-bold text-emerald-400">{stats.totalStars}</p>
+    <p class="mt-1 text-sm text-neutral-500">Total Stars</p>
   </div>
-  <div class="border border-[#1a1a1a] bg-[#0a0a0a] p-5 text-center">
-    <p class="font-display text-3xl font-bold text-[#f5c77a]">{stats.topLanguages.length}</p>
-    <p class="mt-1 text-xs uppercase tracking-wider text-neutral-600">Languages</p>
+  <div class="rounded-xl border border-neutral-800 bg-neutral-900/50 p-5 text-center">
+    <p class="text-3xl font-bold text-emerald-400">{stats.topLanguages.length}</p>
+    <p class="mt-1 text-sm text-neutral-500">Languages</p>
   </div>
-  <div class="border border-[#1a1a1a] bg-[#0a0a0a] p-5 text-center">
-    <p class="font-display text-3xl font-bold text-[#f5c77a]">{stats.recentRepos.length}</p>
-    <p class="mt-1 text-xs uppercase tracking-wider text-neutral-600">Recent updates</p>
+  <div class="rounded-xl border border-neutral-800 bg-neutral-900/50 p-5 text-center">
+    <p class="text-3xl font-bold text-emerald-400">{stats.recentRepos.length}</p>
+    <p class="mt-1 text-sm text-neutral-500">Recent Updates</p>
   </div>
 </div>
 
@@ -31,7 +31,9 @@ const { stats } = Astro.props;
   stats.topLanguages.length > 0 && (
     <div class="mt-6 flex flex-wrap justify-center gap-2">
       {stats.topLanguages.map(({ language, count }) => (
-        <span class="tech-pill">{language} ({count})</span>
+        <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-sm text-emerald-400">
+          {language} ({count})
+        </span>
       ))}
     </div>
   )

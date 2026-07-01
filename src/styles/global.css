@@ -1,9 +1,7 @@
 @import "tailwindcss";
-@import "./cinematic.css";
 
 @theme {
-  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -38,13 +36,13 @@ html[data-theme="light"] .touch-fluid {
   mix-blend-mode: multiply;
 }
 
-/* --- Eyebrow / section label (legacy alias → cinema) --- */
+/* --- Eyebrow / section label --- */
 .eyebrow {
-  @apply mb-3 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.3em] text-[#d4a853];
+  @apply mb-3 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.3em] text-emerald-400;
 }
 .eyebrow::before {
   content: "";
-  @apply h-1.5 w-1.5 rounded-full bg-[#d4a853];
+  @apply h-1.5 w-1.5 rounded-full bg-emerald-400;
 }
 
 /* --- Buttons --- */
@@ -63,17 +61,17 @@ html[data-theme="light"] .touch-fluid {
   }
 }
 .btn-primary {
-  @apply bg-neutral-100 text-neutral-950;
+  @apply bg-emerald-500 text-neutral-950;
 }
 .btn-primary:hover {
-  @apply bg-[#f5c77a];
-  box-shadow: 0 14px 40px -14px rgba(212, 168, 83, 0.45);
+  @apply bg-emerald-400;
+  box-shadow: 0 14px 40px -14px rgba(16, 185, 129, 0.7);
 }
 .btn-ghost {
   @apply border border-neutral-700 text-neutral-200;
 }
 .btn-ghost:hover {
-  @apply border-[#d4a853]/50 text-[#f5c77a];
+  @apply border-emerald-400/50 text-emerald-300;
 }
 
 /* Magnetic cursor pull (desktop fine pointer; JS sets --mag-x / --mag-y). */
@@ -139,7 +137,7 @@ html[data-motion="reduce"] .magnetic-target {
 }
 .nav-link:hover,
 .nav-link[aria-current="page"] {
-  @apply text-[#d4a853];
+  @apply text-emerald-400;
 }
 
 /* --- Scroll-reveal (progressive enhancement; only hides when JS is active) --- */
@@ -207,7 +205,7 @@ summary:focus-visible {
 }
 
 .prose a {
-  @apply font-medium text-[#d4a853] underline-offset-4 hover:text-[#f5c77a] hover:underline;
+  @apply font-medium text-emerald-400 underline-offset-4 hover:text-emerald-300 hover:underline;
 }
 
 .prose strong {
@@ -215,7 +213,7 @@ summary:focus-visible {
 }
 
 .prose ul {
-  @apply my-5 list-disc space-y-2 pl-6 marker:text-[#d4a853];
+  @apply my-5 list-disc space-y-2 pl-6 marker:text-emerald-400;
 }
 
 .prose ol {
@@ -227,11 +225,11 @@ summary:focus-visible {
 }
 
 .prose li::marker {
-  @apply text-[#d4a853];
+  @apply text-emerald-400;
 }
 
 .prose blockquote {
-  @apply my-6 border-l-2 border-[#d4a853]/40 pl-4 italic text-neutral-400;
+  @apply my-6 border-l-2 border-emerald-500/40 pl-4 italic text-neutral-400;
 }
 
 .prose hr {
@@ -239,7 +237,7 @@ summary:focus-visible {
 }
 
 .prose code {
-  @apply rounded bg-neutral-800 px-1.5 py-0.5 text-sm text-[#e8c989];
+  @apply rounded bg-neutral-800 px-1.5 py-0.5 text-sm text-emerald-300;
 }
 
 .prose pre {
