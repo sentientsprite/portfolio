@@ -22,6 +22,8 @@ export interface ProjectOverride {
    * representative results, not guaranteed client figures.
    */
   metrics?: { value: string; label: string }[];
+  /** Optional images shown on the work detail page (e.g. audit screenshots). */
+  detailImages?: { src: string; alt: string; caption?: string }[];
   /** When set, this project appears as a module inside the named growth system. */
   growthSystemId?: string;
   /** Short label for the module's role in the growth system flow. */
@@ -287,17 +289,24 @@ export const projectOverrides: ProjectOverride[] = [
     displayName: 'This Website',
     category: 'meta',
     featured: false,
-    screenshot: 'images/projects/webdesign/this-website.svg',
+    screenshot: 'images/projects/webdesign/lighthouse-100.png',
     demoUrl: 'https://sentientsprite.github.io/portfolio/',
     description:
       'The live showroom you are browsing — built with Astro and Tailwind CSS, deployed to GitHub Pages.',
     details:
-      'This site is open source. It uses Astro for static, near-zero-JS pages, Tailwind for styling, Markdown content collections for writing, and a build-time GitHub API integration for stats.',
+      'This site is open source. It uses Astro for static, near-zero-JS pages, Tailwind for styling, Markdown content collections for writing, and a build-time GitHub API integration for stats. Heavy home-page effects (Three.js, GSAP, Lenis) load after idle and skip on mobile; component CSS is inlined to keep first paint fast.',
     techStack: ['Astro', 'Tailwind CSS', 'TypeScript'],
     metrics: [
-      { value: '94', label: 'Lighthouse perf' },
+      { value: '100', label: 'Lighthouse perf' },
+      { value: '100', label: 'Accessibility' },
       { value: '0', label: 'Layout shift (CLS)' },
-      { value: 'Static', label: 'Near-zero JS' },
+    ],
+    detailImages: [
+      {
+        src: 'images/projects/webdesign/lighthouse-100.png',
+        alt: 'Google Lighthouse report showing perfect 100 scores for Performance, Accessibility, Best Practices, and SEO on mobile',
+        caption: 'Mobile Lighthouse audit — June 2026',
+      },
     ],
   },
   {

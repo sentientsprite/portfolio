@@ -122,6 +122,38 @@ const heroImage = project.screenshot ? withBase(`/${project.screenshot}`) : null
     }
 
     {
+      project.detailImages.length > 0 && (
+        <section class="mt-10">
+          <h2 class="text-xl font-semibold text-neutral-100">Lighthouse audit</h2>
+          <p class="mt-2 max-w-2xl text-sm text-neutral-500">
+            Mobile audit run against the live production site after performance and accessibility optimizations.
+          </p>
+          <div class="mt-6 space-y-6">
+            {
+              project.detailImages.map((image) => (
+                <figure class="overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 shadow-2xl">
+                  <img
+                    src={withBase(`/${image.src}`)}
+                    alt={image.alt}
+                    class="w-full"
+                    loading="lazy"
+                  />
+                  {
+                    image.caption && (
+                      <figcaption class="border-t border-neutral-800 px-4 py-3 text-sm text-neutral-500">
+                        {image.caption}
+                      </figcaption>
+                    )
+                  }
+                </figure>
+              ))
+            }
+          </div>
+        </section>
+      )
+    }
+
+    {
       hasDemo ? (
         <div class="mt-10 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 shadow-2xl">
           <div class="flex items-center gap-2 border-b border-neutral-800 bg-neutral-950/60 px-4 py-2.5">

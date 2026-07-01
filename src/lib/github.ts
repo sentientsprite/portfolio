@@ -32,6 +32,7 @@ export interface MergedProject {
   growthSystemId: string | null;
   growthSystemStage: string | null;
   metrics: { value: string; label: string }[];
+  detailImages: { src: string; alt: string; caption?: string }[];
 }
 
 export interface GitHubStats {
@@ -130,6 +131,7 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
         growthSystemId: override.growthSystemId ?? null,
         growthSystemStage: override.growthSystemStage ?? null,
         metrics: override.metrics ?? [],
+        detailImages: override.detailImages ?? [],
       };
     });
 
