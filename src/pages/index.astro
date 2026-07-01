@@ -21,7 +21,7 @@ import { resolveDemoUrl, slugify } from '../lib/url';
 import { projectOverrides } from '../data/projects';
 import { growthSystemById } from '../data/growth-systems';
 import { fetchGitHubStats } from '../lib/github';
-import { fetchMediumPosts } from '../lib/medium';
+import { getMediumPosts } from '../lib/medium';
 
 const pageTitle = site.name;
 const description = site.description;
@@ -92,7 +92,7 @@ const growthDemoUrl = growthProject
 const growthDetailUrl = withBase('/work/growth-system');
 
 const githubStats = await fetchGitHubStats();
-const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
+const mediumPosts = (await getMediumPosts(3)).slice(0, 3);
 
 const services = [
   {
@@ -588,39 +588,41 @@ const structuredData = {
         </div>
       </section>
 
-      {
-        mediumPosts.length > 0 && (
-          <section id="writing" class="relative mx-auto max-w-6xl px-4 py-28">
-            <div class="mb-16 max-w-2xl">
-              <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">Writing</p>
-              <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
-                Latest essays and articles on Medium
-              </h2>
-            </div>
+      <section id="writing" class="relative mx-auto max-w-6xl px-4 py-28">
+        <div class="mb-16 max-w-2xl">
+          <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">Writing</p>
+          <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
+            Latest essays and articles on Medium
+          </h2>
+        </div>
+        {
+          mediumPosts.length > 0 ? (
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {mediumPosts.map((post) => (
-                <div data-reveal>
-                  <BlogCard
-                    title={post.title}
-                    description={post.snippet}
-                    href={post.link}
-                    date={post.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                    tags={post.categories}
-                    image={post.thumbnail}
-                    external={true}
-                    source="Medium"
-                  />
-                </div>
+                <BlogCard
+                  title={post.title}
+                  description={post.snippet}
+                  href={post.link}
+                  date={post.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                  tags={post.categories}
+                  image={post.thumbnail}
+                  external={true}
+                  source="Medium"
+                />
               ))}
             </div>
-            <div data-reveal class="mt-8 text-center">
-              <a href={withBase('/blog')} class="text-sm font-medium text-emerald-400 transition-colors hover:text-emerald-300">
-                Read the blog &rarr;
-              </a>
-            </div>
-          </section>
-        )
-      }
+          ) : (
+            <p class="text-sm text-neutral-400">
+              Posts are published on Medium. Visit the blog to read the latest essays.
+            </p>
+          )
+        }
+        <div class="mt-8 text-center">
+          <a href={withBase('/blog')} class="text-sm font-medium text-emerald-400 transition-colors hover:text-emerald-300">
+            Read the blog &rarr;
+          </a>
+        </div>
+      </section>
 
       <section id="github" class="relative mx-auto max-w-6xl px-4 py-28">
         <div class="mb-16 max-w-2xl">
@@ -1246,6 +1248,7 @@ const structuredData = {
             scrollTrigger: { trigger: el, start: 'top 88%' },
           });
         });
+        ScrollTrigger.refresh();
       }
 
       /* ----------------------------------------------------------------------

@@ -1,3 +1,5 @@
+import fallbackRaw from '../data/medium-posts.json';
+
 export interface MediumPost {
   title: string;
   link: string;
@@ -8,6 +10,12 @@ export interface MediumPost {
 }
 
 const FEED_URL = 'https://medium.com/feed/@raymondking.mktg';
+
+function loadFallback(limit: number): MediumPost[] {
+  return (fallbackRaw as Array<Omit<MediumPost, 'pubDate'> & { pubDate: string }>)
+    .slice(0, limit)
+    .map((post) => ({ ...post, pubDate: new Date(post.pubDate) }));
+}
 
 function decodeEntities(value: string): string {
   return value
@@ -88,8 +96,13 @@ export async function fetchMediumPosts(limit = 6): Promise<MediumPost[]> {
       .sort((a, b) => b.pubDate.valueOf() - a.pubDate.valueOf())
       .slice(0, limit);
   } catch {
-    return [];
+    return loadFallback(limit);
   }
+}
+
+export async function getMediumPosts(limit = 6): Promise<MediumPost[]> {
+  const live = await fetchMediumPosts(limit);
+  return live.length > 0 ? live : loadFallback(limit);
 }
 
 export const mediumProfileUrl = 'https://medium.com/@raymondking.mktg';

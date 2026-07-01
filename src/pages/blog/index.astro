@@ -3,9 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import BlogCard from '../../components/BlogCard.astro';
 import JellyButton from '../../components/JellyButton.astro';
-import { fetchMediumPosts, mediumProfileUrl } from '../../lib/medium';
+import { getMediumPosts, mediumProfileUrl } from '../../lib/medium';
 
-const posts = await fetchMediumPosts(12);
+const posts = await getMediumPosts(12);
 const dateFmt = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
