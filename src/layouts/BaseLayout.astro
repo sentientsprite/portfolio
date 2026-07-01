@@ -99,12 +99,8 @@ const structuredData = {
     </script>
   </head>
   <body class="min-h-screen overflow-x-hidden flex flex-col">
-    <!-- Homepage theme backdrop (atmosphere + 2D touch fluid), minus the 3D scene -->
+    <!-- Homepage theme backdrop (static atmosphere) -->
     <div class="bg-atmosphere pointer-events-none fixed inset-0 z-[-2]" aria-hidden="true"></div>
-    <canvas
-      id="touch-fluid"
-      class="touch-fluid pointer-events-none fixed inset-0 z-[-1] h-full w-full"
-      aria-hidden="true"></canvas>
 
     <Header />
     <main class="flex-1">
@@ -141,30 +137,6 @@ const structuredData = {
       document.addEventListener('astro:page-load', () => {
         import('../lib/magnetic-buttons').then(({ initMagneticButtons }) => initMagneticButtons());
       });
-    </script>
-
-    <!-- 2D touch-reactive ambient fluid (homepage theme, no 3D) -->
-    <script>
-      function idleFluid(delay = 1500): Promise<void> {
-        return new Promise((resolve) => {
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(() => resolve(), { timeout: delay });
-          } else {
-            setTimeout(resolve, 100);
-          }
-        });
-      }
-      async function bootFluid() {
-        await idleFluid();
-        const { initTouchFluid } = await import('../lib/touch-fluid');
-        const c = document.getElementById('touch-fluid') as HTMLCanvasElement | null;
-        if (c && !c.dataset.fluidBound) {
-          c.dataset.fluidBound = 'true';
-          initTouchFluid(c);
-        }
-      }
-      bootFluid().catch(console.error);
-      document.addEventListener('astro:page-load', bootFluid);
     </script>
 
     <!-- Shared UX enhancements: nav scroll state, scroll reveals, card glow -->

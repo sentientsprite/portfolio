@@ -23,7 +23,7 @@ body {
    Design system — dark futuristic theme shared across the whole site.
    =========================================================================== */
 
-/* --- Homepage atmosphere + 2D touch fluid, shared on every page (no 3D) --- */
+/* --- Homepage atmosphere backdrop --- */
 .bg-atmosphere {
   background:
     radial-gradient(60% 50% at 50% 0%, rgba(16, 185, 129, 0.12), transparent 70%),

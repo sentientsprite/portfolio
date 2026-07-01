@@ -651,8 +651,6 @@ const structuredData = {
           #0a0a0a;
       }
 
-      /* Soft-blend touch fluid removed — static atmosphere only */
-
       /* ---- Loader ---- */
       .loader-ring {
         width: 46px;
@@ -784,10 +782,7 @@ const structuredData = {
 
         await idle(skip3D ? 800 : 2000);
 
-        const [{ initMagneticButtons }] = await Promise.all([
-          import('../lib/magnetic-buttons'),
-        ]);
-
+        const { initMagneticButtons } = await import('../lib/magnetic-buttons');
         initMagneticButtons();
 
         const [{ gsap }, { ScrollTrigger }, lenisMod] = await Promise.all([
@@ -1074,7 +1069,7 @@ const structuredData = {
           }
           packetGeo.attributes.position.needsUpdate = true;
 
-          // Subtle idle sway (no full revolve)
+          // Subtle idle sway
           net.rotation.y = Math.sin(t * 0.25) * 0.12;
           net.position.y = Math.sin(t * 0.6) * 0.08;
 
