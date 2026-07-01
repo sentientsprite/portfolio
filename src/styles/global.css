@@ -86,7 +86,7 @@ body {
   --jelly-green-ink: #032018;
   --jelly-green-inset: rgba(2, 44, 34, 0.65);
   --jelly-green-focus: rgba(16, 185, 129, 0.45);
-  --jelly-green-glow: rgba(16, 185, 129, 0.34);
+  --jelly-green-glow: rgba(16, 185, 129, 0.22);
 }
 
 .jelly-btn {
@@ -94,8 +94,9 @@ body {
   --jelly-throw: 4px;
   --jelly-lift: 4px;
   --jelly-lift-hover: 4px;
-  --jelly-base-shadow: 0 1px 3px -2px rgba(0, 0, 0, 0.42);
-  --jelly-base-shadow-hover: 0 2px 4px -2px rgba(0, 0, 0, 0.48);
+  --jelly-base-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.28);
+  --jelly-base-shadow-hover: 0 1px 2px -2px rgba(0, 0, 0, 0.32);
+  --jelly-base-shadow-active: 0 1px 2px -3px rgba(0, 0, 0, 0.22);
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -143,7 +144,7 @@ body {
     linear-gradient(165deg, var(--jelly-green-from) 0%, var(--jelly-green-to) 100%);
   box-shadow:
     0 -7px 14px -10px var(--jelly-green-inset) inset,
-    0 6px 18px -12px var(--jelly-green-glow);
+    0 2px 8px -14px var(--jelly-green-glow);
   transform: translateY(calc(-1 * var(--jelly-lift)));
   transition:
     transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -315,7 +316,7 @@ body {
   box-shadow:
     0 -4px 10px -10px var(--jelly-green-inset) inset,
     0 2px 6px rgba(2, 44, 34, 0.28) inset,
-    0 3px 10px -8px var(--jelly-green-glow);
+    0 1px 6px -10px var(--jelly-green-glow);
 }
 .jelly-btn:active:not(:disabled) .jelly-btn__base,
 .jelly-btn.is-active .jelly-btn__base {
