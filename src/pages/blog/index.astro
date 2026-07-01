@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import BlogCard from '../../components/BlogCard.astro';
+import JellyButton from '../../components/JellyButton.astro';
 import { fetchMediumPosts, mediumProfileUrl } from '../../lib/medium';
 
 const posts = await fetchMediumPosts(12);
@@ -44,14 +45,7 @@ const dateFmt = (d: Date) =>
           <p class="text-neutral-400">
             Posts are published on Medium. Visit the profile to read the latest.
           </p>
-          <a
-            href={mediumProfileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mt-4 inline-flex rounded-lg bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-neutral-950 transition-colors hover:bg-emerald-400"
-          >
-            Read on Medium &nearr;
-          </a>
+          <JellyButton href={mediumProfileUrl} external label="Read on Medium ↗" class="mt-4" />
         </div>
       )
     }

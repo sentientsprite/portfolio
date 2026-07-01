@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import JellyButton from '../../components/JellyButton.astro';
 import { getMergedProjects, type MergedProject } from '../../lib/github';
 import { categoryLabels } from '../../data/projects';
 import { growthSystemById } from '../../data/growth-systems';
@@ -75,14 +76,12 @@ const heroImage = project.screenshot ? withBase(`/${project.screenshot}`) : null
       <div class="mt-6 flex flex-wrap gap-3">
         {
           hasDemo ? (
-            <a
-              href={demoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-neutral-950 transition-colors hover:bg-emerald-400"
-            >
-              {isMeta ? 'Visit Live Site' : 'Open Live Demo'} &nearr;
-            </a>
+            <JellyButton
+              href={demoUrl!}
+              external
+              size="sm"
+              label={isMeta ? 'Visit Live Site ↗' : 'Open Live Demo ↗'}
+            />
           ) : (
             <span class="inline-flex items-center gap-2 rounded-lg border border-neutral-800 px-5 py-2.5 text-sm font-medium text-neutral-500">
               Live demo coming soon

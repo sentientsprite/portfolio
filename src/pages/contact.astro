@@ -4,6 +4,7 @@ import SectionHeading from '../components/SectionHeading.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import SocialFeeds from '../components/SocialFeeds.astro';
 import GrowthIntakeForm from '../components/GrowthIntakeForm.astro';
+import JellyButton from '../components/JellyButton.astro';
 import { site } from '../config/site';
 ---
 
@@ -28,9 +29,7 @@ import { site } from '../config/site';
     >
       <h3 class="text-lg font-semibold text-neutral-100">Prefer to reach out directly?</h3>
       <p class="mx-auto mt-2 max-w-md text-sm text-neutral-400">Email is the fastest way to get me for project inquiries.</p>
-      <a href={`mailto:${site.email}`} class="btn btn-primary mt-6">
-        {site.email}
-      </a>
+      <JellyButton href={`mailto:${site.email}`} label={site.email} class="mt-6" />
       <div class="mt-8">
         <SocialLinks />
       </div>

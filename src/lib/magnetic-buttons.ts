@@ -3,7 +3,7 @@
  * Buttons lean slightly toward the cursor when it is nearby.
  */
 
-const SELECTORS = '[data-jelly], .btn-primary, [data-magnetic]';
+const SELECTORS = '[data-jelly], [data-magnetic]';
 const MAX_PULL = 0.38; // fraction of offset toward cursor at closest range
 const RANGE = 1.35; // multiplier on element size for activation radius
 

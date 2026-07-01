@@ -57,17 +57,199 @@ body {
   }
 }
 .btn-primary {
-  @apply bg-emerald-500 text-neutral-950;
+  @apply border border-emerald-400/60 text-emerald-300;
 }
 .btn-primary:hover {
-  @apply bg-emerald-400;
-  box-shadow: 0 14px 40px -14px rgba(16, 185, 129, 0.7);
+  @apply border-emerald-400 bg-emerald-500/10 text-emerald-200;
+  box-shadow: none;
 }
 .btn-ghost {
   @apply border border-neutral-700 text-neutral-200;
 }
 .btn-ghost:hover {
   @apply border-emerald-400/50 text-emerald-300;
+}
+
+/* --- Jelly CTA (site-wide primary button theme) --- */
+:root {
+  --jelly-throw: 2px;
+  --jelly-lift: 2px;
+  --jelly-lift-hover: 3px;
+  --jelly-base-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.45);
+  --jelly-base-shadow-hover: 0 2px 3px -1px rgba(0, 0, 0, 0.5);
+  --jelly-base-shadow-active: 0 2px 6px -6px rgba(0, 0, 0, 0.5);
+  --jelly-green-from: #34d399;
+  --jelly-green-to: #059669;
+  --jelly-green-deep: #024a36;
+  --jelly-green-socket-from: #056247;
+  --jelly-green-ink: #032018;
+  --jelly-green-inset: rgba(2, 44, 34, 0.65);
+  --jelly-green-focus: rgba(16, 185, 129, 0.45);
+}
+
+.jelly-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 var(--jelly-throw);
+  border: 0;
+  background: none;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  isolation: isolate;
+  font: inherit;
+  color: inherit;
+}
+.jelly-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.jelly-btn__base {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: linear-gradient(165deg, var(--jelly-green-socket-from) 0%, var(--jelly-green-deep) 100%);
+  box-shadow: var(--jelly-base-shadow);
+  z-index: 0;
+}
+
+.jelly-btn__body {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.66rem 2.2rem;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.08) 32%,
+      rgba(255, 255, 255, 0) 55%
+    ),
+    linear-gradient(165deg, var(--jelly-green-from) 0%, var(--jelly-green-to) 100%);
+  box-shadow: 0 -6px 12px -10px var(--jelly-green-inset) inset;
+  transform: translateY(calc(-1 * var(--jelly-lift)));
+  transition: transform 0.16s cubic-bezier(0.2, 0.85, 0.3, 1), box-shadow 0.16s ease;
+  will-change: transform;
+}
+
+.jelly-btn__label {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.05;
+  color: var(--jelly-green-ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.jelly-btn__eyebrow {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.jelly-btn__text {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.jelly-btn--sm .jelly-btn__body {
+  padding: 0.5rem 1.25rem;
+}
+.jelly-btn--sm .jelly-btn__eyebrow {
+  font-size: 0.5rem;
+  letter-spacing: 0.16em;
+}
+.jelly-btn--sm .jelly-btn__text {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.jelly-btn--block {
+  display: flex;
+  width: 100%;
+}
+.jelly-btn--block .jelly-btn__base,
+.jelly-btn--block .jelly-btn__body {
+  border-radius: 1rem;
+  width: 100%;
+}
+.jelly-btn--block .jelly-btn__body {
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+.jelly-btn--block .jelly-btn__label {
+  align-items: flex-start;
+  text-align: left;
+}
+.jelly-btn__suffix {
+  display: grid;
+  height: 2.25rem;
+  width: 2.25rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(3, 32, 24, 0.12);
+  font-size: 1.125rem;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+
+@media (hover: hover) {
+  .jelly-btn:hover:not(:disabled) .jelly-btn__body {
+    transform: translateY(calc(-1 * var(--jelly-lift-hover)));
+  }
+  .jelly-btn:hover:not(:disabled) .jelly-btn__base {
+    box-shadow: var(--jelly-base-shadow-hover);
+  }
+  .jelly-btn--block:hover:not(:disabled) .jelly-btn__suffix {
+    transform: translateX(0.25rem);
+  }
+}
+
+.jelly-btn:active:not(:disabled) .jelly-btn__body,
+.jelly-btn.is-active .jelly-btn__body {
+  transform: translateY(0);
+  transition-duration: 0.05s;
+  box-shadow:
+    0 -5px 10px -10px var(--jelly-green-inset) inset,
+    0 2px 4px rgba(2, 44, 34, 0.35) inset;
+}
+.jelly-btn:active:not(:disabled) .jelly-btn__base,
+.jelly-btn.is-active .jelly-btn__base {
+  box-shadow: var(--jelly-base-shadow-active);
+}
+
+.jelly-btn:focus-visible {
+  outline: none;
+}
+.jelly-btn:focus-visible .jelly-btn__body {
+  box-shadow:
+    0 0 0 3px var(--jelly-green-focus),
+    0 -6px 12px -10px var(--jelly-green-inset) inset;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jelly-btn__body,
+  .jelly-btn:hover:not(:disabled) .jelly-btn__body {
+    transition: box-shadow 0.16s ease;
+    transform: translateY(calc(-1 * var(--jelly-lift)));
+  }
+  .jelly-btn:active:not(:disabled) .jelly-btn__body,
+  .jelly-btn.is-active .jelly-btn__body {
+    transform: translateY(0);
+  }
 }
 
 /* Magnetic cursor pull (desktop fine pointer; JS sets --mag-x / --mag-y). */

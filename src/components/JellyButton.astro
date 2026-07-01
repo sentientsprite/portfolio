@@ -1,182 +1,84 @@
 ---
 /**
  * JellyButton.astro — squishy 3D "gel" call-to-action button.
- *
- * Combines three tactile-button ideas into one on-brand CTA:
- *  - a glossy "wet jelly" sheen + elastic squish/wobble (area21-style),
- *  - a 3D "pushable" base the raised cap presses down onto (pushable_button /
- *    3D-button), and
- *  - a pointer-anchored click ripple (reactive-button).
- * Renders as an anchor so it works as a primary CTA link. Honors
- * prefers-reduced-motion.
+ * Styles live in global.css (`.jelly-btn`) as the site-wide primary CTA theme.
  */
 interface Props {
-  href: string;
   label: string;
-  /** Optional sublabel shown above the main label. */
+  href?: string;
   eyebrow?: string;
-  /** Pass-through extra classes for layout (margins, etc.). */
   class?: string;
-  /** Open in a new tab. */
   external?: boolean;
-  /** Visual size. 'sm' for compact placements like the navbar. */
-  size?: 'sm' | 'md';
+  size?: 'sm' | 'md' | 'block';
+  as?: 'a' | 'button';
+  type?: 'button' | 'submit';
+  disabled?: boolean;
+  download?: boolean | string;
+  suffix?: string;
+  id?: string;
+  'data-intake-submit'?: boolean;
 }
 
-const { href, label, eyebrow, class: className, external = false, size = 'md' } = Astro.props;
+const {
+  href = '#',
+  label,
+  eyebrow,
+  class: className,
+  external = false,
+  size = 'md',
+  as = 'a',
+  type = 'button',
+  disabled = false,
+  download,
+  suffix,
+  id,
+  'data-intake-submit': dataIntakeSubmit,
+} = Astro.props;
+
 const rel = external ? 'noopener noreferrer' : undefined;
 const target = external ? '_blank' : undefined;
+const sizeClass =
+  size === 'sm' ? 'jelly-btn--sm' : size === 'block' ? 'jelly-btn--block' : '';
+const classes = ['jelly-btn', sizeClass, className];
 ---
 
-<a
-  href={href}
-  target={target}
-  rel={rel}
-  class:list={['jelly-btn', size === 'sm' && 'jelly-btn--sm', className]}
-  data-jelly
->
-  <span class="jelly-btn__base" aria-hidden="true"></span>
-  <span class="jelly-btn__body">
-    <span class="jelly-btn__label">
-      {eyebrow && <span class="jelly-btn__eyebrow">{eyebrow}</span>}
-      <span class="jelly-btn__text">{label}</span>
-    </span>
-  </span>
-</a>
-
-<style>
-  .jelly-btn {
-    --jelly-from: #34d399;
-    --jelly-to: #059669;
-    --jelly-deep: #024a36;
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 0 6px; /* the cap's vertical "throw" — depth it travels when pressed */
-    border: 0;
-    background: none;
-    text-decoration: none;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    isolation: isolate;
-  }
-
-  /* Solid darker "socket" the cap presses into for a 3D pushable look. */
-  .jelly-btn__base {
-    position: absolute;
-    inset: 0;
-    border-radius: 999px;
-    background: linear-gradient(165deg, #056247 0%, var(--jelly-deep) 100%);
-    box-shadow: 0 5px 12px -8px rgba(0, 0, 0, 0.6);
-    z-index: 0;
-  }
-
-  .jelly-btn__body {
-    position: relative;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.66rem 2.2rem;
-    border-radius: 999px;
-    /* Glossy sheen baked into the body: a soft top highlight that fades into
-       the base gradient, so there is no hard inner box. */
-    background:
-      linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.45) 0%,
-        rgba(255, 255, 255, 0.08) 32%,
-        rgba(255, 255, 255, 0) 55%
-      ),
-      linear-gradient(165deg, var(--jelly-from) 0%, var(--jelly-to) 100%);
-    box-shadow: 0 -7px 12px -10px rgba(2, 44, 34, 0.65) inset;
-    transform: translateY(-6px); /* raised cap floats above the base socket */
-    transition: transform 0.16s cubic-bezier(0.2, 0.85, 0.3, 1), box-shadow 0.16s ease;
-    will-change: transform;
-  }
-
-  .jelly-btn__label {
-    position: relative;
-    z-index: 2; /* sit above the ripple */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1.05;
-    color: #032018;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
-  }
-
-  .jelly-btn__eyebrow {
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    opacity: 0.7;
-  }
-
-  .jelly-btn__text {
-    font-size: 1rem;
-    font-weight: 800;
-    letter-spacing: -0.01em;
-  }
-
-  /* Compact variant — navbar and inline placements. */
-  .jelly-btn--sm {
-    padding: 0 0 5px;
-  }
-  .jelly-btn--sm .jelly-btn__body {
-    padding: 0.5rem 1.25rem;
-  }
-  .jelly-btn--sm .jelly-btn__eyebrow {
-    font-size: 0.5rem;
-    letter-spacing: 0.16em;
-  }
-  .jelly-btn--sm .jelly-btn__text {
-    font-size: 0.85rem;
-    font-weight: 700;
-  }
-
-  /* Hover: cap lifts a touch higher off the base (button "armed"). */
-  @media (hover: hover) {
-    .jelly-btn:hover .jelly-btn__body {
-      transform: translateY(-7px);
-    }
-    .jelly-btn:hover .jelly-btn__base {
-      box-shadow: 0 7px 14px -8px rgba(0, 0, 0, 0.6);
-    }
-  }
-
-  /* Press: the cap travels straight down and seats flush on the base — a
-     realistic physical button-press, no gel wobble. */
-  .jelly-btn:active .jelly-btn__body {
-    transform: translateY(0);
-    transition-duration: 0.05s;
-    box-shadow:
-      0 -5px 10px -10px rgba(2, 44, 34, 0.6) inset,
-      0 2px 4px rgba(2, 44, 34, 0.35) inset;
-  }
-  .jelly-btn:active .jelly-btn__base {
-    box-shadow: 0 2px 6px -6px rgba(0, 0, 0, 0.5);
-  }
-
-  .jelly-btn:focus-visible {
-    outline: none;
-  }
-  .jelly-btn:focus-visible .jelly-btn__body {
-    box-shadow:
-      0 0 0 3px rgba(16, 185, 129, 0.45),
-      0 -7px 12px -10px rgba(2, 44, 34, 0.65) inset;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .jelly-btn__body,
-    .jelly-btn:hover .jelly-btn__body {
-      transition: box-shadow 0.16s ease;
-      transform: translateY(-6px);
-    }
-    .jelly-btn:active .jelly-btn__body {
-      transform: translateY(0);
-    }
-  }
-</style>
+{
+  as === 'button' ? (
+    <button
+      id={id}
+      type={type}
+      disabled={disabled}
+      class:list={classes}
+      data-jelly
+      data-intake-submit={dataIntakeSubmit || undefined}
+    >
+      <span class="jelly-btn__base" aria-hidden="true" />
+      <span class="jelly-btn__body">
+        <span class="jelly-btn__label">
+          {eyebrow && <span class="jelly-btn__eyebrow">{eyebrow}</span>}
+          <span class="jelly-btn__text">{label}</span>
+        </span>
+        {suffix && <span class="jelly-btn__suffix" aria-hidden="true">{suffix}</span>}
+      </span>
+    </button>
+  ) : (
+    <a
+      id={id}
+      href={href}
+      download={download}
+      target={target}
+      rel={rel}
+      class:list={classes}
+      data-jelly
+    >
+      <span class="jelly-btn__base" aria-hidden="true" />
+      <span class="jelly-btn__body">
+        <span class="jelly-btn__label">
+          {eyebrow && <span class="jelly-btn__eyebrow">{eyebrow}</span>}
+          <span class="jelly-btn__text">{label}</span>
+        </span>
+        {suffix && <span class="jelly-btn__suffix" aria-hidden="true">{suffix}</span>}
+      </span>
+    </a>
+  )
+}

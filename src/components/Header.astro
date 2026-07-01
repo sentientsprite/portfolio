@@ -1,6 +1,7 @@
 ---
 import { withBase } from '../lib/url';
 import { site } from '../config/site';
+import JellyButton from './JellyButton.astro';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -50,9 +51,7 @@ const isActive = (href: string) =>
     </nav>
 
     <div class="flex items-center gap-3">
-      <a href={withBase('/contact')} class="hidden rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-emerald-400 sm:inline-block">
-        Get in touch
-      </a>
+      <JellyButton href={withBase('/contact')} label="Get in touch" size="sm" class="hidden sm:inline-flex" />
 
       <details id="mobile-menu" class="relative md:hidden">
         <summary class="grid h-9 w-9 cursor-pointer list-none place-items-center rounded-lg text-neutral-300 ring-1 ring-neutral-700 transition hover:text-emerald-400">
