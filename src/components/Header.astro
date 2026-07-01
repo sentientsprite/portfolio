@@ -71,12 +71,14 @@ const isActive = (href: string) =>
               </a>
             ))
           }
-          <a
-            href={withBase('/contact')}
-            class="mt-1 block rounded-lg bg-emerald-500/10 px-4 py-2.5 text-sm font-medium text-emerald-400 transition hover:bg-emerald-500/20"
-          >
-            Get in touch
-          </a>
+          <div class="mt-1 px-1">
+            <JellyButton
+              href={withBase('/contact')}
+              label="Get in touch"
+              size="sm"
+              class="w-full justify-center"
+            />
+          </div>
         </nav>
       </details>
     </div>

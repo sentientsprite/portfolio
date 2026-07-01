@@ -291,7 +291,14 @@ const structuredData = {
         <a href={withBase('/resume')} class="mobile-link">Resume</a>
         <a href={withBase('/blog')} class="mobile-link">Blog</a>
         <a href={withBase('/contact')} class="mobile-link">Contact</a>
-        <a href={withBase('/contact#intake')} class="mobile-link text-emerald-400">Build my system</a>
+        <div class="px-1 pt-1">
+          <JellyButton
+            href={withBase('/contact#intake')}
+            label="Build my system"
+            size="sm"
+            class="w-full justify-center"
+          />
+        </div>
       </div>
     </header>
 

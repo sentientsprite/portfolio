@@ -1,5 +1,6 @@
 ---
 import type { Product } from '../data/products';
+import JellyButton from './JellyButton.astro';
 import { withBase } from '../lib/url';
 
 interface Props {
@@ -27,11 +28,11 @@ const { product } = Astro.props;
       <span class="text-lg font-bold text-emerald-400">{product.price}</span>
     </div>
     <p class="mt-2 flex-1 text-sm leading-relaxed text-neutral-400">{product.description}</p>
-    <a
+    <JellyButton
       href={product.checkoutUrl}
-      class="mt-5 inline-flex items-center justify-center rounded-full bg-emerald-500/10 px-4 py-2.5 text-sm font-medium text-emerald-400 transition-colors hover:bg-emerald-500/20"
-    >
-      Buy Now
-    </a>
+      label="Buy Now"
+      size="sm"
+      class="mt-5 w-full justify-center"
+    />
   </div>
 </article>

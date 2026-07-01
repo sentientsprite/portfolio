@@ -240,12 +240,21 @@ body {
   font-weight: 700;
 }
 
-/* Hero / section CTAs — subtle idle gel pulse (not navbar sm buttons) */
-.jelly-btn:not(.jelly-btn--sm) .jelly-btn__body {
+/* All green jelly CTAs — subtle idle gel pulse */
+.jelly-btn .jelly-btn__body {
   animation: jelly-breathe 4.8s ease-in-out infinite;
 }
 .jelly-btn:is(:hover, :active, .is-wobble, :focus-visible) .jelly-btn__body {
   animation: none;
+}
+
+.jelly-btn.w-full {
+  display: flex;
+  width: 100%;
+}
+.jelly-btn.w-full .jelly-btn__base,
+.jelly-btn.w-full .jelly-btn__body {
+  width: 100%;
 }
 
 .jelly-btn--block {
@@ -323,7 +332,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .jelly-btn:not(.jelly-btn--sm) .jelly-btn__body {
+  .jelly-btn .jelly-btn__body {
     animation: none;
   }
   .jelly-btn__body,

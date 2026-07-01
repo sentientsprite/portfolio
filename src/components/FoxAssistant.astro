@@ -419,19 +419,13 @@ const chatbotJson = JSON.stringify(chatbot);
     outline: 2px solid rgba(16, 185, 129, 0.5);
     outline-offset: 1px;
   }
-  .fox-chat-messages :global(.fox-lead-submit) {
-    padding: 9px 16px;
-    border-radius: 9999px;
-    border: 0;
-    background: #10b981;
-    color: #0a0a0a;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
+  .fox-chat-messages :global(.fox-lead-form .jelly-btn) {
+    margin-top: 4px;
+    width: 100%;
   }
-  .fox-chat-messages :global(.fox-lead-submit:hover) {
-    background: #34d399;
+  .fox-chat-messages :global(.fox-lead-form .jelly-btn__base),
+  .fox-chat-messages :global(.fox-lead-form .jelly-btn__body) {
+    width: 100%;
   }
 
   .fox-chat-messages :global(.fox-typing) {
@@ -955,7 +949,15 @@ const chatbotJson = JSON.stringify(chatbot);
           <input type="text" name="name" placeholder="Your name" required maxlength="80" />
           <input type="email" name="email" placeholder="Email" required maxlength="120" />
           <textarea name="need" rows="3" placeholder="What are you building? (site, funnel, automation…)" required maxlength="800"></textarea>
-          <button type="submit" class="fox-lead-submit">Send to Raymond</button>
+          <button type="submit" class="jelly-btn jelly-btn--sm fox-lead-submit w-full justify-center" data-jelly>
+            <span class="jelly-btn__base" aria-hidden="true"></span>
+            <span class="jelly-btn__body">
+              <span class="jelly-btn__ripple" aria-hidden="true"></span>
+              <span class="jelly-btn__label">
+                <span class="jelly-btn__text">Send to Raymond</span>
+              </span>
+            </span>
+          </button>
         </form>`;
     }
 
@@ -1040,6 +1042,8 @@ const chatbotJson = JSON.stringify(chatbot);
       });
 
       messagesEl.scrollTop = messagesEl.scrollHeight;
+
+      import('../lib/jelly-buttons').then(({ initJellyButtons }) => initJellyButtons(messagesEl));
     }
 
     function showTyping() {
