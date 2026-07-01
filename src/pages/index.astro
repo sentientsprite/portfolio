@@ -233,12 +233,6 @@ const structuredData = {
     <canvas id="scene" class="pointer-events-none fixed inset-0 z-0 h-full w-full"></canvas>
     <!-- Atmospheric gradient layer behind the canvas -->
     <div class="bg-atmosphere pointer-events-none fixed inset-0 z-[-1]"></div>
-    <!-- Touch-reactive ambient fluid (lightweight 2D, mobile-first) -->
-    <canvas
-      id="touch-fluid"
-      class="touch-fluid pointer-events-none fixed inset-0 z-0 h-full w-full"
-      aria-hidden="true"
-    ></canvas>
 
     <!-- ===================== NAVBAR (glassmorphism, scroll-aware) ===================== -->
     <header
@@ -657,15 +651,7 @@ const structuredData = {
           #0a0a0a;
       }
 
-      /* Soft-blend touch fluid sits between atmosphere and the neural-net canvas */
-      .touch-fluid {
-        opacity: 0.72;
-        mix-blend-mode: screen;
-      }
-      html[data-theme="light"] .touch-fluid {
-        opacity: 0.45;
-        mix-blend-mode: multiply;
-      }
+      /* Soft-blend touch fluid removed — static atmosphere only */
 
       /* ---- Loader ---- */
       .loader-ring {
@@ -697,7 +683,7 @@ const structuredData = {
         box-shadow: 0 10px 40px -20px rgba(0, 0, 0, 0.8);
       }
       .nav-link {
-        color: rgb(163, 163, 163);
+        color: rgb(212, 212, 212);
         transition: color 0.2s ease;
       }
       .nav-link:hover { color: rgb(52, 211, 153); }
@@ -774,10 +760,8 @@ const structuredData = {
       @media (prefers-reduced-motion: reduce) {
         .scroll-dot::after,
         .showcase-orb,
-        .loader-ring,
-        .touch-fluid { animation: none; display: none; }
+        .loader-ring { animation: none; display: none; }
       }
-      html[data-motion="reduce"] .touch-fluid { display: none; }
     </style>
 
     <!-- ===================== SCRIPT (Three.js + GSAP + Lenis) — deferred ===================== -->
@@ -800,16 +784,10 @@ const structuredData = {
 
         await idle(skip3D ? 800 : 2000);
 
-        const [{ initTouchFluid }, { initMagneticButtons }] = await Promise.all([
-          import('../lib/touch-fluid'),
+        const [{ initMagneticButtons }] = await Promise.all([
           import('../lib/magnetic-buttons'),
         ]);
 
-        const fluidCanvas = document.getElementById('touch-fluid') as HTMLCanvasElement | null;
-        if (fluidCanvas && !fluidCanvas.dataset.fluidBound) {
-          fluidCanvas.dataset.fluidBound = 'true';
-          initTouchFluid(fluidCanvas);
-        }
         initMagneticButtons();
 
         const [{ gsap }, { ScrollTrigger }, lenisMod] = await Promise.all([
@@ -956,6 +934,7 @@ const structuredData = {
         const edgePos: number[] = [];
         const edgeCol: number[] = [];
         const edges3: THREE.Vector3[][] = []; // sampled points per edge (for packets)
+        const edgeFromLayer: number[] = [];
         const cTmp = new THREE.Color();
         for (let li = 0; li < layers.length - 1; li++) {
           layers[li].forEach((from) => {
@@ -967,6 +946,7 @@ const structuredData = {
               const curve = new THREE.QuadraticBezierCurve3(from.pos.clone(), mid, to.pos.clone());
               const pts = curve.getPoints(curveSegs);
               edges3.push(pts);
+              edgeFromLayer.push(li);
               // Emit consecutive point pairs as line segments + gradient colors
               for (let s = 0; s < pts.length - 1; s++) {
                 const p0 = pts[s];
@@ -995,14 +975,20 @@ const structuredData = {
         );
         net.add(edges);
 
-        // Data packets: bright dots flowing forward along the curved edges
+        // Data packets: spawn on the top (leads) layer and flow down through the funnel
+        const topEdgeIndices: number[] = [];
+        for (let ei = 0; ei < edgeFromLayer.length; ei++) {
+          if (edgeFromLayer[ei] === 0) topEdgeIndices.push(ei);
+        }
+        const pickTopEdge = () => topEdgeIndices[(Math.random() * topEdgeIndices.length) | 0];
+
         const packetCount = isMobile ? 12 : 34;
         const packetPos = new Float32Array(packetCount * 3);
         const packets: { edge: number; t: number; speed: number }[] = [];
         for (let i = 0; i < packetCount; i++) {
           packets.push({
-            edge: (Math.random() * edges3.length) | 0,
-            t: Math.random(),
+            edge: topEdgeIndices[i % topEdgeIndices.length] ?? 0,
+            t: (i / packetCount) * 0.12,
             speed: 0.1 + Math.random() * 0.18,
           });
         }
@@ -1022,30 +1008,6 @@ const structuredData = {
         );
         net.add(packetMesh);
 
-        /* --- Ambient drifting particles (atmosphere) --- */
-        const pCount = isMobile ? 900 : 2600;
-        const positions = new Float32Array(pCount * 3);
-        for (let i = 0; i < pCount; i++) {
-          positions[i * 3] = (Math.random() - 0.5) * 40;
-          positions[i * 3 + 1] = (Math.random() - 0.5) * 28;
-          positions[i * 3 + 2] = (Math.random() - 0.5) * 30;
-        }
-        const pGeo = new THREE.BufferGeometry();
-        pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const particles = new THREE.Points(
-          pGeo,
-          new THREE.PointsMaterial({
-            color: 0x34d399,
-            size: 0.04,
-            transparent: true,
-            opacity: 0.5,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false,
-            sizeAttenuation: true,
-          }),
-        );
-        scene.add(particles);
-
         /* --- Lights (tuned to keep nodes reading blue/purple) --- */
         scene.add(new THREE.AmbientLight(0x55608a, 0.95));
         const key = new THREE.DirectionalLight(0xffffff, 1.05);
@@ -1063,10 +1025,9 @@ const structuredData = {
         const netW = (layers.length - 1) * layerGap || 1;
 
         function recomputeScales() {
-          // Stand the pipeline upright (90° CCW) on every viewport so it reads
-          // bottom-to-top (Leads → Won); the long axis runs vertically.
-          net.rotation.z = Math.PI / 2;
-          glow.position.set(0, netW * 0.42, 1.5); // payoff glow at the top (Won)
+          // Stand the pipeline upright so it reads top-to-bottom (Leads → Won).
+          net.rotation.z = -Math.PI / 2;
+          glow.position.set(0, -netW * 0.42, 1.5); // payoff glow at the bottom (Won)
 
           const halfH = Math.tan(THREE.MathUtils.degToRad(45) / 2) * camera.position.z;
           const visH = 2 * halfH; // visible world height at the net's depth
@@ -1095,13 +1056,13 @@ const structuredData = {
             nd.mesh.scale.setScalar(nd.base * (1 + Math.sin(t * 2 + nd.phase) * 0.12));
           });
 
-          // Flow data packets forward along the curved edges; recycle at the end
+          // Flow data packets from the top layer down along curved edges
           for (let i = 0; i < packets.length; i++) {
             const p = packets[i];
             p.t += p.speed * dt;
             if (p.t >= 1) {
-              p.t -= 1;
-              p.edge = (Math.random() * edges3.length) | 0;
+              p.t = 0;
+              p.edge = pickTopEdge();
             }
             const pts = edges3[p.edge];
             const f = p.t * (pts.length - 1);
@@ -1113,10 +1074,9 @@ const structuredData = {
           }
           packetGeo.attributes.position.needsUpdate = true;
 
-          // Subtle idle sway (no full revolve) + slow particle drift
+          // Subtle idle sway (no full revolve)
           net.rotation.y = Math.sin(t * 0.25) * 0.12;
           net.position.y = Math.sin(t * 0.6) * 0.08;
-          particles.rotation.y = t * 0.015;
 
           // Mouse parallax (lerped) — pivot tilt + camera drift
           if (!prefersReduced) {

@@ -2,6 +2,10 @@
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* High-contrast muted text on dark backgrounds (WCAG AA+). */
+  --color-neutral-400: #d4d4d4;
+  --color-neutral-500: #d4d4d4;
+  --color-neutral-600: #a3a3a3;
 }
 
 html {
@@ -26,14 +30,6 @@ body {
     radial-gradient(40% 40% at 80% 60%, rgba(20, 184, 166, 0.08), transparent 70%),
     radial-gradient(50% 50% at 15% 80%, rgba(16, 185, 129, 0.06), transparent 70%),
     #0a0a0a;
-}
-.touch-fluid {
-  opacity: 0.72;
-  mix-blend-mode: screen;
-}
-html[data-theme="light"] .touch-fluid {
-  opacity: 0.45;
-  mix-blend-mode: multiply;
 }
 
 /* --- Eyebrow / section label --- */
@@ -133,7 +129,7 @@ html[data-motion="reduce"] .magnetic-target {
   box-shadow: 0 10px 40px -20px rgba(0, 0, 0, 0.8);
 }
 .nav-link {
-  @apply text-sm text-neutral-400 transition-colors;
+  @apply text-sm text-neutral-300 transition-colors;
 }
 .nav-link:hover,
 .nav-link[aria-current="page"] {
@@ -217,7 +213,7 @@ summary:focus-visible {
 }
 
 .prose ol {
-  @apply my-5 list-decimal space-y-2 pl-6 marker:text-neutral-500;
+  @apply my-5 list-decimal space-y-2 pl-6 marker:text-neutral-300;
 }
 
 .prose li {
@@ -229,7 +225,7 @@ summary:focus-visible {
 }
 
 .prose blockquote {
-  @apply my-6 border-l-2 border-emerald-500/40 pl-4 italic text-neutral-400;
+  @apply my-6 border-l-2 border-emerald-500/40 pl-4 italic text-neutral-300;
 }
 
 .prose hr {
@@ -323,7 +319,7 @@ html[data-theme="light"] #navbar.scrolled .nav-shell {
   box-shadow: 0 10px 40px -20px rgba(0, 0, 0, 0.25) !important;
 }
 html[data-theme="light"] .nav-link {
-  color: #525252;
+  color: #404040;
 }
 html[data-theme="light"] .mobile-link {
   color: #262626;
