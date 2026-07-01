@@ -4,7 +4,7 @@
  *
  * Stack: Astro (static) + Tailwind v4 + Three.js + GSAP (ScrollTrigger) + Lenis.
  * Self-contained layout (own nav/footer) for a full-bleed cinematic experience.
- * Classic portfolio home lives at /overview.
+ * Self-contained layout (own nav/footer) for a full-bleed cinematic experience.
  */
 import '../styles/global.css';
 import FoxAssistant from '../components/FoxAssistant.astro';
@@ -12,11 +12,17 @@ import AccessibilityWidget from '../components/AccessibilityWidget.astro';
 import SpeedReader from '../components/SpeedReader.astro';
 import VaultSuggestionForm from '../components/VaultSuggestionForm.astro';
 import JellyButton from '../components/JellyButton.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import BlogCard from '../components/BlogCard.astro';
+import GitHubStats from '../components/GitHubStats.astro';
+import ContributionGraph from '../components/ContributionGraph.astro';
 import { site } from '../config/site';
 import { withBase } from '../lib/url';
 import { resolveDemoUrl, slugify } from '../lib/url';
 import { projectOverrides } from '../data/projects';
 import { growthSystemById } from '../data/growth-systems';
+import { getMergedProjects, fetchGitHubStats } from '../lib/github';
+import { fetchMediumPosts } from '../lib/medium';
 
 const pageTitle = site.name;
 const description = site.description;
@@ -85,6 +91,14 @@ const growthDemoUrl = growthProject
   ? resolveDemoUrl({ demoPath: growthProject.demoPath, demoUrl: growthProject.demoUrl })
   : null;
 const growthDetailUrl = withBase('/work/growth-system');
+
+const allProjects = await getMergedProjects();
+const growthSystemProject = allProjects.find((p) => p.slug === 'growth-system');
+const selectedWork = growthSystemProject
+  ? [growthSystemProject, ...allProjects.filter((p) => p.featured && p.slug !== 'growth-system').slice(0, 2)]
+  : allProjects.filter((p) => p.featured).slice(0, 3);
+const githubStats = await fetchGitHubStats();
+const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
 
 const services = [
   {
@@ -248,7 +262,6 @@ const structuredData = {
         </a>
 
         <nav class="hidden items-center gap-7 md:flex" aria-label="Main">
-          <a href={withBase('/overview')} class="nav-link">Overview</a>
           <a href={withBase('/work')} class="nav-link">Work</a>
           <a href={withBase('/case-studies')} class="nav-link">Case Studies</a>
           <a href={withBase('/resume')} class="nav-link">Resume</a>
@@ -279,7 +292,6 @@ const structuredData = {
         role="navigation"
         aria-label="Main"
       >
-        <a href={withBase('/overview')} class="mobile-link">Overview</a>
         <a href={withBase('/work')} class="mobile-link">Work</a>
         <a href={withBase('/case-studies')} class="mobile-link">Case Studies</a>
         <a href={withBase('/resume')} class="mobile-link">Resume</a>
@@ -582,6 +594,96 @@ const structuredData = {
         </div>
       </section>
 
+      {
+        selectedWork.length > 0 && (
+          <section id="selected-work" class="relative mx-auto max-w-6xl px-4 py-28">
+            <div class="mb-16 max-w-2xl">
+              <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">Selected work</p>
+              <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
+                Growth systems and product builds
+              </h2>
+            </div>
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {selectedWork.map((project) => (
+                <div data-reveal>
+                  <ProjectCard project={project} />
+                </div>
+              ))}
+            </div>
+            <div data-reveal class="mt-8 text-center">
+              <a href={withBase('/work')} class="text-sm font-medium text-emerald-400 transition-colors hover:text-emerald-300">
+                Browse the full showroom &rarr;
+              </a>
+            </div>
+          </section>
+        )
+      }
+
+      {
+        mediumPosts.length > 0 && (
+          <section id="writing" class="relative mx-auto max-w-6xl px-4 py-28">
+            <div class="mb-16 max-w-2xl">
+              <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">Writing</p>
+              <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
+                Latest essays and articles on Medium
+              </h2>
+            </div>
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {mediumPosts.map((post) => (
+                <div data-reveal>
+                  <BlogCard
+                    title={post.title}
+                    description={post.snippet}
+                    href={post.link}
+                    date={post.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                    tags={post.categories}
+                    image={post.thumbnail}
+                    external={true}
+                    source="Medium"
+                  />
+                </div>
+              ))}
+            </div>
+            <div data-reveal class="mt-8 text-center">
+              <a href={withBase('/blog')} class="text-sm font-medium text-emerald-400 transition-colors hover:text-emerald-300">
+                Read the blog &rarr;
+              </a>
+            </div>
+          </section>
+        )
+      }
+
+      <section id="github" class="relative mx-auto max-w-6xl px-4 py-28">
+        <div class="mb-16 max-w-2xl">
+          <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">GitHub activity</p>
+          <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
+            Open source and ongoing builds
+          </h2>
+        </div>
+        <div data-reveal>
+          <GitHubStats stats={githubStats} />
+        </div>
+        <div data-reveal class="mt-8">
+          <ContributionGraph />
+        </div>
+      </section>
+
+      <section class="relative mx-auto max-w-6xl px-4 pb-8">
+        <div
+          data-reveal
+          class="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-neutral-900/40 to-neutral-950 p-12 text-center backdrop-blur-sm sm:p-16"
+        >
+          <h2 class="text-3xl font-bold tracking-tight text-neutral-100 sm:text-4xl">Let's work together</h2>
+          <p class="mx-auto mt-3 max-w-xl text-neutral-400">
+            Need a site, funnel, or growth system? Let's talk.
+          </p>
+          <div class="mt-8 flex flex-wrap justify-center gap-4">
+            <a href={withBase('/contact')} class="btn btn-primary">Contact Me</a>
+            <a href={withBase('/resume')} class="btn btn-ghost">View Resume</a>
+          </div>
+        </div>
+      </section>
+
       <!-- ===================== CTA ===================== -->
       <section id="contact" class="relative mx-auto max-w-6xl px-4 py-28">
         <div
@@ -850,11 +952,13 @@ const structuredData = {
         pivot.add(net);
         scene.add(pivot);
 
-        const layerCounts = isMobile ? [4, 6, 6, 4, 2, 1] : [6, 9, 10, 8, 6, 3, 1];
+        const layerCounts = isMobile ? [1, 4, 6, 4, 1] : [1, 6, 9, 10, 9, 6, 1];
         const layerGap = 2.3;
         const vSpread = isMobile ? 4.4 : 6.6;
         const startX = -((layerCounts.length - 1) * layerGap) / 2;
         const endX = startX + (layerCounts.length - 1) * layerGap;
+        // Layer 0 (entry) is placed at +X so +90° Z rotation puts it at the top of the screen.
+        const layerX = (li: number) => endX - li * layerGap;
 
         // Shared node geometry with a baked-in vertical blue → purple gradient
         const nodeGeo = new THREE.IcosahedronGeometry(0.15, 0);
@@ -883,25 +987,27 @@ const structuredData = {
         const nodeData: { mesh: THREE.Mesh; phase: number; base: number }[] = [];
 
         layerCounts.forEach((count, li) => {
+          const isFirst = li === 0;
           const isLast = li === layerCounts.length - 1;
+          const isTerminal = isFirst || isLast;
           const layer: { mesh: THREE.Mesh; pos: THREE.Vector3 }[] = [];
           for (let n = 0; n < count; n++) {
-            // Organic placement: jittered columns + a gentle vertical bow + depth
+            // Diamond profile: narrow at both ends, widest at the center layers.
             const bow = Math.sin((li / (layerCounts.length - 1)) * Math.PI) * 0.6;
-            const x = startX + li * layerGap + (Math.random() - 0.5) * 0.5;
+            const x = layerX(li) + (Math.random() - 0.5) * 0.5;
             const y =
               count === 1
                 ? 0
                 : (n / (count - 1) - 0.5) * vSpread * (0.85 + bow * 0.15) +
                   (Math.random() - 0.5) * 0.7;
             const z = (Math.random() - 0.5) * 2.6;
-            const base = isLast ? 1.9 : 0.85 + Math.random() * 0.5;
+            const base = isTerminal ? 1.9 : 0.85 + Math.random() * 0.5;
             const mesh = new THREE.Mesh(
               nodeGeo,
               new THREE.MeshStandardMaterial({
-                vertexColors: true, // blue → purple gradient baked into the geometry
-                emissive: isLast ? 0x7c3aed : 0x4f46e5, // violet / indigo glow
-                emissiveIntensity: isLast ? 1.3 : 0.55,
+                vertexColors: true,
+                emissive: isFirst ? 0x22d3ee : isLast ? 0x7c3aed : 0x4f46e5,
+                emissiveIntensity: isTerminal ? 1.3 : 0.55,
                 metalness: 0.1,
                 roughness: 0.45,
                 flatShading: true,
@@ -917,11 +1023,11 @@ const structuredData = {
           layers.push(layer);
         });
 
-        // Gradient endpoints: cyan (leads) flowing to emerald (won)
+        // Gradient: cyan at the top entry node → emerald at the bottom won node
         const colA = new THREE.Color(0x22d3ee);
         const colB = new THREE.Color(0x34d399);
         const colorAt = (x: number, target: THREE.Color) =>
-          target.copy(colA).lerp(colB, THREE.MathUtils.clamp((x - startX) / (endX - startX), 0, 1));
+          target.copy(colA).lerp(colB, THREE.MathUtils.clamp((endX - x) / (endX - startX), 0, 1));
 
         // Edges: fully connect adjacent layers with organic bezier curves.
         // Each curve is sampled into segments with a per-vertex gradient color.
@@ -970,7 +1076,7 @@ const structuredData = {
         );
         net.add(edges);
 
-        // Data packets: spawn on the top (leads) layer and flow down through the funnel
+        // Data packets: spawn at the top entry node and flow down through the diamond
         const topEdgeIndices: number[] = [];
         for (let ei = 0; ei < edgeFromLayer.length; ei++) {
           if (edgeFromLayer[ei] === 0) topEdgeIndices.push(ei);
@@ -1011,26 +1117,28 @@ const structuredData = {
         const rim = new THREE.DirectionalLight(0x8b5cf6, 0.9); // violet rim
         rim.position.set(-6, -2, -4);
         scene.add(rim);
-        // Bright glow sits at the "won" node so conversions feel like the payoff
-        const glow = new THREE.PointLight(0x6366f1, 5, 18, 2); // indigo payoff glow
-        glow.position.set(endX, 0, 1.5);
-        scene.add(glow);
+        // Payoff glows at both diamond tips (entry + won)
+        const glowTop = new THREE.PointLight(0x22d3ee, 4, 16, 2);
+        glowTop.position.set(endX, 0, 1.5);
+        scene.add(glowTop);
+        const glowBottom = new THREE.PointLight(0x6366f1, 5, 18, 2);
+        glowBottom.position.set(startX, 0, 1.5);
+        scene.add(glowBottom);
 
-        /* --- Stable size: upright pipeline held at content width on every viewport --- */
-        const netW = (layers.length - 1) * layerGap || 1;
+        /* --- Scale to fill viewport width (diamond span maps to screen X after rotation) --- */
+        const diamondWidth = vSpread * 1.12 + 1.6;
 
         function recomputeScales() {
-          // Stand the pipeline upright so it reads top-to-bottom (Leads → Won).
-          net.rotation.z = -Math.PI / 2;
-          glow.position.set(0, -netW * 0.42, 1.5); // payoff glow at the bottom (Won)
+          // Diamond funnel: single entry node at top, wide middle, single won node at bottom.
+          net.rotation.z = Math.PI / 2;
 
           const halfH = Math.tan(THREE.MathUtils.degToRad(45) / 2) * camera.position.z;
-          const visH = 2 * halfH; // visible world height at the net's depth
+          const visW = 2 * halfH * camera.aspect;
+          const scale = (visW * 0.98) / diamondWidth;
 
-          // Fit the long axis (netW) to ~content height and keep it there — no
-          // full-bleed or scroll-driven contraction.
-          const contentPx = Math.min(window.innerHeight * 0.92, 1180);
-          net.scale.setScalar((visH * (contentPx / window.innerHeight)) / netW);
+          net.scale.setScalar(scale);
+          glowTop.position.set(0, endX * scale, 1.5);
+          glowBottom.position.set(0, startX * scale, 1.5);
         }
         recomputeScales();
 

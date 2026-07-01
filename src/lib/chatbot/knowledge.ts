@@ -91,7 +91,6 @@ export function buildChatbotConfig(): ChatbotConfig {
         ],
         response: `${site.name} is a ${site.title}. ${site.bio}\n\nCore skills: ${skills}.`,
         links: [
-          { label: 'Overview', href: withBase('/overview') },
           { label: 'Resume', href: withBase('/resume') },
           { label: 'About on home', href: withBase('/#about') },
         ],
@@ -424,9 +423,8 @@ export function buildChatbotConfig(): ChatbotConfig {
           'navigate',
           'blog',
           'home',
-          'overview',
         ],
-        response: `Site map:\n\n• Home — 3D studio landing with services & showcase\n• Overview — classic portfolio summary\n• Work — full showroom + Lead-to-Revenue system\n• Case Studies — measurable outcomes\n• Resume — experience & certifications\n• Store — digital products\n• Blog — articles (when published)\n• Contact — email & social links`,
+        response: `Site map:\n\n• Home — studio landing with services, showcase, FAQ, selected work, and writing\n• Work — full showroom + Lead-to-Revenue system\n• Case Studies — measurable outcomes\n• Resume — experience & certifications\n• Store — digital products\n• Blog — articles (when published)\n• Contact — email & social links`,
         links: [
           { label: 'Home', href: withBase('/') },
           { label: 'Work', href: withBase('/work') },
