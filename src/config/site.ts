@@ -12,7 +12,7 @@ export const site = {
     linkedin: 'https://www.linkedin.com/in/raymond-raymundo-king',
     x: 'https://x.com/prana_juana',
   },
-  accent: 'emerald',
+  accent: 'cinema',
   /** Public intake for Zephyr portfolio suggestions (API only — not the full app). */
   zephyrSuggestApi: 'https://zephyr-lyart-beta.vercel.app/api/suggest',
   skills: [

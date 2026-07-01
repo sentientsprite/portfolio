@@ -1,43 +1,38 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
-import SocialLinks from '../components/SocialLinks.astro';
-import SocialFeeds from '../components/SocialFeeds.astro';
+import CinematicLayout from '../layouts/CinematicLayout.astro';
 import GrowthIntakeForm from '../components/GrowthIntakeForm.astro';
+import SocialLinks from '../components/SocialLinks.astro';
 import { site } from '../config/site';
 ---
 
-<BaseLayout
+<CinematicLayout
   title="Contact"
   description="Start a marketing systems project with Raymond King. Share your goals through the quick intake form, or reach out by email and social."
 >
-  <div class="mx-auto max-w-4xl px-4 py-16">
-    <SectionHeading
-      eyebrow="Free consult"
-      title="Let's find the gaps in your marketing system"
-      subtitle="Book a free, no-obligation hour. Answer a few quick questions below and I'll follow up by email to schedule a consult, review the current bottleneck, and suggest the clearest next step."
-    />
+  <div class="work-catalog">
+    <header class="work-catalog-header" data-animate>
+      <p class="cinema-section-label mb-0">Free consult</p>
+      <h1 class="work-catalog-title">Where are leads leaking?</h1>
+      <p class="max-w-xl font-body text-neutral-500">
+        One hour, no obligation. Tell me what's broken — I'll reply with a clear next step.
+      </p>
+    </header>
 
-    <div class="mt-10" data-animate>
-      <GrowthIntakeForm />
+    <div data-animate>
+      <GrowthIntakeForm variant="cinematic" />
     </div>
 
-    <div
-      class="glow-card mt-10 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/40 p-8 text-center backdrop-blur-sm sm:p-10"
-      data-animate
-    >
-      <h3 class="text-lg font-semibold text-neutral-100">Prefer to reach out directly?</h3>
-      <p class="mx-auto mt-2 max-w-md text-sm text-neutral-400">Email is the fastest way to get me for project inquiries.</p>
-      <a href={`mailto:${site.email}`} class="btn btn-primary mt-6">
+    <div class="mt-12 border border-[#1a1a1a] bg-[#0a0a0a] p-8 text-center sm:p-10" data-animate>
+      <h3 class="font-display text-lg font-bold text-neutral-100">Prefer email?</h3>
+      <p class="mx-auto mt-2 max-w-md text-sm text-neutral-500">
+        Fastest path for project inquiries.
+      </p>
+      <a href={`mailto:${site.email}`} class="btn-cinema btn-cinema-primary mt-6 inline-flex">
         {site.email}
       </a>
-      <div class="mt-8">
+      <div class="mt-8 flex justify-center">
         <SocialLinks />
       </div>
     </div>
-
-    <div class="mt-12" data-animate>
-      <SocialFeeds />
-    </div>
   </div>
-</BaseLayout>
+</CinematicLayout>

@@ -1,6 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import SectionHeading from '../../components/SectionHeading.astro';
+import CinematicLayout from '../../layouts/CinematicLayout.astro';
 import BlogCard from '../../components/BlogCard.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../lib/url';
@@ -10,16 +9,25 @@ const studies = (await getCollection('caseStudies', ({ data }) => !data.draft)).
 );
 ---
 
-<BaseLayout title="Case Studies" description="In-depth research and project case studies.">
-  <div class="mx-auto max-w-6xl px-4 py-16">
-    <SectionHeading eyebrow="Proof of results" title="Case Studies" subtitle="In-depth breakdowns with measurable outcomes" />
+<CinematicLayout title="Case Studies" description="In-depth research and project case studies.">
+  <div class="work-catalog">
+    <header class="work-catalog-header" data-animate>
+      <p class="cinema-section-label mb-0">Proof</p>
+      <h1 class="work-catalog-title">Case Studies</h1>
+      <p class="max-w-xl text-neutral-500">Breakdowns with measurable outcomes — not vanity metrics.</p>
+    </header>
+
     <div class="grid gap-6 sm:grid-cols-2">
       {studies.map((study) => (
         <BlogCard
           title={study.data.title}
           description={study.data.description}
           href={`case-studies/${study.id}`}
-          date={study.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          date={study.data.pubDate.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
           tags={study.data.tags}
           type="case-study"
           image={study.data.heroImage ? withBase(study.data.heroImage) : null}
@@ -27,4 +35,4 @@ const studies = (await getCollection('caseStudies', ({ data }) => !data.draft)).
       ))}
     </div>
   </div>
-</BaseLayout>
+</CinematicLayout>

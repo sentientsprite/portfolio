@@ -1,10 +1,10 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
+import CinematicLayout from '../layouts/CinematicLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import GrowthSystemShowcase from '../components/GrowthSystemShowcase.astro';
 import { getMergedProjects } from '../lib/github';
-import { categoryLabels, type WorkCategory } from '../data/projects';
+import { categoryLabels } from '../data/projects';
+import { withBase } from '../lib/url';
 
 const projects = await getMergedProjects();
 const growthSystemProject = projects.find((p) => p.slug === 'growth-system');
@@ -39,23 +39,11 @@ const showroom = projects.filter(
 
 const meta = projects.filter((p) => p.category === 'meta');
 
-const grouped = showroom.reduce<Record<string, typeof showroom>>((acc, project) => {
-  const key = project.category;
-  acc[key] = acc[key] ?? [];
-  acc[key].push(project);
-  return acc;
-}, {});
-
-const categoryOrder: WorkCategory[] = ['automation', 'fun'];
-
-const sectionIntros: Partial<Record<WorkCategory, string>> = {
-  automation:
-    'Workflows that do the repetitive work — capturing leads, routing them, and sending follow-up — so the business runs without manual babysitting.',
-  fun: 'Side builds and experiments where I try new tech and ideas for the craft of it.',
-};
-
-const productIntro =
-  'Full product builds and working demos behind the marketing systems — apps and dashboards you can open, inspect, and judge directly.';
+const allCatalog = [
+  ...marketingSystems,
+  ...productSystems.filter((p) => p.slug !== 'growth-system'),
+  ...showroom,
+];
 
 const siteOrigin = 'https://sentientsprite.github.io/portfolio';
 const catalogProjects = projects.filter((p) => p.category !== 'meta');
@@ -81,67 +69,70 @@ const itemListSchema = {
 
 <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} is:inline />
 
-<BaseLayout
+<CinematicLayout
   title="Work"
   description="Live demos and marketing systems from Raymond King: websites, CRM workflows, booking flows, automation, and attribution dashboards for business owners."
 >
-  <div class="mx-auto max-w-6xl px-4 py-16">
-    <SectionHeading
-      eyebrow="Portfolio"
-      title="Work"
-      subtitle="This page is built around working demos: a click can become a tracked lead, move toward a booking, receive automated follow-up, and show up in attribution reporting. Explore each module below."
-    />
-
-  {
-    growthSystemProject && (
-      <GrowthSystemShowcase
-        systemId="lead-to-revenue"
-        systemProject={growthSystemProject}
-        modules={marketingSystems}
-      />
-    )
-  }
+  <div class="work-catalog">
+    <header class="work-catalog-header" data-animate>
+      <p class="cinema-section-label mb-0">Index</p>
+      <h1 class="work-catalog-title">Work</h1>
+      <p class="max-w-2xl font-body text-neutral-500">
+        Click any row — each one is a live demo or deep-dive into the stack.
+      </p>
+    </header>
 
     {
-      productSystems.length > 0 && (
-        <section class="mb-16">
-          <h3 class="mb-2 text-xl font-semibold text-neutral-100" data-animate>Product Systems</h3>
-          <p class="mb-6 max-w-2xl text-sm text-neutral-400" data-animate>{productIntro}</p>
-          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {productSystems.map((project) => (
-              <ProjectCard project={project} />
-            ))}
-          </div>
-        </section>
+      growthSystemProject && (
+        <div class="mb-16" data-animate>
+          <GrowthSystemShowcase
+            systemId="lead-to-revenue"
+            systemProject={growthSystemProject}
+            modules={marketingSystems}
+          />
+        </div>
       )
     }
 
-    {
-      categoryOrder.map((category) => {
-        const items = grouped[category];
-        if (!items?.length) return null;
-        return (
-          <section class="mb-16">
-            <h3 class="mb-2 text-xl font-semibold text-neutral-100" data-animate>{categoryLabels[category]}</h3>
-            {sectionIntros[category] && (
-              <p class="mb-6 max-w-2xl text-sm text-neutral-400" data-animate>{sectionIntros[category]}</p>
-            )}
-            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map((project) => (
-                <ProjectCard project={project} />
-              ))}
+    <div class="divide-y divide-[#1a1a1a]">
+      {
+        allCatalog.map((project, i) => (
+          <a
+            href={withBase(`/work/${project.slug}`)}
+            class="work-row group"
+            data-animate
+          >
+            <span class="work-row-index">{String(i + 1).padStart(2, '0')}</span>
+            <div class="work-row-body">
+              <h3>{project.displayName}</h3>
+              <p class="work-row-meta">
+                {project.growthSystemStage ?? categoryLabels[project.category]}
+              </p>
             </div>
-          </section>
-        );
-      })
-    }
+            <div class="work-row-thumb">
+              {project.screenshot ? (
+                <img
+                  src={withBase(project.screenshot)}
+                  alt=""
+                  loading="lazy"
+                />
+              ) : (
+                <div class="media-placeholder h-full">
+                  <span>{project.displayName.charAt(0)}</span>
+                </div>
+              )}
+            </div>
+          </a>
+        ))
+      }
+    </div>
 
     {
       meta.length > 0 && (
-        <section class="border-t border-neutral-800 pt-12">
-          <h3 class="mb-2 text-xl font-semibold text-neutral-100" data-animate>Web Design</h3>
-          <p class="mb-6 max-w-2xl text-sm text-neutral-400" data-animate>
-            Reusable UI patterns and interactive features I built into this site itself — every one is live right now. Open a card for the how-and-why, then try the real thing on any page.
+        <section class="mt-20 border-t border-[#1a1a1a] pt-16">
+          <p class="cinema-section-label" data-animate>Web design</p>
+          <p class="mb-8 max-w-xl text-sm text-neutral-500" data-animate>
+            Patterns built into this site — every one is live right now.
           </p>
           <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {meta.map((project) => (
@@ -151,13 +142,5 @@ const itemListSchema = {
         </section>
       )
     }
-
-    {
-      projects.length === 0 && (
-        <p class="text-neutral-400">
-          No work items found yet. Add curated entries in <code>src/data/projects.ts</code>.
-        </p>
-      )
-    }
   </div>
-</BaseLayout>
+</CinematicLayout>

@@ -1,24 +1,25 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import CinematicLayout from '../layouts/CinematicLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ProductCard from '../components/ProductCard.astro';
 import { products } from '../data/products';
 ---
 
-<BaseLayout title="Store" description="Digital products and templates.">
-  <div class="mx-auto max-w-6xl px-4 py-16">
-    <SectionHeading
-      eyebrow="Shop"
-      title="Store"
-      subtitle="Digital products and templates for marketers and developers"
-    />
+<CinematicLayout title="Store" description="Digital products and templates.">
+  <div class="work-catalog">
+    <header class="work-catalog-header" data-animate>
+      <p class="cinema-section-label mb-0">Shop</p>
+      <h1 class="work-catalog-title">Store</h1>
+      <p class="max-w-xl text-neutral-500">Templates and tools for marketers and developers.</p>
+    </header>
+
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {products.map((product) => (
         <ProductCard product={product} />
       ))}
     </div>
-    <p class="mt-8 text-center text-sm text-neutral-500">
-      Checkout links coming soon. Update product URLs in <code>src/data/products.ts</code>.
+    <p class="mt-10 text-center text-sm text-neutral-600">
+      Checkout links coming soon — update URLs in <code class="text-neutral-400">src/data/products.ts</code>.
     </p>
   </div>
-</BaseLayout>
+</CinematicLayout>
