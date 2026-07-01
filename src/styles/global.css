@@ -86,16 +86,15 @@ body {
   --jelly-green-ink: #032018;
   --jelly-green-inset: rgba(2, 44, 34, 0.65);
   --jelly-green-focus: rgba(16, 185, 129, 0.45);
-  --jelly-green-glow: rgba(16, 185, 129, 0.34);
 }
 
 .jelly-btn {
-  /* Green CTAs use a deeper gel throw than the speed-reader launcher */
+  /* Green CTAs — 4px gel depth (speed reader stays at 2px via :root) */
   --jelly-throw: 4px;
   --jelly-lift: 4px;
-  --jelly-lift-hover: 5px;
-  --jelly-base-shadow: 0 3px 8px -4px rgba(0, 0, 0, 0.5);
-  --jelly-base-shadow-hover: 0 5px 12px -5px rgba(0, 0, 0, 0.55);
+  --jelly-lift-hover: 4px;
+  --jelly-base-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.45);
+  --jelly-base-shadow-hover: 0 3px 6px -2px rgba(0, 0, 0, 0.5);
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -136,18 +135,14 @@ body {
   background:
     linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.58) 0%,
-      rgba(255, 255, 255, 0.14) 28%,
-      rgba(255, 255, 255, 0) 52%
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.08) 32%,
+      rgba(255, 255, 255, 0) 55%
     ),
     linear-gradient(165deg, var(--jelly-green-from) 0%, var(--jelly-green-to) 100%);
-  box-shadow:
-    0 -7px 14px -10px var(--jelly-green-inset) inset,
-    0 8px 26px -10px var(--jelly-green-glow);
+  box-shadow: 0 -6px 12px -10px var(--jelly-green-inset) inset;
   transform: translateY(calc(-1 * var(--jelly-lift)));
-  transition:
-    transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.2s ease;
+  transition: transform 0.16s cubic-bezier(0.2, 0.85, 0.3, 1), box-shadow 0.16s ease;
   will-change: transform;
 }
 
@@ -180,26 +175,13 @@ body {
 
 @keyframes jelly-wobble {
   0% {
-    transform: translateY(0) scaleX(1.045) scaleY(0.9);
+    transform: translateY(0);
   }
-  38% {
-    transform: translateY(calc(-1 * var(--jelly-lift) - 1px)) scaleX(0.985) scaleY(1.025);
-  }
-  68% {
-    transform: translateY(calc(-1 * var(--jelly-lift) + 0.5px)) scaleX(1.015) scaleY(0.99);
+  45% {
+    transform: translateY(calc(-1 * var(--jelly-lift) - 0.5px));
   }
   100% {
-    transform: translateY(calc(-1 * var(--jelly-lift))) scale(1);
-  }
-}
-
-@keyframes jelly-breathe {
-  0%,
-  100% {
-    transform: translateY(calc(-1 * var(--jelly-lift))) scale(1);
-  }
-  50% {
-    transform: translateY(calc(-1 * var(--jelly-lift) - 1px)) scaleX(1.006) scaleY(0.994);
+    transform: translateY(calc(-1 * var(--jelly-lift)));
   }
 }
 
@@ -238,14 +220,6 @@ body {
 .jelly-btn--sm .jelly-btn__text {
   font-size: 0.85rem;
   font-weight: 700;
-}
-
-/* Hero / section CTAs — subtle idle gel pulse (not navbar sm buttons) */
-.jelly-btn:not(.jelly-btn--sm) .jelly-btn__body {
-  animation: jelly-breathe 4.8s ease-in-out infinite;
-}
-.jelly-btn:is(:hover, :active, .is-wobble, :focus-visible) .jelly-btn__body {
-  animation: none;
 }
 
 .jelly-btn--block {
@@ -294,19 +268,17 @@ body {
 }
 
 .jelly-btn.is-wobble .jelly-btn__body {
-  animation: jelly-wobble 0.48s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: jelly-wobble 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);
   transition: none;
 }
 
 .jelly-btn:active:not(:disabled):not(.is-wobble) .jelly-btn__body,
 .jelly-btn.is-active:not(.is-wobble) .jelly-btn__body {
-  transform: translateY(0) scaleX(1.045) scaleY(0.9);
-  transition-duration: 0.06s;
-  transition-timing-function: ease-out;
+  transform: translateY(0);
+  transition-duration: 0.05s;
   box-shadow:
-    0 -4px 10px -10px var(--jelly-green-inset) inset,
-    0 2px 6px rgba(2, 44, 34, 0.28) inset,
-    0 4px 14px -8px var(--jelly-green-glow);
+    0 -5px 10px -10px var(--jelly-green-inset) inset,
+    0 2px 4px rgba(2, 44, 34, 0.35) inset;
 }
 .jelly-btn:active:not(:disabled) .jelly-btn__base,
 .jelly-btn.is-active .jelly-btn__base {
@@ -323,9 +295,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .jelly-btn:not(.jelly-btn--sm) .jelly-btn__body {
-    animation: none;
-  }
   .jelly-btn__body,
   .jelly-btn:hover:not(:disabled) .jelly-btn__body {
     transition: box-shadow 0.16s ease;
