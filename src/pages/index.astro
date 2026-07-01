@@ -12,7 +12,6 @@ import AccessibilityWidget from '../components/AccessibilityWidget.astro';
 import SpeedReader from '../components/SpeedReader.astro';
 import VaultSuggestionForm from '../components/VaultSuggestionForm.astro';
 import JellyButton from '../components/JellyButton.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 import BlogCard from '../components/BlogCard.astro';
 import GitHubStats from '../components/GitHubStats.astro';
 import ContributionGraph from '../components/ContributionGraph.astro';
@@ -21,7 +20,7 @@ import { withBase } from '../lib/url';
 import { resolveDemoUrl, slugify } from '../lib/url';
 import { projectOverrides } from '../data/projects';
 import { growthSystemById } from '../data/growth-systems';
-import { getMergedProjects, fetchGitHubStats } from '../lib/github';
+import { fetchGitHubStats } from '../lib/github';
 import { fetchMediumPosts } from '../lib/medium';
 
 const pageTitle = site.name;
@@ -92,11 +91,6 @@ const growthDemoUrl = growthProject
   : null;
 const growthDetailUrl = withBase('/work/growth-system');
 
-const allProjects = await getMergedProjects();
-const growthSystemProject = allProjects.find((p) => p.slug === 'growth-system');
-const selectedWork = growthSystemProject
-  ? [growthSystemProject, ...allProjects.filter((p) => p.featured && p.slug !== 'growth-system').slice(0, 2)]
-  : allProjects.filter((p) => p.featured).slice(0, 3);
 const githubStats = await fetchGitHubStats();
 const mediumPosts = (await fetchMediumPosts(3)).slice(0, 3);
 
@@ -593,31 +587,6 @@ const structuredData = {
           ))}
         </div>
       </section>
-
-      {
-        selectedWork.length > 0 && (
-          <section id="selected-work" class="relative mx-auto max-w-6xl px-4 py-28">
-            <div class="mb-16 max-w-2xl">
-              <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">Selected work</p>
-              <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
-                Growth systems and product builds
-              </h2>
-            </div>
-            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {selectedWork.map((project) => (
-                <div data-reveal>
-                  <ProjectCard project={project} />
-                </div>
-              ))}
-            </div>
-            <div data-reveal class="mt-8 text-center">
-              <a href={withBase('/work')} class="text-sm font-medium text-emerald-400 transition-colors hover:text-emerald-300">
-                Browse the full showroom &rarr;
-              </a>
-            </div>
-          </section>
-        )
-      }
 
       {
         mediumPosts.length > 0 && (
