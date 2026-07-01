@@ -1070,7 +1070,7 @@ const structuredData = {
             : pickTopEdge();
         };
 
-        const packetCount = isMobile ? 12 : 34;
+        const packetCount = isMobile ? 5 : 14;
         const packets: { edge: number; t: number; speed: number }[] = [];
         for (let i = 0; i < packetCount; i++) {
           packets.push({
@@ -1079,19 +1079,17 @@ const structuredData = {
             speed: 0.14 + Math.random() * 0.12,
           });
         }
-        const packetDotGeo = new THREE.SphereGeometry(0.09, 8, 8);
+        const packetDotGeo = new THREE.SphereGeometry(0.045, 6, 6);
         const packetDotMat = new THREE.MeshBasicMaterial({
           color: 0xffffff,
-          transparent: true,
-          opacity: 0.95,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-          depthTest: false,
+          transparent: false,
+          opacity: 1,
+          depthWrite: true,
+          depthTest: true,
         });
         const packetDots: THREE.Mesh[] = [];
         for (let i = 0; i < packetCount; i++) {
           const dot = new THREE.Mesh(packetDotGeo, packetDotMat);
-          dot.renderOrder = 5;
           net.add(dot);
           packetDots.push(dot);
         }
