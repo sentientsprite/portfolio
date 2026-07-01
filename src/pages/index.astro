@@ -880,9 +880,11 @@ const structuredData = {
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const isMobile = window.matchMedia('(max-width: 768px)').matches;
         const isTouch = window.matchMedia('(hover: none)').matches;
-        const skip3D = prefersReduced || isMobile;
+        const motionReduced =
+          prefersReduced || document.documentElement.getAttribute('data-motion') === 'reduce';
+        const skip3D = motionReduced;
 
-        await idle(skip3D ? 800 : 2000);
+        await idle(motionReduced ? 800 : isMobile ? 1200 : 2000);
 
         const { initMagneticButtons } = await import('../lib/magnetic-buttons');
         initMagneticButtons();
@@ -925,7 +927,7 @@ const structuredData = {
           const THREE = await import('three');
 
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x0a0a0a, 0.035);
+        scene.fog = new THREE.FogExp2(0x0a0a0a, 0.028);
 
         const camera = new THREE.PerspectiveCamera(
           45,
@@ -1117,28 +1119,42 @@ const structuredData = {
         const rim = new THREE.DirectionalLight(0x8b5cf6, 0.9); // violet rim
         rim.position.set(-6, -2, -4);
         scene.add(rim);
-        // Payoff glows at both diamond tips (entry + won)
+        // Payoff glows at both diamond tips (entry + won), parented to the net
         const glowTop = new THREE.PointLight(0x22d3ee, 4, 16, 2);
         glowTop.position.set(endX, 0, 1.5);
-        scene.add(glowTop);
+        net.add(glowTop);
         const glowBottom = new THREE.PointLight(0x6366f1, 5, 18, 2);
         glowBottom.position.set(startX, 0, 1.5);
-        scene.add(glowBottom);
+        net.add(glowBottom);
 
-        /* --- Scale to fill viewport width (diamond span maps to screen X after rotation) --- */
-        const diamondWidth = vSpread * 1.12 + 1.6;
+        /* --- Scale to viewport width; pull camera back so the full diamond fits --- */
+        const pipelineLength = (layerCounts.length - 1) * layerGap;
+        const maxLayerCount = Math.max(...layerCounts);
+        const diamondWidth = vSpread * 1.08 + maxLayerCount * 0.06;
+        const baseCameraZ = 11.5;
 
         function recomputeScales() {
-          // Diamond funnel: single entry node at top, wide middle, single won node at bottom.
           net.rotation.z = Math.PI / 2;
 
-          const halfH = Math.tan(THREE.MathUtils.degToRad(45) / 2) * camera.position.z;
-          const visW = 2 * halfH * camera.aspect;
-          const scale = (visW * 0.98) / diamondWidth;
+          const halfFov = THREE.MathUtils.degToRad(45) / 2;
+          camera.position.z = baseCameraZ;
+
+          let halfH = Math.tan(halfFov) * camera.position.z;
+          let visW = 2 * halfH * camera.aspect;
+          let scale = (visW * 0.98) / diamondWidth;
+          const scaledHeight = pipelineLength * scale;
+
+          // Width-first scaling can make the diamond taller than the viewport — dolly back.
+          if (scaledHeight > halfH * 2 * 0.9) {
+            const targetHalfH = scaledHeight / (2 * 0.9);
+            camera.position.z = targetHalfH / Math.tan(halfFov);
+            camera.updateProjectionMatrix();
+            halfH = Math.tan(halfFov) * camera.position.z;
+            visW = 2 * halfH * camera.aspect;
+            scale = (visW * 0.98) / diamondWidth;
+          }
 
           net.scale.setScalar(scale);
-          glowTop.position.set(0, endX * scale, 1.5);
-          glowBottom.position.set(0, startX * scale, 1.5);
         }
         recomputeScales();
 
