@@ -143,30 +143,6 @@ const structuredData = {
       });
     </script>
 
-    <!-- 2D touch-reactive ambient fluid (homepage theme, no 3D) -->
-    <script>
-      function idleFluid(delay = 1500): Promise<void> {
-        return new Promise((resolve) => {
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(() => resolve(), { timeout: delay });
-          } else {
-            setTimeout(resolve, 100);
-          }
-        });
-      }
-      async function bootFluid() {
-        await idleFluid();
-        const { initTouchFluid } = await import('../lib/touch-fluid');
-        const c = document.getElementById('touch-fluid') as HTMLCanvasElement | null;
-        if (c && !c.dataset.fluidBound) {
-          c.dataset.fluidBound = 'true';
-          initTouchFluid(c);
-        }
-      }
-      bootFluid().catch(console.error);
-      document.addEventListener('astro:page-load', bootFluid);
-    </script>
-
     <!-- Shared UX enhancements: nav scroll state, scroll reveals, card glow -->
     <script>
       function initEnhancements() {
