@@ -9,6 +9,8 @@ export interface ProjectOverride {
   demoUrl?: string;
   /** Internal, self-hosted demo served from /public (e.g. 'demos/landing-page/index.html'). */
   demoPath?: string;
+  /** Silent animation loop for cards/showcase (e.g. 'demos/fieldsync-scheduler/loop.html'). */
+  previewLoop?: string;
   /** Optional public source repository URL. Omit for private/local product work. */
   sourceUrl?: string;
   /** Longer write-up shown on the work detail page. */
@@ -78,6 +80,7 @@ export const projectOverrides: ProjectOverride[] = [
     growthSystemId: 'lead-to-revenue',
     growthSystemStage: 'Book instantly',
     screenshot: 'images/projects/fieldsync-scheduler.png',
+    previewLoop: 'demos/fieldsync-scheduler/loop.html',
     demoPath: 'demos/fieldsync-scheduler/index.html',
     sourceUrl: '',
     description:

@@ -23,6 +23,7 @@ export interface MergedProject {
   htmlUrl: string | null;
   demoUrl: string | null;
   demoPath: string | null;
+  previewLoop: string | null;
   stars: number;
   language: string | null;
   screenshot: string | null;
@@ -122,6 +123,7 @@ export async function getMergedProjects(): Promise<MergedProject[]> {
             : override.sourceUrl || null,
         demoUrl: override.demoUrl ?? repo?.homepage ?? null,
         demoPath: override.demoPath ?? null,
+        previewLoop: override.previewLoop ?? null,
         stars: repo?.stargazers_count ?? 0,
         language: repo?.language ?? override.techStack?.[0] ?? null,
         screenshot: override.screenshot ?? null,

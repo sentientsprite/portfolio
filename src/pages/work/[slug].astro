@@ -22,6 +22,7 @@ interface Props {
 const { project } = Astro.props;
 const allProjects = await getMergedProjects();
 const demoUrl = resolveDemoUrl({ demoPath: project.demoPath, demoUrl: project.demoUrl });
+const loopUrl = project.previewLoop ? withBase(`/${project.previewLoop}`) : null;
 const hasDemo = Boolean(demoUrl);
 const isMeta = project.category === 'meta';
 const hasSource = Boolean(project.htmlUrl);
@@ -149,6 +150,19 @@ const heroImage = project.screenshot ? withBase(`/${project.screenshot}`) : null
             }
           </div>
         </section>
+      )
+    }
+
+    {
+      loopUrl && (
+        <div class="mt-10 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-950 shadow-2xl">
+          <iframe
+            src={loopUrl}
+            title={`${project.displayName} — how booking works`}
+            loading="lazy"
+            class="aspect-video w-full border-0 bg-[#0a0a0a]"
+          />
+        </div>
       )
     }
 
