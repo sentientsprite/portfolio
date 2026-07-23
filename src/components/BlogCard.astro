@@ -11,6 +11,8 @@ interface Props {
   external?: boolean;
   image?: string | null;
   source?: string;
+  /** Footer CTA label (defaults by external). */
+  cta?: string;
 }
 
 const {
@@ -23,17 +25,18 @@ const {
   external = false,
   image = null,
   source,
+  cta,
 } = Astro.props;
 
 const linkHref = external ? href : withBase(href);
 const linkAttrs = external
   ? { target: '_blank', rel: 'noopener noreferrer' }
   : {};
+const footerCta = cta ?? (external ? 'Read on Medium ↗' : 'Read article →');
 ---
 
 <article
   class="glow-card group flex flex-col overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/40 backdrop-blur-sm hover:border-emerald-500/30"
-  data-animate
 >
   {
     image && (
@@ -78,10 +81,6 @@ const linkAttrs = external
         </div>
       )
     }
-    {
-      external && (
-        <span class="mt-3 text-xs font-medium text-emerald-400">Read on Medium &nearr;</span>
-      )
-    }
+    <span class="mt-3 text-xs font-medium text-emerald-400">{footerCta}</span>
   </div>
 </article>

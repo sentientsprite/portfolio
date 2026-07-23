@@ -119,6 +119,7 @@ export const projectOverrides: ProjectOverride[] = [
     growthSystemId: 'lead-to-revenue',
     growthSystemStage: 'Prioritize prospects',
     demoPath: 'demos/spryte-audit/index.html',
+    previewLoop: 'demos/spryte-audit/loop.html',
     sourceUrl: '',
     description:
       'AI-assisted lead audit demo for turning prospect websites into scored opportunities and prioritized outreach recommendations.',
@@ -231,13 +232,22 @@ export const projectOverrides: ProjectOverride[] = [
   },
   {
     repoName: 'NEMO-APP-v.1',
-    displayName: 'Sales Pipeline Workspace',
+    displayName: 'Nemo Local',
     category: 'product',
-    featured: false,
-    hidden: true,
-    description: 'Private sales pipeline and agent workspace — not shown publicly.',
-    details: 'Internal tooling for sales pipeline management. Kept off the public showroom.',
-    techStack: ['Next.js', 'Agents', 'Dashboard', 'Vercel'],
+    featured: true,
+    demoUrl: 'https://nemo-app-v-1.vercel.app/',
+    previewLoop: 'demos/nemo-local/loop.html',
+    sourceUrl: '',
+    description:
+      'Local Visibility Score for home services — grade Google Business Profile, review velocity, and listing consistency, then email a one-page PDF of top fixes.',
+    details:
+      'Nemo Local helps home-service operators see why customers cannot find them on Google. Enter a business name and ZIP; the product scores GBP completeness, review velocity, and listing consistency, then emails a ranked one-page PDF of the highest-impact fixes. Public demo at the live Vercel app — no private data required to try the free-score flow.',
+    techStack: ['Next.js', 'Local SEO', 'GBP', 'Lead Magnets', 'Vercel'],
+    metrics: [
+      { value: '0–100', label: 'Visibility score' },
+      { value: '1 page', label: 'PDF report' },
+      { value: 'Free', label: 'Score entry' },
+    ],
   },
   {
     repoName: 'seo-dashboard',
@@ -323,7 +333,7 @@ export const projectOverrides: ProjectOverride[] = [
     description:
       'A squishy 3D gel call-to-action: glossy highlight, pushable depth base, pointer-anchored click ripple, and elastic wobble on press — honors reduced motion.',
     details:
-      'Inspired by tactile jelly CTAs on high-end landing pages, this component layers a raised glossy cap over a darker “socket” so the button visibly presses down on click. A reactive ripple originates from the exact pointer position, and a spring wobble animation retriggers on rapid taps. Used as the primary CTA across project pages and the homepage hero. Try it live — click any “Let\'s Build” or “Book a build audit” jelly button on this site.',
+      'Inspired by tactile jelly CTAs on high-end landing pages, this component layers a raised glossy cap over a darker “socket” so the button visibly presses down on click. A reactive ripple originates from the exact pointer position, and a spring wobble animation retriggers on rapid taps. Primary and ghost variants share the same 4px gel throw with thin speed-reader-style shadows. Used as the site-wide CTA theme — try any green “Let’s Build” or ghost secondary on this site.',
     techStack: ['CSS', '3D UI', 'Micro-interactions', 'Astro'],
     metrics: [
       { value: '0 KB', label: 'Extra JS deps' },

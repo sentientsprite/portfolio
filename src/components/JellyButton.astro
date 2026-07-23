@@ -10,6 +10,8 @@ interface Props {
   class?: string;
   external?: boolean;
   size?: 'sm' | 'md' | 'block';
+  /** Filled green CTA (default) or secondary gel outline. */
+  variant?: 'primary' | 'ghost';
   as?: 'a' | 'button';
   type?: 'button' | 'submit';
   disabled?: boolean;
@@ -26,6 +28,7 @@ const {
   class: className,
   external = false,
   size = 'md',
+  variant = 'primary',
   as = 'a',
   type = 'button',
   disabled = false,
@@ -39,7 +42,8 @@ const rel = external ? 'noopener noreferrer' : undefined;
 const target = external ? '_blank' : undefined;
 const sizeClass =
   size === 'sm' ? 'jelly-btn--sm' : size === 'block' ? 'jelly-btn--block' : '';
-const classes = ['jelly-btn', sizeClass, className];
+const variantClass = variant === 'ghost' ? 'jelly-btn--ghost' : '';
+const classes = ['jelly-btn', sizeClass, variantClass, className];
 ---
 
 {

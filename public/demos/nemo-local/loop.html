@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nemo Local — Loop</title>
+<style>
+  :root {
+    --bg: #05070a;
+    --panel: #0f141c;
+    --border: #1e293b;
+    --ink: #f8fafc;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-soft: rgba(56, 189, 248, 0.14);
+    --good: #34d399;
+    --mid: #fbbf24;
+    --low: #f87171;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink);
+  }
+  .stage {
+    width: 100%; height: 100%;
+    padding: 16px 18px;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 12px;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .fields { display: flex; flex-direction: column; gap: 8px; }
+  .field {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 11px;
+    font-size: 12px;
+    color: var(--muted);
+    background: #0a0e14;
+  }
+  .field.filled {
+    color: var(--ink);
+    animation: fill-in 7s ease-in-out infinite;
+  }
+  .field.filled:nth-child(1) { animation-delay: 0s; }
+  .field.filled:nth-child(2) { animation-delay: 0.15s; }
+  .field.filled:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes fill-in {
+    0%, 8% { border-color: var(--border); background: #0a0e14; }
+    16%, 55% { border-color: rgba(56,189,248,.45); background: var(--accent-soft); }
+    65%, 100% { border-color: var(--border); background: #0a0e14; }
+  }
+  .go {
+    margin-top: 4px;
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 800;
+    background: var(--accent);
+    color: #041018;
+    text-align: center;
+    opacity: 0.5;
+    animation: go-pulse 7s ease-in-out infinite;
+  }
+  @keyframes go-pulse {
+    0%, 28% { opacity: 0.5; transform: scale(1); }
+    34%, 42% { opacity: 1; transform: scale(1.03); box-shadow: 0 0 18px rgba(56,189,248,.35); }
+    50%, 100% { opacity: 0.75; transform: scale(1); }
+  }
+  .score-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 24px);
+    gap: 10px;
+    opacity: 0;
+    animation: report-in 7s ease-in-out infinite;
+  }
+  @keyframes report-in {
+    0%, 40% { opacity: 0; transform: translateY(8px); }
+    48%, 84% { opacity: 1; transform: translateY(0); }
+    94%, 100% { opacity: 0; transform: translateY(4px); }
+  }
+  .ring {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    display: grid;
+    place-items: center;
+    position: relative;
+  }
+  .ring::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: var(--mid);
+    border-right-color: var(--mid);
+    animation: spin-score 7s ease-in-out infinite;
+  }
+  @keyframes spin-score {
+    0%, 42% { transform: rotate(0deg); opacity: 0; }
+    48% { opacity: 1; }
+    70% { transform: rotate(250deg); opacity: 1; }
+    84% { transform: rotate(250deg); opacity: 1; }
+    94%, 100% { opacity: 0; }
+  }
+  .ring b { font-size: 28px; line-height: 1; }
+  .ring small { display: block; font-size: 9px; color: var(--muted); margin-top: 2px; text-align: center; }
+  .fixes { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+  .fix {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 11px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: #0a0e14;
+    border: 1px solid var(--border);
+  }
+  .fix em { font-style: normal; color: var(--good); font-weight: 700; font-size: 10px; }
+  .pulse {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: progress 7s linear infinite;
+  }
+  @keyframes progress {
+    0% { transform: scaleX(0); opacity: 0.4; }
+    100% { transform: scaleX(1); opacity: 0.85; }
+  }
+  @media (max-width: 520px) {
+    .stage { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; }
+    .score-wrap { opacity: 1; transform: none; }
+    .ring::before { opacity: 1; transform: rotate(250deg); }
+    .go { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="stage" aria-hidden="true">
+  <div class="panel">
+    <div class="label">Free local score</div>
+    <div class="fields">
+      <div class="field filled">Peak Peak Plumbing</div>
+      <div class="field filled">84088</div>
+      <div class="field filled">you@business.com</div>
+      <div class="go">Get my free score →</div>
+    </div>
+    <div class="pulse"></div>
+  </div>
+  <div class="panel">
+    <div class="label">Visibility report</div>
+    <div class="score-wrap">
+      <div class="ring"><div><b>67</b><small>/ 100</small></div></div>
+      <div class="fixes">
+        <div class="fix"><span>GBP categories incomplete</span><em>High impact</em></div>
+        <div class="fix"><span>Review velocity below area avg</span><em>Medium</em></div>
+        <div class="fix"><span>NAP mismatch on 2 directories</span><em>Quick win</em></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

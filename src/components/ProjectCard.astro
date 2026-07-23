@@ -50,14 +50,14 @@ const hasSource = Boolean(project.htmlUrl);
     {
       hasDemo && (
         <span class="absolute left-3 top-3 z-20 rounded-full bg-neutral-950/80 px-2.5 py-1 text-[11px] font-medium text-emerald-400 backdrop-blur">
-          Live preview
+          {loopUrl ? 'Live loop' : 'Live preview'}
         </span>
       )
     }
 
     <div class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-neutral-950/0 opacity-0 transition group-hover:bg-neutral-950/40 group-hover:opacity-100">
       <span class="rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-neutral-950">
-        {hasDemo ? 'Hover to preview · Click to explore' : 'View details'}
+        {loopUrl ? 'Click to explore' : hasDemo ? 'Hover to preview · Click to explore' : 'View details'}
       </span>
     </div>
   </div>

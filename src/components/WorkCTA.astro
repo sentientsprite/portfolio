@@ -29,11 +29,6 @@ const mailto = `mailto:${site.email}?subject=${customSubject}&body=${customBody}
   </p>
   <div class="mt-8 flex flex-wrap items-center justify-center gap-5">
     <JellyButton href={withBase('/contact#intake')} eyebrow="Free consult" label="Book a free consult" />
-    <a
-      href={mailto}
-      class="rounded-full border border-neutral-700 px-8 py-3.5 text-sm font-medium text-neutral-200 transition hover:border-emerald-400/50 hover:text-emerald-300"
-    >
-      Request a custom version
-    </a>
+    <JellyButton href={mailto} variant="ghost" label="Request a custom version" />
   </div>
 </section>

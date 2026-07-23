@@ -92,12 +92,7 @@ const detailUrl = withBase(`/work/${systemProject.slug}`);
             <JellyButton href={demoUrl} external size="sm" label="Open benefit showcase ↗" />
           )
         }
-        <a
-          href={detailUrl}
-          class="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-5 py-2.5 text-sm font-medium text-neutral-300 transition hover:border-emerald-500/30 hover:text-emerald-400"
-        >
-          System overview
-        </a>
+        <JellyButton href={detailUrl} variant="ghost" size="sm" label="System overview" />
       </div>
     </div>
 

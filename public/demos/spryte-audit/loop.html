@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spryte Lead Audit — Loop</title>
+<style>
+  :root {
+    --bg: #09090b;
+    --panel: #18181b;
+    --border: #27272a;
+    --ink: #fafafa;
+    --muted: #a1a1aa;
+    --accent: #10b981;
+    --accent-soft: rgba(16, 185, 129, 0.14);
+    --crit: #fca5a5;
+    --crit-bg: #451a1a;
+    --warn: #fcd34d;
+    --warn-bg: #422006;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink);
+  }
+  .stage {
+    width: 100%; height: 100%;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .bar {
+    display: flex;
+    gap: 8px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px;
+    position: relative;
+  }
+  .bar .url {
+    flex: 1;
+    font-size: 11px;
+    color: var(--muted);
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #111113;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .bar .url span {
+    display: inline-block;
+    animation: type-url 7s steps(28, end) infinite;
+    max-width: 0;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+  @keyframes type-url {
+    0%, 8% { max-width: 0; }
+    28%, 78% { max-width: 220px; }
+    90%, 100% { max-width: 0; }
+  }
+  .run {
+    background: var(--accent);
+    color: #03130d;
+    border: 0;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 800;
+    opacity: 0.45;
+    animation: run-pulse 7s ease-in-out infinite;
+  }
+  @keyframes run-pulse {
+    0%, 26% { opacity: 0.45; transform: scale(1); }
+    30%, 36% { opacity: 1; transform: scale(1.04); box-shadow: 0 0 16px rgba(16,185,129,.35); }
+    42%, 100% { opacity: 0.7; transform: scale(1); }
+  }
+  .scores {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .metric {
+    text-align: center;
+    background: #111113;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 6px;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: score-in 7s ease-in-out infinite;
+  }
+  .metric:nth-child(1) { animation-delay: 0.05s; }
+  .metric:nth-child(2) { animation-delay: 0.12s; }
+  .metric:nth-child(3) { animation-delay: 0.19s; }
+  .metric:nth-child(4) { animation-delay: 0.26s; }
+  .metric b {
+    display: block;
+    font-size: 20px;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+  .metric span { font-size: 9px; color: var(--muted); letter-spacing: 0.04em; }
+  @keyframes score-in {
+    0%, 38% { opacity: 0; transform: translateY(8px); }
+    46%, 82% { opacity: 1; transform: translateY(0); }
+    92%, 100% { opacity: 0; transform: translateY(4px); }
+  }
+  .grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 10px;
+    min-height: 0;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    overflow: hidden;
+    opacity: 0;
+    animation: panel-in 7s ease-in-out infinite;
+  }
+  .panel:nth-child(2) { animation-delay: 0.15s; }
+  @keyframes panel-in {
+    0%, 44% { opacity: 0; }
+    52%, 82% { opacity: 1; }
+    92%, 100% { opacity: 0; }
+  }
+  .label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .issue {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .issue:last-child { border-bottom: 0; }
+  .sev {
+    font-size: 9px;
+    border-radius: 999px;
+    padding: 3px 7px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .crit { background: var(--crit-bg); color: var(--crit); }
+  .warn { background: var(--warn-bg); color: var(--warn); }
+  .copy {
+    background: #0f172a;
+    border-left: 3px solid var(--accent);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    line-height: 1.45;
+    color: #cbd5e1;
+  }
+  .lead {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 10px;
+    background: #111113;
+    margin-top: 8px;
+    font-size: 11px;
+  }
+  .lead small { color: var(--muted); display: block; margin-top: 2px; }
+  .cta { color: var(--accent); font-weight: 700; font-size: 11px; align-self: center; }
+  .pulse {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: progress 7s linear infinite;
+  }
+  @keyframes progress {
+    0% { transform: scaleX(0); opacity: 0.4; }
+    100% { transform: scaleX(1); opacity: 0.85; }
+  }
+  @media (max-width: 520px) {
+    .scores { grid-template-columns: repeat(2, 1fr); }
+    .grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; }
+    .bar .url span { max-width: 220px; }
+    .metric, .panel { opacity: 1; transform: none; }
+    .run { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="stage" aria-hidden="true">
+  <div class="bar">
+    <div class="url">https://<span>acme-hvac.example.com</span></div>
+    <div class="run">Run Audit</div>
+    <div class="pulse"></div>
+  </div>
+  <div class="scores">
+    <div class="metric"><b>62</b><span>Overall</span></div>
+    <div class="metric"><b>48</b><span>SEO</span></div>
+    <div class="metric"><b>71</b><span>Speed</span></div>
+    <div class="metric"><b>55</b><span>Convert</span></div>
+  </div>
+  <div class="grid">
+    <div class="panel">
+      <div class="label">Top gaps</div>
+      <div class="issue"><span class="sev crit">Crit</span><span>No clear primary CTA above the fold</span></div>
+      <div class="issue"><span class="sev warn">Warn</span><span>Service pages missing local schema</span></div>
+      <div class="issue"><span class="sev warn">Warn</span><span>Form fields untracked in CRM</span></div>
+    </div>
+    <div class="panel">
+      <div class="label">Outreach angle</div>
+      <div class="copy">You’re losing booked jobs to competitors with tighter booking CTAs and cleaner local SEO.</div>
+      <div class="lead">
+        <div><b>Priority lead</b><small>Score 62 · HVAC · ZIP 84088</small></div>
+        <div class="cta">Open →</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

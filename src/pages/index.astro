@@ -63,7 +63,7 @@ const faqStructuredData = {
 };
 
 // Products & launches — three flagship products, in order.
-const showcaseOrder = ['fieldsync-scheduler', 'spryte', 'prana'];
+const showcaseOrder = ['fieldsync-scheduler', 'spryte', 'NEMO-APP-v.1'];
 const showcase = showcaseOrder
   .map((repoName) => projectOverrides.find((p) => p.repoName === repoName && !p.hidden))
   .filter((p): p is NonNullable<typeof p> => Boolean(p))
@@ -337,13 +337,11 @@ const structuredData = {
               eyebrow="Free consult"
               label="Let's Build"
             />
-            <a
+            <JellyButton
               href="#growth"
-              data-magnetic
-              class="rounded-full border border-emerald-400/60 px-7 py-3 text-sm font-semibold text-emerald-300 transition hover:border-emerald-400 hover:bg-emerald-500 hover:text-neutral-950"
-            >
-              See the growth system
-            </a>
+              variant="ghost"
+              label="See the growth system"
+            />
           </div>
 
           <section class="sr-only" aria-label="AI-readable portfolio summary">
@@ -412,12 +410,7 @@ const structuredData = {
 
               <div class="mt-7 flex flex-wrap items-center gap-4">
                 {growthDemoUrl && <JellyButton href={growthDemoUrl} label="Open benefit showcase" size="sm" external />}
-                <a
-                  href={growthDetailUrl}
-                  class="inline-flex items-center gap-2 rounded-full border border-emerald-400/60 px-6 py-2.5 text-sm font-semibold text-emerald-300 transition hover:border-emerald-400 hover:bg-emerald-500 hover:text-neutral-950"
-                >
-                  System overview
-                </a>
+                <JellyButton href={growthDetailUrl} variant="ghost" size="sm" label="System overview" />
               </div>
             </div>
 
@@ -623,12 +616,12 @@ const structuredData = {
                 <BlogCard
                   title={post.title}
                   description={post.snippet}
-                  href={post.link}
+                  href={`/blog/${post.slug}`}
                   date={post.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                   tags={post.categories}
                   image={post.thumbnail}
-                  external={true}
                   source="Medium"
+                  cta="Read article →"
                 />
               ))}
             </div>
@@ -678,12 +671,11 @@ const structuredData = {
               eyebrow="Free consult"
               label="Let's Build"
             />
-            <a
+            <JellyButton
               href={`mailto:${site.email}`}
-              class="rounded-full border border-emerald-400/60 px-8 py-3.5 text-sm font-semibold text-emerald-300 transition hover:border-emerald-400 hover:bg-emerald-500 hover:text-neutral-950"
-            >
-              Or just email me
-            </a>
+              variant="ghost"
+              label="Or just email me"
+            />
           </div>
         </div>
       </section>
