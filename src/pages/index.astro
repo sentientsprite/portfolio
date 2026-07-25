@@ -15,6 +15,7 @@ import JellyButton from '../components/JellyButton.astro';
 import BlogCard from '../components/BlogCard.astro';
 import GitHubStats from '../components/GitHubStats.astro';
 import ContributionGraph from '../components/ContributionGraph.astro';
+import ToolStackMap from '../components/ToolStackMap.astro';
 import { site } from '../config/site';
 import { withBase } from '../lib/url';
 import { resolveDemoUrl, slugify } from '../lib/url';
@@ -22,6 +23,7 @@ import { projectOverrides } from '../data/projects';
 import { growthSystemById } from '../data/growth-systems';
 import { fetchGitHubStats } from '../lib/github';
 import { getMediumPosts } from '../lib/medium';
+import { NEMO_SCORE_URL } from '../data/value-offers';
 
 const pageTitle = site.name;
 const description = site.description;
@@ -258,8 +260,8 @@ const structuredData = {
 
         <nav class="hidden items-center gap-7 md:flex" aria-label="Main">
           <a href={withBase('/work')} class="nav-link">Work</a>
-          <a href={withBase('/case-studies')} class="nav-link">Case Studies</a>
-          <a href={withBase('/resume')} class="nav-link">Resume</a>
+          <a href={withBase('/#tools')} class="nav-link">Tools</a>
+          <a href={withBase('/pricing')} class="nav-link">Pricing</a>
           <a href={withBase('/blog')} class="nav-link">Blog</a>
           <a href={withBase('/contact')} class="nav-link">Contact</a>
         </nav>
@@ -288,8 +290,8 @@ const structuredData = {
         aria-label="Main"
       >
         <a href={withBase('/work')} class="mobile-link">Work</a>
-        <a href={withBase('/case-studies')} class="mobile-link">Case Studies</a>
-        <a href={withBase('/resume')} class="mobile-link">Resume</a>
+        <a href={withBase('/#tools')} class="mobile-link">Tools</a>
+        <a href={withBase('/pricing')} class="mobile-link">Pricing</a>
         <a href={withBase('/blog')} class="mobile-link">Blog</a>
         <a href={withBase('/contact')} class="mobile-link">Contact</a>
         <div class="px-1 pt-1">
@@ -411,6 +413,7 @@ const structuredData = {
               <div class="mt-7 flex flex-wrap items-center gap-4">
                 {growthDemoUrl && <JellyButton href={growthDemoUrl} label="Open benefit showcase" size="sm" external />}
                 <JellyButton href={growthDetailUrl} variant="ghost" size="sm" label="System overview" />
+                <JellyButton href={NEMO_SCORE_URL} variant="ghost" size="sm" label="Free local visibility score ↗" external />
               </div>
             </div>
 
@@ -440,6 +443,43 @@ const structuredData = {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- ===================== VALUE TOOLS ===================== -->
+      <section id="tools" class="relative mx-auto max-w-6xl px-4 py-28">
+        <div class="mb-12 max-w-2xl">
+          <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">Owner tools</p>
+          <h2 data-reveal class="text-4xl font-semibold tracking-tight sm:text-5xl">
+            Useful before you hire anyone.
+          </h2>
+        </div>
+        <div data-reveal class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            { href: '/checklist', title: 'Lead-leak checklist', body: 'Printable one-pager: find where inquiries die.', external: false },
+            { href: '/quiz', title: 'Module quiz', body: 'Five questions → the demo that matches your bottleneck.', external: false },
+            { href: '/booking-preview', title: 'Booking by niche', body: 'FieldSync loop dressed as HVAC, plumbing, wellness, or electrical.', external: false },
+            { href: NEMO_SCORE_URL, title: 'Local visibility score', body: 'Free GBP-style score for home services.', external: true },
+            { href: '/consult', title: 'Consult roadmap', body: 'Exactly what the free hour covers — before you book.', external: false },
+            { href: '/pricing', title: 'Engagement bands', body: 'Site · stack slice · full system — clear scopes.', external: false },
+          ].map((card) => (
+            <a
+              href={card.external ? card.href : withBase(card.href)}
+              target={card.external ? '_blank' : undefined}
+              rel={card.external ? 'noopener noreferrer' : undefined}
+              class="group rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5 transition hover:border-emerald-500/40"
+            >
+              <h3 class="text-base font-semibold text-neutral-100 group-hover:text-emerald-300">{card.title}</h3>
+              <p class="mt-2 text-sm text-neutral-400">{card.body}</p>
+              <span class="mt-3 inline-block text-xs font-medium text-emerald-400">
+                {card.external ? 'Open ↗' : 'Open →'}
+              </span>
+            </a>
+          ))}
+        </div>
+
+        <div data-reveal class="mt-14">
+          <ToolStackMap />
         </div>
       </section>
 

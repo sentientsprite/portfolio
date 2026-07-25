@@ -1,0 +1,114 @@
+---
+/**
+ * Interactive lead-to-revenue tool stack map.
+ */
+import { stackNodes } from '../data/value-offers';
+import { withBase } from '../lib/url';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<section class:list={['tool-stack', className]} data-tool-stack>
+  <div class="mb-6 max-w-2xl">
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Tool stack map</p>
+    <h2 class="mt-2 text-2xl font-semibold tracking-tight text-neutral-100 sm:text-3xl">
+      Where the system usually breaks
+    </h2>
+    <p class="mt-2 text-sm text-neutral-400">
+      Click a node to see the common failure and the demo that fixes it.
+    </p>
+  </div>
+
+  <div class="flex flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-2">
+    {
+      stackNodes.map((node, i) => (
+        <>
+          {i > 0 && (
+            <div class="hidden items-center text-emerald-500/40 lg:flex" aria-hidden="true">
+              →
+            </div>
+          )}
+          <button
+            type="button"
+            class="tool-stack__node group flex flex-1 flex-col rounded-2xl border border-neutral-800 bg-neutral-950/50 p-4 text-left transition hover:border-emerald-500/40 data-[active=true]:border-emerald-400/50 data-[active=true]:bg-emerald-500/5"
+            data-stack-node={node.id}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            data-active={i === 0 ? 'true' : 'false'}
+          >
+            <span class="text-[10px] font-bold uppercase tracking-[0.16em] text-neutral-500">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <span class="mt-1 text-sm font-semibold text-neutral-100 group-hover:text-emerald-300">
+              {node.label}
+            </span>
+            <span class="mt-0.5 text-xs text-neutral-500">{node.detail}</span>
+          </button>
+        </>
+      ))
+    }
+  </div>
+
+  <div
+    class="mt-5 rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5 sm:p-6"
+    data-stack-panel
+    aria-live="polite"
+  >
+    <!-- Filled by script; first node as SSR fallback -->
+    <p class="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-400" data-stack-fix>
+      {stackNodes[0].fix}
+    </p>
+    <p class="mt-2 text-sm text-neutral-300" data-stack-failure>{stackNodes[0].failure}</p>
+    <a
+      href={withBase(stackNodes[0].href)}
+      class="mt-4 inline-flex text-sm font-semibold text-emerald-400 hover:text-emerald-300"
+      data-stack-link
+    >
+      Open {stackNodes[0].label} →
+    </a>
+  </div>
+</section>
+
+<script define:vars={{ nodes: stackNodes, base: import.meta.env.BASE_URL }}>
+  function withBase(path) {
+    const root = (base || '/').replace(/\/$/, '');
+    if (!path.startsWith('/')) return path;
+    return `${root}${path}`;
+  }
+
+  function initToolStack(root) {
+    if (root.dataset.bound) return;
+    root.dataset.bound = 'true';
+    const buttons = [...root.querySelectorAll('[data-stack-node]')];
+    const fixEl = root.querySelector('[data-stack-fix]');
+    const failEl = root.querySelector('[data-stack-failure]');
+    const linkEl = root.querySelector('[data-stack-link]');
+
+    function select(id) {
+      const node = nodes.find((n) => n.id === id) || nodes[0];
+      buttons.forEach((btn) => {
+        const on = btn.getAttribute('data-stack-node') === node.id;
+        btn.setAttribute('data-active', on ? 'true' : 'false');
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      if (fixEl) fixEl.textContent = node.fix;
+      if (failEl) failEl.textContent = node.failure;
+      if (linkEl) {
+        linkEl.href = withBase(node.href);
+        linkEl.textContent = `Open ${node.label} →`;
+      }
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => select(btn.getAttribute('data-stack-node')));
+    });
+  }
+
+  document.querySelectorAll('[data-tool-stack]').forEach(initToolStack);
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('[data-tool-stack]').forEach(initToolStack);
+  });
+</script>

@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import JellyButton from '../components/JellyButton.astro';
+import { site } from '../config/site';
+import { checklistDownloadHref } from '../data/value-offers';
+import { withBase } from '../lib/url';
+
+const downloadUrl = withBase(checklistDownloadHref);
+---
+
+<BaseLayout
+  title="Lead-leak audit checklist"
+  description="Free one-page checklist to find where inquiries die between click and booked job."
+>
+  <div class="mx-auto max-w-3xl px-4 py-16">
+    <SectionHeading
+      eyebrow="Free download"
+      title="Lead-leak audit checklist"
+      subtitle="A printable one-pager for owners: capture → CRM → follow-up → booking → reporting. Check what you have, circle what breaks."
+    />
+
+    <div class="mt-10 grid gap-6 sm:grid-cols-[1.1fr_0.9fr]">
+      <div class="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-6">
+        <h3 class="text-sm font-semibold text-neutral-100">What’s inside</h3>
+        <ul class="mt-3 space-y-2 text-sm text-neutral-400">
+          <li>• 15 checkbox items across five funnel stages</li>
+          <li>• Space for business / niche / date</li>
+          <li>• Quick self-score: site fix vs stack slice vs full system</li>
+          <li>• Print or Save as PDF from your browser</li>
+        </ul>
+        <p class="mt-4 text-xs text-neutral-500">
+          Educational tool — not a guarantee of results. Customize to your niche.
+        </p>
+      </div>
+
+      <form
+        class="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/[0.07] via-neutral-900/50 to-neutral-950 p-6"
+        data-checklist-gate
+        data-download={downloadUrl}
+        data-email={site.email}
+      >
+        <h3 class="text-sm font-semibold text-neutral-100">Get the checklist</h3>
+        <p class="mt-1 text-xs text-neutral-400">
+          Optional: leave your email so I know you’re looking at leaks — then download opens immediately.
+        </p>
+        <label class="mt-4 block text-xs font-medium text-neutral-400" for="cl-name">
+          Name <span class="text-neutral-600">(optional)</span>
+        </label>
+        <input
+          id="cl-name"
+          name="name"
+          type="text"
+          maxlength="80"
+          class="mt-1.5 w-full rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+          placeholder="Your name"
+        />
+        <label class="mt-3 block text-xs font-medium text-neutral-400" for="cl-email">Email</label>
+        <input
+          id="cl-email"
+          name="email"
+          type="email"
+          required
+          maxlength="120"
+          class="mt-1.5 w-full rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+          placeholder="you@business.com"
+        />
+        <label class="mt-3 block text-xs font-medium text-neutral-400" for="cl-niche">
+          Niche <span class="text-neutral-600">(optional)</span>
+        </label>
+        <input
+          id="cl-niche"
+          name="niche"
+          type="text"
+          maxlength="80"
+          class="mt-1.5 w-full rounded-lg border border-neutral-800 bg-neutral-950/80 px-3 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-600 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+          placeholder="HVAC, plumbing, wellness…"
+        />
+        <div class="mt-5 flex flex-col gap-3">
+          <JellyButton as="button" type="submit" label="Email me & download →" class="w-full justify-center" />
+          <a
+            href={downloadUrl}
+            class="text-center text-xs font-medium text-neutral-500 transition hover:text-emerald-400"
+            data-checklist-direct
+          >
+            Skip form — open checklist
+          </a>
+        </div>
+        <p class="mt-3 text-xs text-neutral-500" data-checklist-status aria-live="polite"></p>
+      </form>
+    </div>
+
+    <p class="mt-10 text-center text-sm text-neutral-500">
+      Prefer a guided review?
+      <a href={withBase('/contact#intake')} class="font-medium text-emerald-400 hover:text-emerald-300">
+        Book a free consult
+      </a>
+    </p>
+  </div>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll('[data-checklist-gate]').forEach((form) => {
+    if (!(form instanceof HTMLFormElement)) return;
+    if (form.dataset.bound) return;
+    form.dataset.bound = 'true';
+    const download = form.getAttribute('data-download') || '';
+    const emailTo = form.getAttribute('data-email') || '';
+    const status = form.querySelector('[data-checklist-status]');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const name = String(fd.get('name') || '').trim();
+      const email = String(fd.get('email') || '').trim();
+      const niche = String(fd.get('niche') || '').trim();
+      const subject = encodeURIComponent('Lead-leak checklist download');
+      const body = encodeURIComponent(
+        `Name: ${name || '—'}\nEmail: ${email}\nNiche: ${niche || '—'}\n\n(Downloaded the lead-leak checklist)`,
+      );
+      if (emailTo) window.open(`mailto:${emailTo}?subject=${subject}&body=${body}`, '_self');
+      if (status) status.textContent = 'Opening checklist…';
+      window.setTimeout(() => {
+        window.open(download, '_blank', 'noopener,noreferrer');
+      }, 200);
+    });
+  });
+</script>

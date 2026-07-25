@@ -321,5 +321,82 @@
     <div class="pulse-line"></div>
   </div>
 </div>
+<script>
+(function () {
+  var niches = {
+    hvac: {
+      label: 'Pick a slot',
+      slots: [
+        ['9 – 11 AM', 'Earliest'],
+        ['11 AM – 1 PM', 'Most popular'],
+        ['1 – 3 PM', 'Afternoon'],
+      ],
+      techA: 'Tech A',
+      techB: 'Tech B',
+      sms: 'Visit confirmed for <em>11 AM – 1 PM</em>. Tech en route — you\'ll get a reminder.',
+    },
+    plumbing: {
+      label: 'Pick a slot',
+      slots: [
+        ['8 – 10 AM', 'Morning'],
+        ['10 AM – 12 PM', 'Most popular'],
+        ['2 – 4 PM', 'Afternoon'],
+      ],
+      techA: 'Crew A',
+      techB: 'Crew B',
+      sms: 'Plumber booked for <em>10 AM – 12 PM</em>. Text when they\'re on the way.',
+    },
+    wellness: {
+      label: 'Pick a time',
+      slots: [
+        ['9:00 AM', 'Open'],
+        ['11:30 AM', 'Most popular'],
+        ['3:00 PM', 'Later'],
+      ],
+      techA: 'Provider A',
+      techB: 'Provider B',
+      sms: 'Consult confirmed for <em>11:30 AM</em>. Reminder arrives 24 hours before.',
+    },
+    electrical: {
+      label: 'Pick a slot',
+      slots: [
+        ['7 – 9 AM', 'Early'],
+        ['12 – 2 PM', 'Most popular'],
+        ['4 – 6 PM', 'Evening'],
+      ],
+      techA: 'Spark A',
+      techB: 'Spark B',
+      sms: 'Electrician confirmed for <em>12 – 2 PM</em>. Drive-time checked — no double-book.',
+    },
+  };
+
+  function apply(id) {
+    var n = niches[id] || niches.hvac;
+    var labels = document.querySelectorAll('.panel-label');
+    if (labels[0]) labels[0].textContent = n.label;
+    var slotEls = document.querySelectorAll('.slot');
+    n.slots.forEach(function (s, i) {
+      if (!slotEls[i]) return;
+      var b = slotEls[i].querySelector('b');
+      var small = slotEls[i].querySelector('small');
+      if (b) b.textContent = s[0];
+      if (small) small.textContent = s[1];
+    });
+    var names = document.querySelectorAll('.tl-name');
+    if (names[0]) names[0].textContent = n.techA;
+    if (names[1]) names[1].textContent = n.techB;
+    var sms = document.querySelector('.sms');
+    if (sms) sms.innerHTML = n.sms;
+  }
+
+  var params = new URLSearchParams(location.search);
+  apply(params.get('niche') || 'hvac');
+
+  window.addEventListener('message', function (e) {
+    if (!e.data || e.data.type !== 'fieldsync-niche') return;
+    apply(e.data.niche);
+  });
+})();
+</script>
 </body>
 </html>

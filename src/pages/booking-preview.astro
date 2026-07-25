@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import JellyButton from '../components/JellyButton.astro';
+import { bookingNiches } from '../data/value-offers';
+import { withBase } from '../lib/url';
+
+const loopBase = withBase('/demos/fieldsync-scheduler/loop.html');
+---
+
+<BaseLayout
+  title="Booking preview by niche"
+  description="See how a FieldSync-style booking loop looks for HVAC, plumbing, wellness, or electrical — same system, your labels."
+>
+  <div class="mx-auto max-w-5xl px-4 py-16">
+    <SectionHeading
+      eyebrow="Live mock"
+      title="Booking that looks like your business"
+      subtitle="Same silent pick → dispatch → confirm loop. Swap the niche to see HVAC, plumbing, wellness, or electrical labels."
+    />
+
+    <div class="mt-8 flex flex-wrap gap-2" data-niche-picker data-loop-base={loopBase}>
+      {
+        bookingNiches.map((n, i) => (
+          <button
+            type="button"
+            class="rounded-full border px-4 py-2 text-sm font-medium transition data-[active=true]:border-emerald-400/60 data-[active=true]:bg-emerald-500/15 data-[active=true]:text-emerald-300 border-neutral-700 text-neutral-300 hover:border-emerald-500/40"
+            data-niche={n.id}
+            data-active={i === 0 ? 'true' : 'false'}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >
+            {n.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="mt-6 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-950 shadow-2xl">
+      <iframe
+        title="FieldSync niche booking loop"
+        src={`${loopBase}?niche=hvac`}
+        class="aspect-video w-full border-0"
+        data-niche-frame
+      />
+    </div>
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <JellyButton href={withBase('/demos/fieldsync-scheduler/index.html')} external label="Open full FieldSync demo ↗" />
+      <JellyButton href={withBase('/contact#intake')} variant="ghost" label="Want this for your niche?" />
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  function initNichePicker(root) {
+    if (root.dataset.bound) return;
+    root.dataset.bound = 'true';
+    const base = root.getAttribute('data-loop-base') || '';
+    const frame = document.querySelector('[data-niche-frame]');
+    const buttons = [...root.querySelectorAll('[data-niche]')];
+
+    function select(id) {
+      buttons.forEach((btn) => {
+        const on = btn.getAttribute('data-niche') === id;
+        btn.setAttribute('data-active', on ? 'true' : 'false');
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      if (frame instanceof HTMLIFrameElement) {
+        frame.src = `${base}?niche=${encodeURIComponent(id)}`;
+      }
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => select(btn.getAttribute('data-niche') || 'hvac'));
+    });
+  }
+
+  document.querySelectorAll('[data-niche-picker]').forEach(initNichePicker);
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('[data-niche-picker]').forEach(initNichePicker);
+  });
+</script>

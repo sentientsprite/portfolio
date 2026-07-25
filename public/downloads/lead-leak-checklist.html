@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lead-Leak Audit Checklist — Raymond King</title>
+  <style>
+    :root {
+      --ink: #0a0a0a;
+      --muted: #525252;
+      --line: #d4d4d4;
+      --accent: #059669;
+      --soft: #ecfdf5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: var(--ink);
+      background: #fff;
+      line-height: 1.45;
+      padding: 32px 28px 48px;
+      max-width: 720px;
+      margin-inline: auto;
+    }
+    h1 { font-size: 1.65rem; margin: 0 0 0.35rem; letter-spacing: -0.03em; }
+    .sub { color: var(--muted); font-size: 0.95rem; margin: 0 0 1.5rem; }
+    .meta {
+      display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem;
+      font-size: 0.8rem; color: var(--muted);
+      border: 1px solid var(--line); border-radius: 10px;
+      padding: 0.75rem 1rem; margin-bottom: 1.5rem; background: #fafafa;
+    }
+    h2 {
+      font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--accent); margin: 1.5rem 0 0.65rem;
+    }
+    .item {
+      border: 1px solid var(--line); border-radius: 10px;
+      padding: 0.75rem 0.9rem; margin: 0.5rem 0;
+      display: grid; grid-template-columns: 1.25rem 1fr; gap: 0.65rem;
+      align-items: start;
+    }
+    .item input { margin-top: 0.2rem; }
+    .item strong { display: block; font-size: 0.95rem; }
+    .item span { display: block; font-size: 0.82rem; color: var(--muted); margin-top: 0.15rem; }
+    .box {
+      margin-top: 1.25rem; padding: 1rem; border-radius: 10px;
+      background: var(--soft); border: 1px solid #a7f3d0;
+      font-size: 0.9rem;
+    }
+    .actions { margin-top: 1.5rem; display: flex; flex-wrap: gap: 0.75rem; }
+    button, .btn {
+      appearance: none; border: 0; border-radius: 999px;
+      padding: 0.65rem 1.1rem; font-weight: 700; font-size: 0.9rem;
+      background: var(--accent); color: #fff; cursor: pointer; text-decoration: none;
+    }
+    .btn-ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+    footer { margin-top: 2rem; font-size: 0.75rem; color: var(--muted); }
+    @media print {
+      body { padding: 0; }
+      .actions { display: none; }
+      .item { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Lead-leak audit checklist</h1>
+  <p class="sub">A one-page pass over where inquiries die between click and booked job. Check what you have — circle what breaks.</p>
+
+  <div class="meta">
+    <label>Business: <input name="biz" placeholder="________________" style="border:0;border-bottom:1px solid #a3a3a3;min-width:12rem" /></label>
+    <label>Niche: <input name="niche" placeholder="________________" style="border:0;border-bottom:1px solid #a3a3a3;min-width:8rem" /></label>
+    <label>Date: <input name="date" placeholder="________" style="border:0;border-bottom:1px solid #a3a3a3;min-width:6rem" /></label>
+  </div>
+
+  <h2>1. Capture</h2>
+  <label class="item"><input type="checkbox" /><div><strong>Primary CTA is obvious above the fold</strong><span>Visitor knows the one action (call, book, form) in under 5 seconds.</span></div></label>
+  <label class="item"><input type="checkbox" /><div><strong>Form fields are minimal</strong><span>Only what you need to follow up. Extra fields kill completion.</span></div></label>
+  <label class="item"><input type="checkbox" /><div><strong>Every lead has a source</strong><span>UTM / GBP / referral / direct recorded somehow — not “unknown.”</span></div></label>
+
+  <h2>2. Hand-off to CRM / inbox</h2>
+  <label class="item"><input type="checkbox" /><div><strong>Submissions don’t only live in email</strong><span>If the inbox is the CRM, leads get buried.</span></div></label>
+  <label class="item"><input type="checkbox" /><div><strong>Someone owns the first response SLA</strong><span>Who replies in &lt;15 minutes during business hours?</span></div></label>
+  <label class="item"><input type="checkbox" /><div><strong>Duplicates and spam are filtered</strong><span>Bad data shouldn’t clog the queue your team trusts.</span></div></label>
+
+  <h2>3. Follow-up</h2>
+  <label class="item"><input type="checkbox" /><div><strong>No-response leads get a second touch automatically</strong><span>Not “when someone remembers.”</span></div></label>
+  <label class="item"><input type="checkbox" /><div><strong>Ready vs not-ready is separated</strong><span>Hot leads to sales; everyone else to nurture.</span></div></label>
+  <label class="item"><input type="checkbox" /><div><strong>SMS or email reminders exist for appointments</strong><span>No-shows are a leak too.</span></div></label>
+
+  <h2>4. Booking</h2>
+  <label class="item"><input type="checkbox" /><div><strong>Customer can self-serve a slot</strong><span>Or the path from inquiry → calendar is documented and short.</span></div></label>
+  <label class="item"><input type="checkbox" /><div><strong>Double-books are blocked</strong><span>Drive time / capacity considered — not just an open Google Calendar.</span></div></label>
+  <label class="item"><input type="checkbox" /><div><strong>Confirmation goes out immediately</strong><span>Text or email with time, address expectations, and reschedule path.</span></div></label>
+
+  <h2>5. Reporting</h2>
+  <label class="item"><input type="checkbox" /><div><strong>You can name cost per lead by channel this month</strong><span>Even roughly — ads vs organic vs referral.</span></div></label>
+  <label class="item"><input type="checkbox" /><div><strong>Booked jobs connect back to a source</strong><span>If not, you can’t decide what to cut or scale.</span></div></label>
+  <label class="item"><input type="checkbox" /><div><strong>One weekly owner view exists</strong><span>Leads in, booked, no-shows, top leak — not five logins.</span></div></label>
+
+  <div class="box">
+    <strong>Score yourself:</strong> count the unchecked boxes. 0–3 = tighten one stage. 4–8 = a growth-stack slice. 9+ = the whole lead-to-revenue loop probably needs a rebuild.
+  </div>
+
+  <div class="actions">
+    <button type="button" onclick="window.print()">Print / Save as PDF</button>
+    <a class="btn btn-ghost" href="https://sentientsprite.github.io/portfolio/contact#intake">Book a free consult</a>
+  </div>
+
+  <footer>
+    Raymond King — Marketing Systems Builder · sentientsprite.github.io/portfolio<br />
+    Checklist is educational, not a guarantee of results. Customize to your niche.
+  </footer>
+</body>
+</html>

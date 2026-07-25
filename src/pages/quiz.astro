@@ -1,0 +1,197 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import JellyButton from '../components/JellyButton.astro';
+import { moduleQuiz } from '../data/value-offers';
+import { withBase } from '../lib/url';
+
+const results = moduleQuiz.results;
+---
+
+<BaseLayout
+  title="Which module do you need?"
+  description="Five-question quiz to recommend the right marketing-system module — landing, booking, nurture, scoring, or attribution."
+>
+  <div class="mx-auto max-w-2xl px-4 py-16">
+    <SectionHeading eyebrow="Self-diagnosis" title={moduleQuiz.title} subtitle={moduleQuiz.subtitle} />
+
+    <div class="mt-10" data-module-quiz data-results={JSON.stringify(results)} data-base={import.meta.env.BASE_URL}>
+      <div data-quiz-steps class="space-y-6">
+        {
+          moduleQuiz.questions.map((q, qi) => (
+            <fieldset
+              class="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5 data-[hidden=true]:hidden"
+              data-quiz-step={qi}
+              data-hidden={qi === 0 ? 'false' : 'true'}
+            >
+              <legend class="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-400">
+                Question {qi + 1} / {moduleQuiz.questions.length}
+              </legend>
+              <p class="mt-2 text-lg font-semibold text-neutral-100">{q.prompt}</p>
+              <div class="mt-4 grid gap-2">
+                {q.options.map((opt) => (
+                  <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-neutral-800 bg-neutral-950/50 px-3 py-3 text-sm text-neutral-300 transition hover:border-emerald-500/30 has-[:checked]:border-emerald-400/50 has-[:checked]:bg-emerald-500/10">
+                    <input
+                      type="radio"
+                      name={q.id}
+                      value={opt.id}
+                      class="mt-0.5 accent-emerald-500"
+                      data-tags={opt.tags.join(',')}
+                      required={qi === 0}
+                    />
+                    <span>{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+              <div class="mt-4 flex justify-between gap-3">
+                {qi > 0 ? (
+                  <button
+                    type="button"
+                    class="rounded-lg border border-neutral-700 px-4 py-2 text-sm text-neutral-300 hover:border-emerald-500/30 hover:text-emerald-300"
+                    data-quiz-back
+                  >
+                    Back
+                  </button>
+                ) : (
+                  <span />
+                )}
+                <button
+                  type="button"
+                  class="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-neutral-950 hover:bg-emerald-400 disabled:opacity-40"
+                  data-quiz-next
+                  disabled
+                >
+                  {qi === moduleQuiz.questions.length - 1 ? 'See recommendation' : 'Next'}
+                </button>
+              </div>
+            </fieldset>
+          ))
+        }
+      </div>
+
+      <div class="mt-6 hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-500/10 via-neutral-900/50 to-neutral-950 p-6 sm:p-8" data-quiz-result>
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Recommended first</p>
+        <h2 class="mt-2 text-2xl font-semibold text-neutral-100" data-result-stage></h2>
+        <p class="mt-1 text-sm font-medium text-emerald-300" data-result-product></p>
+        <p class="mt-3 text-sm leading-relaxed text-neutral-400" data-result-blurb></p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <JellyButton href={withBase('/contact#intake')} size="sm" label="Book a free consult" />
+          <a
+            href="#"
+            class="inline-flex items-center rounded-full border border-neutral-700 px-5 py-2.5 text-sm font-medium text-neutral-200 transition hover:border-emerald-400/50 hover:text-emerald-300"
+            data-result-demo
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open matching demo ↗
+          </a>
+          <a
+            href="#"
+            class="inline-flex items-center text-sm font-medium text-emerald-400 hover:text-emerald-300"
+            data-result-detail
+          >
+            Module details →
+          </a>
+        </div>
+        <button
+          type="button"
+          class="mt-6 text-xs text-neutral-500 hover:text-neutral-300"
+          data-quiz-reset
+        >
+          Retake quiz
+        </button>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  function withBase(base, path) {
+    const root = (base || '/').replace(/\/$/, '');
+    if (!path.startsWith('/')) return path;
+    return `${root}${path}`;
+  }
+
+  function initQuiz(root) {
+    if (root.dataset.bound) return;
+    root.dataset.bound = 'true';
+    const results = JSON.parse(root.getAttribute('data-results') || '{}');
+    const base = root.getAttribute('data-base') || '/';
+    const steps = [...root.querySelectorAll('[data-quiz-step]')];
+    const resultPanel = root.querySelector('[data-quiz-result]');
+    let index = 0;
+    const scores = {};
+
+    function showStep(i) {
+      index = i;
+      steps.forEach((step, si) => {
+        step.setAttribute('data-hidden', si === i ? 'false' : 'true');
+      });
+      if (resultPanel) resultPanel.classList.add('hidden');
+      syncNextEnabled();
+    }
+
+    function syncNextEnabled() {
+      const step = steps[index];
+      const next = step?.querySelector('[data-quiz-next]');
+      const checked = step?.querySelector('input[type="radio"]:checked');
+      if (next) next.disabled = !checked;
+    }
+
+    function tally() {
+      Object.keys(scores).forEach((k) => delete scores[k]);
+      root.querySelectorAll('input[type="radio"]:checked').forEach((input) => {
+        const tags = (input.getAttribute('data-tags') || '').split(',').filter(Boolean);
+        tags.forEach((t) => {
+          scores[t] = (scores[t] || 0) + 1;
+        });
+      });
+      const ranked = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+      return ranked[0]?.[0] || 'capture';
+    }
+
+    function showResult() {
+      const key = tally();
+      const r = results[key] || results.capture;
+      steps.forEach((step) => step.setAttribute('data-hidden', 'true'));
+      resultPanel?.classList.remove('hidden');
+      const stage = root.querySelector('[data-result-stage]');
+      const product = root.querySelector('[data-result-product]');
+      const blurb = root.querySelector('[data-result-blurb]');
+      const demo = root.querySelector('[data-result-demo]');
+      const detail = root.querySelector('[data-result-detail]');
+      if (stage) stage.textContent = r.stage;
+      if (product) product.textContent = r.product;
+      if (blurb) blurb.textContent = r.blurb;
+      if (demo) demo.setAttribute('href', withBase(base, r.demo));
+      if (detail) detail.setAttribute('href', withBase(base, r.href));
+    }
+
+    root.addEventListener('change', (e) => {
+      if (e.target instanceof HTMLInputElement && e.target.type === 'radio') syncNextEnabled();
+    });
+
+    root.querySelectorAll('[data-quiz-next]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (index >= steps.length - 1) showResult();
+        else showStep(index + 1);
+      });
+    });
+    root.querySelectorAll('[data-quiz-back]').forEach((btn) => {
+      btn.addEventListener('click', () => showStep(Math.max(0, index - 1)));
+    });
+    root.querySelector('[data-quiz-reset]')?.addEventListener('click', () => {
+      root.querySelectorAll('input[type="radio"]').forEach((input) => {
+        if (input instanceof HTMLInputElement) input.checked = false;
+      });
+      showStep(0);
+    });
+
+    showStep(0);
+  }
+
+  document.querySelectorAll('[data-module-quiz]').forEach(initQuiz);
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('[data-module-quiz]').forEach(initQuiz);
+  });
+</script>
