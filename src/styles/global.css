@@ -86,6 +86,13 @@ body {
   --jelly-green-ink: #032018;
   --jelly-green-inset: rgba(2, 44, 34, 0.65);
   --jelly-green-focus: rgba(16, 185, 129, 0.45);
+  --jelly-purple-from: #a78bfa;
+  --jelly-purple-to: #7c3aed;
+  --jelly-purple-deep: #2e1065;
+  --jelly-purple-socket-from: #5b21b6;
+  --jelly-purple-ink: #1e0b3a;
+  --jelly-purple-inset: rgba(46, 16, 101, 0.7);
+  --jelly-purple-focus: rgba(139, 92, 246, 0.45);
 }
 
 .jelly-btn {
@@ -268,6 +275,36 @@ body {
     0 0 0 3px var(--jelly-green-focus),
     0 0 0 1px rgba(52, 211, 153, 0.35) inset,
     0 -6px 12px -10px var(--jelly-green-inset) inset;
+}
+
+/* Violet gel — Zephyr suggestion CTAs (matches #suggest form accent) */
+.jelly-btn--purple .jelly-btn__base {
+  background: linear-gradient(165deg, var(--jelly-purple-socket-from) 0%, var(--jelly-purple-deep) 100%);
+}
+.jelly-btn--purple .jelly-btn__body {
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.42) 0%,
+      rgba(255, 255, 255, 0.08) 34%,
+      rgba(255, 255, 255, 0) 58%
+    ),
+    linear-gradient(165deg, var(--jelly-purple-from) 0%, var(--jelly-purple-to) 100%);
+  box-shadow: 0 -6px 12px -10px var(--jelly-purple-inset) inset;
+}
+.jelly-btn--purple .jelly-btn__label {
+  color: var(--jelly-purple-ink);
+}
+.jelly-btn--purple:active:not(:disabled):not(.is-wobble) .jelly-btn__body,
+.jelly-btn--purple.is-active:not(.is-wobble) .jelly-btn__body {
+  box-shadow:
+    0 -5px 10px -10px var(--jelly-purple-inset) inset,
+    0 2px 4px rgba(46, 16, 101, 0.5) inset;
+}
+.jelly-btn--purple:focus-visible .jelly-btn__body {
+  box-shadow:
+    0 0 0 3px var(--jelly-purple-focus),
+    0 -6px 12px -10px var(--jelly-purple-inset) inset;
 }
 
 /* All green jelly CTAs — subtle idle gel pulse */

@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import JellyButton from '../../components/JellyButton.astro';
 import SpeedReaderDemo from '../../components/SpeedReaderDemo.astro';
+import SuggestCTA from '../../components/SuggestCTA.astro';
 import { getMergedProjects, type MergedProject } from '../../lib/github';
 import { categoryLabels } from '../../data/projects';
 import { growthSystemById } from '../../data/growth-systems';
@@ -42,12 +43,15 @@ const heroImage = project.screenshot ? withBase(`/${project.screenshot}`) : null
 
 <BaseLayout title={project.displayName} description={project.description}>
   <div class="mx-auto max-w-5xl px-4 py-12">
-    <a
-      href={withBase('/work')}
-      class="inline-flex items-center gap-1 text-sm text-neutral-400 transition-colors hover:text-emerald-400"
-    >
-      &larr; Back to Work
-    </a>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <a
+        href={withBase('/work')}
+        class="inline-flex items-center gap-1 text-sm text-neutral-400 transition-colors hover:text-emerald-400"
+      >
+        &larr; Back to Work
+      </a>
+      <SuggestCTA />
+    </div>
 
     <header class="mt-6">
       {

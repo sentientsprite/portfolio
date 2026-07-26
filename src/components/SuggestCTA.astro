@@ -1,0 +1,25 @@
+---
+/**
+ * Purple jelly CTA → home Zephyr suggestion form (#suggest).
+ */
+import JellyButton from './JellyButton.astro';
+import { withBase } from '../lib/url';
+
+interface Props {
+  size?: 'sm' | 'md';
+  class?: string;
+  /** Use on the home page so the hash stays in-page. */
+  samePage?: boolean;
+}
+
+const { size = 'sm', class: className, samePage = false } = Astro.props;
+const href = samePage ? '#suggest' : withBase('/#suggest');
+---
+
+<JellyButton
+  href={href}
+  variant="purple"
+  size={size}
+  label="Leave a suggestion"
+  class={className}
+/>
