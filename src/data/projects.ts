@@ -232,16 +232,16 @@ export const projectOverrides: ProjectOverride[] = [
   },
   {
     repoName: 'NEMO-APP-v.1',
-    displayName: 'Nemo Local',
+    displayName: 'Local Visibility Score',
     category: 'product',
     featured: true,
     demoUrl: 'https://nemo-app-v-1.vercel.app/',
     previewLoop: 'demos/nemo-local/loop.html',
     sourceUrl: '',
     description:
-      'Local Visibility Score for home services — grade Google Business Profile, review velocity, and listing consistency, then email a one-page PDF of top fixes.',
+      'Nemo Local — grade Google Business Profile, review velocity, and listing consistency for home services, then email a one-page PDF of top fixes.',
     details:
-      'Nemo Local helps home-service operators see why customers cannot find them on Google. Enter a business name and ZIP; the product scores GBP completeness, review velocity, and listing consistency, then emails a ranked one-page PDF of the highest-impact fixes. Public demo at the live Vercel app — no private data required to try the free-score flow.',
+      'Local Visibility Score (Nemo Local) helps home-service operators see why customers cannot find them on Google. Enter a business name and ZIP; the product scores GBP completeness, review velocity, and listing consistency, then emails a ranked one-page PDF of the highest-impact fixes. Public demo at the live Vercel app — no private data required to try the free-score flow.',
     techStack: ['Next.js', 'Local SEO', 'GBP', 'Lead Magnets', 'Vercel'],
     metrics: [
       { value: '0–100', label: 'Visibility score' },
@@ -251,14 +251,15 @@ export const projectOverrides: ProjectOverride[] = [
   },
   {
     repoName: 'seo-dashboard',
-    displayName: 'SEO Performance Dashboard',
+    displayName: 'SEO Dashboard',
     category: 'marketing',
     featured: false,
     demoPath: 'demos/seo-dashboard/index.html',
+    previewLoop: 'demos/seo-dashboard/loop.html',
     description:
-      'A clean reporting dashboard surfacing organic traffic, rankings, and conversion trends.',
+      'Client-facing SEO reporting: organic traffic, rankings, and conversion trends in one clean dashboard.',
     details:
-      'A client-facing SEO dashboard that turns raw analytics into a story: organic growth, keyword movement, top pages, and conversion impact. Standalone reporting tool — separate from the ROI Attribution Dashboard in the growth system.',
+      'A client-facing SEO dashboard that turns raw analytics into a story: organic growth, keyword movement, top pages, and conversion impact. Standalone reporting tool — separate from the ROI Attribution Dashboard in the growth system and from Nemo’s Local Visibility Score for GBP/local listings.',
     techStack: ['Analytics', 'SEMrush', 'Data Viz'],
   },
   {

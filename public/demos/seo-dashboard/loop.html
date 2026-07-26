@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SEO Dashboard — Loop</title>
+<style>
+  :root {
+    --bg: #050807;
+    --panel: #0f1915;
+    --border: #1a2a24;
+    --ink: #ecfdf5;
+    --muted: #8aa39b;
+    --accent: #34d399;
+    --accent-deep: #059669;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink);
+  }
+  .stage {
+    width: 100%; height: 100%;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .top h1 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .pill {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    background: rgba(52, 211, 153, 0.1);
+    border-radius: 999px;
+    padding: 3px 8px;
+  }
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .metric {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+  }
+  .metric .label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .metric .value {
+    margin-top: 4px;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .metric .delta {
+    margin-top: 2px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .panel {
+    flex: 1;
+    min-height: 0;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 12px 12px;
+    display: flex;
+    flex-direction: column;
+  }
+  .panel .label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .chart {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    min-height: 0;
+  }
+  .bar-col {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 6px;
+  }
+  .bar {
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+    background: linear-gradient(180deg, var(--accent), var(--accent-deep));
+    height: 12%;
+    transition: height 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .bar-col span {
+    font-size: 9px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="top">
+      <h1>Organic performance</h1>
+      <span class="pill">SEO Dashboard</span>
+    </div>
+    <div class="metrics">
+      <div class="metric">
+        <div class="label">Traffic</div>
+        <div class="value" data-m="traffic">—</div>
+        <div class="delta" data-d="traffic">▲ —</div>
+      </div>
+      <div class="metric">
+        <div class="label">Avg position</div>
+        <div class="value" data-m="pos">—</div>
+        <div class="delta" data-d="pos">▲ —</div>
+      </div>
+      <div class="metric">
+        <div class="label">Conversions</div>
+        <div class="value" data-m="conv">—</div>
+        <div class="delta" data-d="conv">▲ —</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="label">Sessions by month</div>
+      <div class="chart" id="chart"></div>
+    </div>
+  </div>
+<script>
+(function () {
+  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+  var frames = [
+    {
+      traffic: '18.4k', dTraffic: '▲ 42%',
+      pos: '11.2', dPos: '▲ 8%',
+      conv: '412', dConv: '▲ 19%',
+      bars: [28, 34, 40, 48, 55, 62]
+    },
+    {
+      traffic: '31.7k', dTraffic: '▲ 78%',
+      pos: '8.1', dPos: '▲ 18%',
+      conv: '786', dConv: '▲ 31%',
+      bars: [34, 42, 51, 60, 72, 84]
+    },
+    {
+      traffic: '48.2k', dTraffic: '▲ 120%',
+      pos: '6.4', dPos: '▲ 30%',
+      conv: '1,284', dConv: '▲ 45%',
+      bars: [40, 52, 61, 74, 88, 100]
+    }
+  ];
+  var chart = document.getElementById('chart');
+  months.forEach(function (m) {
+    var col = document.createElement('div');
+    col.className = 'bar-col';
+    col.innerHTML = '<div class="bar"></div><span>' + m + '</span>';
+    chart.appendChild(col);
+  });
+  var bars = chart.querySelectorAll('.bar');
+  var i = 0;
+  function paint(frame) {
+    document.querySelector('[data-m="traffic"]').textContent = frame.traffic;
+    document.querySelector('[data-d="traffic"]').textContent = frame.dTraffic;
+    document.querySelector('[data-m="pos"]').textContent = frame.pos;
+    document.querySelector('[data-d="pos"]').textContent = frame.dPos;
+    document.querySelector('[data-m="conv"]').textContent = frame.conv;
+    document.querySelector('[data-d="conv"]').textContent = frame.dConv;
+    bars.forEach(function (bar, idx) {
+      bar.style.height = frame.bars[idx] + '%';
+    });
+  }
+  paint(frames[0]);
+  setInterval(function () {
+    i = (i + 1) % frames.length;
+    paint(frames[i]);
+  }, 2200);
+})();
+</script>
+</body>
+</html>

@@ -31,8 +31,8 @@ const description = site.description;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogImage = `${site.url}/${site.photo}`;
 
-// Products & launches — three flagship products, in order.
-const showcaseOrder = ['fieldsync-scheduler', 'spryte', 'NEMO-APP-v.1'];
+// Products & launches — flagship demos, in order.
+const showcaseOrder = ['fieldsync-scheduler', 'spryte', 'NEMO-APP-v.1', 'seo-dashboard'];
 const showcase = showcaseOrder
   .map((repoName) => projectOverrides.find((p) => p.repoName === repoName && !p.hidden))
   .filter((p): p is NonNullable<typeof p> => Boolean(p))
