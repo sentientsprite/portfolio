@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import JellyButton from '../../components/JellyButton.astro';
+import SpeedReaderDemo from '../../components/SpeedReaderDemo.astro';
 import { getMergedProjects, type MergedProject } from '../../lib/github';
 import { categoryLabels } from '../../data/projects';
 import { growthSystemById } from '../../data/growth-systems';
@@ -23,7 +24,8 @@ const { project } = Astro.props;
 const allProjects = await getMergedProjects();
 const demoUrl = resolveDemoUrl({ demoPath: project.demoPath, demoUrl: project.demoUrl });
 const loopUrl = project.previewLoop ? withBase(`/${project.previewLoop}`) : null;
-const hasDemo = Boolean(demoUrl);
+const isSpeedReader = project.slug === 'speed-reader';
+const hasDemo = Boolean(demoUrl) || isSpeedReader;
 const isMeta = project.category === 'meta';
 const hasSource = Boolean(project.htmlUrl);
 const displayUrl = demoUrl
@@ -76,7 +78,9 @@ const heroImage = project.screenshot ? withBase(`/${project.screenshot}`) : null
 
       <div class="mt-6 flex flex-wrap gap-3">
         {
-          hasDemo ? (
+          isSpeedReader ? (
+            <JellyButton href="#try-speed-reader" size="sm" label="Try paste demo ↓" />
+          ) : hasDemo ? (
             <JellyButton
               href={demoUrl!}
               external
@@ -166,8 +170,10 @@ const heroImage = project.screenshot ? withBase(`/${project.screenshot}`) : null
       )
     }
 
+    {isSpeedReader && <SpeedReaderDemo />}
+
     {
-      hasDemo ? (
+      isSpeedReader ? null : hasDemo ? (
         <div class="mt-10 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 shadow-2xl">
           <div class="flex items-center gap-2 border-b border-neutral-800 bg-neutral-950/60 px-4 py-2.5">
             <span class="h-3 w-3 rounded-full bg-neutral-700" />

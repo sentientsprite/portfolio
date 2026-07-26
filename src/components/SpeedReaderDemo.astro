@@ -1,0 +1,181 @@
+---
+/**
+ * Inline paste-and-play Spritz demo for the Speed Reader work page.
+ */
+import JellyButton from './JellyButton.astro';
+
+const sample = `Paste any article, email, or notes into the box and hit Play. The reader flashes one word at a time with the optimal recognition letter highlighted in green — the same Spritz-style engine that powers the blue speed-read button on every page of this site. Adjust words per minute until it feels comfortable, pause anytime, then try your own text.`;
+---
+
+<section
+  id="try-speed-reader"
+  class="sr-demo mt-10 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-950 shadow-2xl"
+  data-speed-demo
+>
+  <div class="border-b border-neutral-800 bg-neutral-950/80 px-4 py-3 sm:px-5">
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Live demo</p>
+    <h2 class="mt-1 text-lg font-semibold text-neutral-100">Paste your text. Hit play.</h2>
+    <p class="mt-1 text-sm text-neutral-500">
+      Runs entirely in your browser — nothing is uploaded.
+    </p>
+  </div>
+
+  <div class="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
+    <div class="border-b border-neutral-800 p-4 sm:p-5 lg:border-b-0 lg:border-r">
+      <label for="sr-demo-input" class="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">
+        Your text
+      </label>
+      <textarea
+        id="sr-demo-input"
+        class="mt-2 h-48 w-full resize-y rounded-xl border border-neutral-800 bg-neutral-900/60 px-3 py-3 text-sm leading-relaxed text-neutral-200 placeholder:text-neutral-600 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 sm:h-64"
+        spellcheck="true"
+        data-sr-input
+      >{sample}</textarea>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <JellyButton as="button" type="button" size="sm" label="Play" id="sr-demo-play" />
+        <JellyButton as="button" type="button" variant="ghost" size="sm" label="Clear" id="sr-demo-clear" />
+      </div>
+    </div>
+
+    <div class="flex flex-col p-4 sm:p-5">
+      <div class="sr-demo__stage flex flex-1 flex-col justify-center rounded-xl border border-neutral-800 bg-neutral-900/40 px-3 py-6">
+        <p class="sr-demo__guide mb-0 text-center font-mono text-sm text-neutral-600 select-none" aria-hidden="true">
+          ―――――――――― ф ―――――――――――
+        </p>
+        <div
+          class="sr-demo__word my-1 grid min-h-[2.6rem] grid-cols-[1fr_auto_1fr] items-center font-mono text-2xl leading-tight text-neutral-100"
+          aria-live="assertive"
+          aria-atomic="true"
+          data-sr-word
+        >
+          <span class="text-right" data-sr-before></span>
+          <span class="font-bold text-emerald-400" data-sr-focus>S</span>
+          <span class="text-left" data-sr-after></span>
+        </div>
+        <p class="sr-demo__guide mb-0 text-center font-mono text-sm text-neutral-600 select-none" aria-hidden="true">
+          ――――――――――――――――――――――
+        </p>
+        <p class="mt-3 text-center text-xs text-neutral-500" data-sr-status>Choose a WPM, then Play.</p>
+      </div>
+
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+        <label class="text-[10px] font-semibold uppercase tracking-[0.16em] text-neutral-500" for="sr-demo-wpm">
+          WPM
+        </label>
+        <select
+          id="sr-demo-wpm"
+          class="min-w-[5.5rem] rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 focus:border-emerald-500/40 focus:outline-none"
+          data-sr-wpm
+        >
+          <option value="200">200</option>
+          <option value="250">250</option>
+          <option value="300">300</option>
+          <option value="350" selected>350</option>
+          <option value="400">400</option>
+          <option value="450">450</option>
+          <option value="500">500</option>
+          <option value="600">600</option>
+          <option value="700">700</option>
+          <option value="800">800</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { createSpeedReader } from '../lib/speed-reader';
+
+  function initDemo(root: HTMLElement) {
+    if (root.dataset.bound) return;
+    root.dataset.bound = 'true';
+
+    const input = root.querySelector('[data-sr-input]') as HTMLTextAreaElement | null;
+    const playBtn = root.querySelector('#sr-demo-play') as HTMLButtonElement | null;
+    const clearBtn = root.querySelector('#sr-demo-clear') as HTMLButtonElement | null;
+    const wpmSelect = root.querySelector('[data-sr-wpm]') as HTMLSelectElement | null;
+    const beforeEl = root.querySelector('[data-sr-before]') as HTMLElement | null;
+    const focusEl = root.querySelector('[data-sr-focus]') as HTMLElement | null;
+    const afterEl = root.querySelector('[data-sr-after]') as HTMLElement | null;
+    const statusEl = root.querySelector('[data-sr-status]') as HTMLElement | null;
+
+    if (!input || !playBtn || !wpmSelect || !beforeEl || !focusEl || !afterEl) return;
+
+    const setPlayLabel = (label: string) => {
+      const text = playBtn.querySelector('.jelly-btn__text');
+      if (text) text.textContent = label;
+      else playBtn.setAttribute('aria-label', label);
+    };
+
+    const reader = createSpeedReader({
+      onWord(parts, index, total) {
+        beforeEl.textContent = parts.before;
+        focusEl.textContent = parts.focus;
+        afterEl.textContent = parts.after;
+        if (statusEl) statusEl.textContent = `Word ${index + 1} of ${total}`;
+      },
+      onDone() {
+        setPlayLabel('Play');
+        if (statusEl) statusEl.textContent = 'Finished — hit Play to restart.';
+      },
+      onEmpty() {
+        beforeEl.textContent = '';
+        focusEl.textContent = '—';
+        afterEl.textContent = '';
+        setPlayLabel('Play');
+        if (statusEl) statusEl.textContent = 'Paste some text first.';
+      },
+    });
+
+    function currentWpm() {
+      return parseInt(wpmSelect.value, 10) || 350;
+    }
+
+    function resetStage() {
+      beforeEl.textContent = '';
+      focusEl.textContent = 'S';
+      afterEl.textContent = '';
+      if (statusEl) statusEl.textContent = 'Choose a WPM, then Play.';
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (!reader.isActive()) {
+        const text = input.value.trim();
+        if (!text) {
+          if (statusEl) statusEl.textContent = 'Paste some text first.';
+          input.focus();
+          return;
+        }
+        reader.start(text, currentWpm());
+        setPlayLabel('Pause');
+        return;
+      }
+      if (reader.isPaused()) {
+        reader.resume();
+        setPlayLabel('Pause');
+      } else {
+        reader.pause();
+        setPlayLabel('Play');
+      }
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      reader.stop();
+      input.value = '';
+      setPlayLabel('Play');
+      resetStage();
+      input.focus();
+    });
+
+    wpmSelect.addEventListener('change', () => {
+      if (reader.isActive()) reader.setWpm(currentWpm());
+    });
+  }
+
+  function boot() {
+    document.querySelectorAll<HTMLElement>('[data-speed-demo]').forEach(initDemo);
+  }
+
+  boot();
+  document.addEventListener('astro:page-load', boot);
+</script>

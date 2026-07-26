@@ -30,40 +30,6 @@ const description = site.description;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogImage = `${site.url}/${site.photo}`;
 
-// Visible FAQ — also emitted as FAQPage structured data for AI Overviews / Gemini.
-const faqs = [
-  {
-    q: 'What does Raymond King do?',
-    a: 'Raymond King is a Marketing Systems Builder. He builds practical systems for business owners — conversion websites, CRM workflows, automated email and SMS follow-up, booking flows, and reporting dashboards — connected into one lead-to-revenue workflow.',
-  },
-  {
-    q: 'What is the Lead-to-Revenue Growth System?',
-    a: 'It is a connected 5-step demo stack: capture intent on a conversion landing page, support appointment booking, sync and score leads in a CRM, nurture automatically with email and SMS, and report channel performance with an attribution dashboard.',
-  },
-  {
-    q: 'Who is this for?',
-    a: 'Business owners, founders, agencies, and local service operators who get traffic but lose leads to manual follow-up, missed bookings, or unclear reporting.',
-  },
-  {
-    q: 'How do projects start?',
-    a: 'Through a short intake form on the contact page. You share your goals, current bottleneck, timeline, and budget, and Raymond follows up with a clear next step. There is no obligation.',
-  },
-  {
-    q: 'Can Raymond help track which marketing channels are working?',
-    a: 'Yes. The attribution dashboard demo shows how Google Analytics, CRM revenue, and ad spend can be brought into one reporting view for cost per lead, ROAS, and attributed revenue by channel. Demo data is simulated; production builds require access to the client tools.',
-  },
-];
-
-const faqStructuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
-};
-
 // Products & launches — three flagship products, in order.
 const showcaseOrder = ['fieldsync-scheduler', 'spryte', 'NEMO-APP-v.1'];
 const showcase = showcaseOrder
@@ -209,7 +175,6 @@ const structuredData = {
     <meta name="twitter:image" content={ogImage} />
 
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-    <script type="application/ld+json" set:html={JSON.stringify(faqStructuredData)} />
     <!-- Apply saved accessibility settings before first paint (no flash). -->
     <script is:inline>
       (function () {
@@ -649,32 +614,6 @@ const structuredData = {
           <a href={withBase('/blog')} class="text-sm font-medium text-emerald-400 transition-colors hover:text-emerald-300">
             Read the blog &rarr;
           </a>
-        </div>
-      </section>
-
-      <!-- ===================== FAQ (answer-first content for AI Overviews) ===================== -->
-      <section id="faq" class="relative mx-auto max-w-3xl px-4 py-24">
-        <div class="mb-12 text-center">
-          <p data-reveal class="mb-3 text-xs uppercase tracking-[0.3em] text-emerald-400">FAQ</p>
-          <h2 data-reveal class="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Common questions
-          </h2>
-        </div>
-        <div class="space-y-3">
-          {faqs.map((f) => (
-            <details
-              data-reveal
-              class="group rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5 backdrop-blur-sm transition hover:border-emerald-500/30"
-            >
-              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-medium text-neutral-100">
-                {f.q}
-                <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-neutral-700 text-emerald-400 transition group-open:rotate-45">
-                  +
-                </span>
-              </summary>
-              <p class="mt-3 text-sm leading-relaxed text-neutral-400">{f.a}</p>
-            </details>
-          ))}
         </div>
       </section>
 

@@ -347,16 +347,15 @@ export const projectOverrides: ProjectOverride[] = [
     category: 'meta',
     featured: false,
     screenshot: 'images/projects/webdesign/speed-reader.svg',
-    demoUrl: 'https://sentientsprite.github.io/portfolio/',
     sourceUrl: '',
     description:
-      'Spritz-style speed reading for any page: pulls all paragraph text and flashes it word-by-word at a chosen WPM, with the optimal recognition letter highlighted.',
+      'Spritz-style speed reading: paste your own text (or tap the site-wide blue button to harvest page paragraphs) and flash words at a chosen WPM with the optimal recognition letter highlighted.',
     details:
-      'Adapted from Glance/OpenSpritz (MIT). Tap the blue speed-read button to open a reader bar that harvests visible <p> copy from the page main content, preprocesses words for punctuation-aware pacing, and displays each word with the Spritz pivot letter in emerald. WPM is adjustable (200–800) and saved for the session. Pause, resume, or close with Escape. No external APIs — a self-contained reader engine. Try it live — tap the speed-read button at the top-right of any page.',
+      'Adapted from Glance/OpenSpritz (MIT). This page includes a live paste-and-play demo — drop in any article, email, or notes and hit Play. The same engine powers the blue speed-read FAB on every page: it harvests visible <p> copy, preprocesses words for punctuation-aware pacing, and shows each word with the Spritz pivot letter in emerald. WPM is adjustable (200–800). Pause, resume, or close with Escape. No external APIs — everything runs in the browser.',
     techStack: ['Glance/OpenSpritz', 'Spritz', 'TypeScript', 'Astro'],
     metrics: [
       { value: '200–800', label: 'WPM range' },
-      { value: '1 tap', label: 'On any page' },
+      { value: 'Paste', label: 'Your own text' },
       { value: '0', label: 'External APIs' },
     ],
   },
