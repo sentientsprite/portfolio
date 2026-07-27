@@ -66,7 +66,9 @@ import { withBase } from '../lib/url';
     </div>
 
     <p class="mx-auto mt-10 max-w-2xl text-center text-sm text-neutral-500">
-      Not sure which band fits? Take the{' '}
+      Not sure which band fits? Browse{' '}
+      <a href={withBase('/tools')} class="font-medium text-emerald-400 hover:text-emerald-300">all owner tools</a>
+      {' '}or take the{' '}
       <a href={withBase('/quiz')} class="font-medium text-emerald-400 hover:text-emerald-300">module quiz</a>
       {' '}or{' '}
       <a href={withBase('/consult')} class="font-medium text-emerald-400 hover:text-emerald-300">see what a free consult covers</a>.

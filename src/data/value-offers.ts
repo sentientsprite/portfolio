@@ -317,4 +317,43 @@ export const stackNodes = [
   },
 ] as const;
 
+export const ownerTools = [
+  {
+    href: '/checklist',
+    title: 'Lead-leak checklist',
+    body: 'Printable one-pager: find where inquiries die.',
+    external: false,
+  },
+  {
+    href: '/quiz',
+    title: 'Module quiz',
+    body: 'Five questions → the demo that matches your bottleneck.',
+    external: false,
+  },
+  {
+    href: '/booking-preview',
+    title: 'Booking by niche',
+    body: 'FieldSync loop dressed as HVAC, plumbing, wellness, or electrical.',
+    external: false,
+  },
+  {
+    href: NEMO_SCORE_URL,
+    title: 'Local visibility score',
+    body: 'Free GBP-style score for home services (Nemo Local).',
+    external: true,
+  },
+  {
+    href: '/consult',
+    title: 'Consult roadmap',
+    body: 'Exactly what the free hour covers — before you book.',
+    external: false,
+  },
+  {
+    href: '/pricing',
+    title: 'Engagement bands',
+    body: 'Site · stack slice · full system — clear scopes.',
+    external: false,
+  },
+] as const;
+
 export const checklistDownloadHref = '/downloads/lead-leak-checklist.html';

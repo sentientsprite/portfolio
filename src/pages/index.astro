@@ -24,7 +24,7 @@ import { projectOverrides } from '../data/projects';
 import { growthSystemById } from '../data/growth-systems';
 import { fetchGitHubStats } from '../lib/github';
 import { getMediumPosts } from '../lib/medium';
-import { NEMO_SCORE_URL } from '../data/value-offers';
+import { NEMO_SCORE_URL, ownerTools } from '../data/value-offers';
 
 const pageTitle = site.name;
 const description = site.description;
@@ -226,7 +226,7 @@ const structuredData = {
 
         <nav class="hidden items-center gap-7 md:flex" aria-label="Main">
           <a href={withBase('/work')} class="nav-link">Work</a>
-          <a href={withBase('/#tools')} class="nav-link">Tools</a>
+          <a href={withBase('/tools')} class="nav-link">Tools</a>
           <a href={withBase('/pricing')} class="nav-link">Pricing</a>
           <a href={withBase('/blog')} class="nav-link">Blog</a>
           <a href={withBase('/contact')} class="nav-link">Contact</a>
@@ -256,7 +256,7 @@ const structuredData = {
         aria-label="Main"
       >
         <a href={withBase('/work')} class="mobile-link">Work</a>
-        <a href={withBase('/#tools')} class="mobile-link">Tools</a>
+        <a href={withBase('/tools')} class="mobile-link">Tools</a>
         <a href={withBase('/pricing')} class="mobile-link">Pricing</a>
         <a href={withBase('/blog')} class="mobile-link">Blog</a>
         <a href={withBase('/contact')} class="mobile-link">Contact</a>
@@ -422,14 +422,7 @@ const structuredData = {
           </h2>
         </div>
         <div data-reveal class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            { href: '/checklist', title: 'Lead-leak checklist', body: 'Printable one-pager: find where inquiries die.', external: false },
-            { href: '/quiz', title: 'Module quiz', body: 'Five questions → the demo that matches your bottleneck.', external: false },
-            { href: '/booking-preview', title: 'Booking by niche', body: 'FieldSync loop dressed as HVAC, plumbing, wellness, or electrical.', external: false },
-            { href: NEMO_SCORE_URL, title: 'Local visibility score', body: 'Free GBP-style score for home services.', external: true },
-            { href: '/consult', title: 'Consult roadmap', body: 'Exactly what the free hour covers — before you book.', external: false },
-            { href: '/pricing', title: 'Engagement bands', body: 'Site · stack slice · full system — clear scopes.', external: false },
-          ].map((card) => (
+          {ownerTools.map((card) => (
             <a
               href={card.external ? card.href : withBase(card.href)}
               target={card.external ? '_blank' : undefined}
@@ -443,6 +436,12 @@ const structuredData = {
               </span>
             </a>
           ))}
+        </div>
+
+        <div data-reveal class="mt-8 text-center">
+          <a href={withBase('/tools')} class="text-sm font-medium text-emerald-400 transition-colors hover:text-emerald-300">
+            All tools on one page &rarr;
+          </a>
         </div>
 
         <div data-reveal class="mt-14">
