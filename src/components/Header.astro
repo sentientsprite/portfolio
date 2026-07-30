@@ -2,6 +2,7 @@
 import { withBase } from '../lib/url';
 import { site } from '../config/site';
 import JellyButton from './JellyButton.astro';
+import { gatewayCtas } from '../data/value-offers';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -53,7 +54,13 @@ const isActive = (href: string) =>
     </nav>
 
     <div class="flex items-center gap-3">
-      <JellyButton href={withBase('/contact')} label="Get in touch" size="sm" class="hidden sm:inline-flex" />
+      <JellyButton
+        href={gatewayCtas.audit.href}
+        label={gatewayCtas.audit.label}
+        size="sm"
+        class="hidden sm:inline-flex"
+        external
+      />
 
       <details id="mobile-menu" class="relative md:hidden">
         <summary class="grid h-9 w-9 cursor-pointer list-none place-items-center rounded-lg text-neutral-300 ring-1 ring-neutral-700 transition hover:text-emerald-400">
@@ -75,10 +82,11 @@ const isActive = (href: string) =>
           }
           <div class="mt-1 px-1">
             <JellyButton
-              href={withBase('/contact')}
-              label="Get in touch"
+              href={gatewayCtas.audit.href}
+              label={gatewayCtas.audit.label}
               size="sm"
               class="w-full justify-center"
+              external
             />
           </div>
         </nav>

@@ -12,7 +12,7 @@ import AccessibilityWidget from '../components/AccessibilityWidget.astro';
 import SpeedReader from '../components/SpeedReader.astro';
 import VaultSuggestionForm from '../components/VaultSuggestionForm.astro';
 import JellyButton from '../components/JellyButton.astro';
-import SuggestCTA from '../components/SuggestCTA.astro';
+import GatewayCTAs from '../components/GatewayCTAs.astro';
 import BlogCard from '../components/BlogCard.astro';
 import GitHubStats from '../components/GitHubStats.astro';
 import ContributionGraph from '../components/ContributionGraph.astro';
@@ -24,7 +24,7 @@ import { projectOverrides } from '../data/projects';
 import { growthSystemById } from '../data/growth-systems';
 import { fetchGitHubStats } from '../lib/github';
 import { getMediumPosts } from '../lib/medium';
-import { NEMO_SCORE_URL, SPRYTE_URL, ownerTools } from '../data/value-offers';
+import { gatewayCtas, ownerTools } from '../data/value-offers';
 
 const pageTitle = site.name;
 const description = site.description;
@@ -234,7 +234,12 @@ const structuredData = {
 
         <div class="flex items-center gap-3">
           <span class="hidden sm:inline-block">
-            <JellyButton href={withBase('/contact#intake')} label="Build my system" size="sm" />
+            <JellyButton
+              href={gatewayCtas.audit.href}
+              label={gatewayCtas.audit.label}
+              size="sm"
+              external
+            />
           </span>
           <button
             id="menu-toggle"
@@ -262,10 +267,11 @@ const structuredData = {
         <a href={withBase('/contact')} class="mobile-link">Contact</a>
         <div class="px-1 pt-1">
           <JellyButton
-            href={withBase('/contact#intake')}
-            label="Build my system"
+            href={gatewayCtas.audit.href}
+            label={gatewayCtas.audit.label}
             size="sm"
             class="w-full justify-center"
+            external
           />
         </div>
       </div>
@@ -300,17 +306,7 @@ const structuredData = {
           </p>
 
           <div data-hero="line" class="mt-10 flex flex-wrap items-center justify-center gap-5">
-            <JellyButton
-              href={withBase('/contact#intake')}
-              eyebrow="Free consult"
-              label="Let's Build"
-            />
-            <JellyButton
-              href="#growth"
-              variant="ghost"
-              label="Free Visibility Audit"
-            />
-            <SuggestCTA samePage size="md" />
+            <GatewayCTAs layout="full" emphasize />
           </div>
 
           <section class="sr-only" aria-label="AI-readable portfolio summary">
@@ -378,10 +374,11 @@ const structuredData = {
               </div>
 
               <div class="mt-7 flex flex-wrap items-center gap-4">
-                {growthDemoUrl && <JellyButton href={growthDemoUrl} label="Open benefit showcase" size="sm" external />}
-                <JellyButton href={SPRYTE_URL} size="sm" label="Try Spryte audit ↗" external />
+                <GatewayCTAs layout="full" size="sm" />
+                {growthDemoUrl && (
+                  <JellyButton href={growthDemoUrl} variant="ghost" size="sm" label="Open benefit showcase ↗" external />
+                )}
                 <JellyButton href={growthDetailUrl} variant="ghost" size="sm" label="System overview" />
-                <JellyButton href={NEMO_SCORE_URL} variant="ghost" size="sm" label="Free local visibility score ↗" external />
               </div>
             </div>
 
@@ -549,9 +546,8 @@ const structuredData = {
               One operator, practical marketing systems.
             </h2>
             <div data-reveal class="mt-7 flex flex-wrap items-center gap-4">
-              <JellyButton href={withBase('/resume')} size="sm" label="View resume" />
-              <JellyButton href={withBase('/contact')} variant="ghost" size="sm" label="Contact" />
-              <JellyButton href={SPRYTE_URL} variant="ghost" size="sm" label="Try Spryte audit ↗" external />
+              <GatewayCTAs layout="pair" size="sm" />
+              <JellyButton href={withBase('/resume')} variant="ghost" size="sm" label="View resume" />
             </div>
             <p data-reveal class="mt-6 text-pretty leading-relaxed text-neutral-400">
               {site.bio}
@@ -646,22 +642,14 @@ const structuredData = {
           class="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-neutral-900/40 to-neutral-950 p-12 text-center backdrop-blur-sm sm:p-20"
         >
           <h2 class="mx-auto max-w-2xl text-balance text-4xl font-semibold tracking-tight sm:text-6xl">
-            Ready to find where leads are getting lost?
+            Start with a free audit. Decide on a call after you see the score.
           </h2>
           <p class="mx-auto mt-5 max-w-xl text-neutral-400">
-            Tell me where leads are slipping through. In a free consult we review the current funnel, identify the bottleneck, and decide whether a website, automation, booking, or reporting fix is the right next step.
+            Same gateway as Spryte and Nemo: free diagnostic first, human follow-up only if you want it.
+            No credit card. No auto-enroll.
           </p>
           <div class="mt-10 flex flex-wrap items-center justify-center gap-5">
-            <JellyButton
-              href={withBase('/contact#intake')}
-              eyebrow="Free consult"
-              label="Let's Build"
-            />
-            <JellyButton
-              href={`mailto:${site.email}`}
-              variant="ghost"
-              label="Or just email me"
-            />
+            <GatewayCTAs layout="full" emphasize />
           </div>
         </div>
       </section>

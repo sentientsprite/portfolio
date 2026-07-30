@@ -4,29 +4,32 @@ import SectionHeading from '../components/SectionHeading.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import GrowthIntakeForm from '../components/GrowthIntakeForm.astro';
 import JellyButton from '../components/JellyButton.astro';
+import GatewayCTAs from '../components/GatewayCTAs.astro';
 import SuggestCTA from '../components/SuggestCTA.astro';
 import { site } from '../config/site';
-import { SPRYTE_URL } from '../data/value-offers';
 ---
 
 <BaseLayout
   title="Contact"
-  description="Start a marketing systems project with Raymond King. Share your goals through the quick intake form, or reach out by email and social."
+  description="Start with a free Spryte audit or Nemo visibility score, then book a free consult with Raymond King if you want a human next step."
 >
   <div class="mx-auto max-w-4xl px-4 py-16">
     <SectionHeading
-      eyebrow="Free consult"
-      title="Let's find the gaps in your marketing system"
-      subtitle="Book a free, no-obligation hour. Answer a few quick questions below and I'll follow up by email to schedule a consult, review the current bottleneck, and suggest the clearest next step."
+      eyebrow="Gateway"
+      title="Start free. Talk when you're ready."
+      subtitle="Same pattern as Spryte and Nemo: run a free diagnostic first. The intake below is for a no-obligation consult — only if you want a human walkthrough after you've seen a score."
     />
 
-    <div class="mt-6 flex flex-wrap gap-3">
-      <SuggestCTA />
-      <JellyButton href={SPRYTE_URL} variant="ghost" size="sm" label="Try Spryte audit ↗" external />
+    <div class="mt-6">
+      <GatewayCTAs layout="products" size="sm" />
     </div>
 
     <div class="mt-10" data-animate>
       <GrowthIntakeForm showIntro={false} />
+    </div>
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <SuggestCTA />
     </div>
 
     <div

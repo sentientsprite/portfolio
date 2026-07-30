@@ -3,6 +3,33 @@
 export const NEMO_SCORE_URL = 'https://nemo-app-v-1.vercel.app/';
 export const SPRYTE_URL = 'https://spryte-site.vercel.app/';
 
+/**
+ * Gateway CTA strategy (matches Spryte / Nemo product sites):
+ * 1. Free product value first (audit or visibility score)
+ * 2. Human follow-up second (consult) — no pressure to hire from the form alone
+ * 3. Zephyr “Leave a suggestion” stays tertiary / sidebar, not a hero conversion path
+ */
+export const gatewayCtas = {
+  audit: {
+    id: 'audit',
+    label: 'Run a free audit',
+    href: SPRYTE_URL,
+    external: true as const,
+  },
+  score: {
+    id: 'score',
+    label: 'Free visibility score',
+    href: NEMO_SCORE_URL,
+    external: true as const,
+  },
+  consult: {
+    id: 'consult',
+    label: 'Book a free consult',
+    href: '/contact#intake',
+    external: false as const,
+  },
+} as const;
+
 export const bookingNiches = [
   {
     id: 'hvac',
@@ -327,8 +354,8 @@ export const ownerTools = [
   },
   {
     href: SPRYTE_URL,
-    title: 'Spryte lead audit',
-    body: 'Paste a prospect URL — get a scored opportunity and outreach angles.',
+    title: 'Run a free audit',
+    body: 'Spryte — paste a site URL, get a scored homepage audit and honest next step.',
     external: true,
   },
   {
@@ -345,8 +372,8 @@ export const ownerTools = [
   },
   {
     href: NEMO_SCORE_URL,
-    title: 'Local visibility score',
-    body: 'Free GBP-style score for home services (Nemo Local).',
+    title: 'Free visibility score',
+    body: 'Nemo Local — GBP-style local visibility score for home services.',
     external: true,
   },
   {
