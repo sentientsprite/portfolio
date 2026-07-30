@@ -17,15 +17,16 @@ export function withBase(path = ''): string {
 
 /**
  * Resolve a project's embeddable demo URL.
+ * External demos (demoUrl) win when set — public live apps take priority.
  * Internal demos (demoPath, served from /public) are prefixed with the base.
- * External demos (demoUrl) are returned as-is. Placeholder '#' yields null.
+ * Placeholder '#' yields null.
  */
 export function resolveDemoUrl(opts: {
   demoPath?: string | null;
   demoUrl?: string | null;
 }): string | null {
-  if (opts.demoPath) return withBase(opts.demoPath);
   if (opts.demoUrl && opts.demoUrl !== '#') return opts.demoUrl;
+  if (opts.demoPath) return withBase(opts.demoPath);
   return null;
 }
 

@@ -24,7 +24,7 @@ import { projectOverrides } from '../data/projects';
 import { growthSystemById } from '../data/growth-systems';
 import { fetchGitHubStats } from '../lib/github';
 import { getMediumPosts } from '../lib/medium';
-import { NEMO_SCORE_URL, ownerTools } from '../data/value-offers';
+import { NEMO_SCORE_URL, SPRYTE_URL, ownerTools } from '../data/value-offers';
 
 const pageTitle = site.name;
 const description = site.description;
@@ -308,7 +308,7 @@ const structuredData = {
             <JellyButton
               href="#growth"
               variant="ghost"
-              label="See the growth system"
+              label="Free Visibility Audit"
             />
             <SuggestCTA samePage size="md" />
           </div>
@@ -379,6 +379,7 @@ const structuredData = {
 
               <div class="mt-7 flex flex-wrap items-center gap-4">
                 {growthDemoUrl && <JellyButton href={growthDemoUrl} label="Open benefit showcase" size="sm" external />}
+                <JellyButton href={SPRYTE_URL} size="sm" label="Try Spryte audit ↗" external />
                 <JellyButton href={growthDetailUrl} variant="ghost" size="sm" label="System overview" />
                 <JellyButton href={NEMO_SCORE_URL} variant="ghost" size="sm" label="Free local visibility score ↗" external />
               </div>
@@ -550,6 +551,7 @@ const structuredData = {
             <div data-reveal class="mt-7 flex flex-wrap items-center gap-4">
               <JellyButton href={withBase('/resume')} size="sm" label="View resume" />
               <JellyButton href={withBase('/contact')} variant="ghost" size="sm" label="Contact" />
+              <JellyButton href={SPRYTE_URL} variant="ghost" size="sm" label="Try Spryte audit ↗" external />
             </div>
             <p data-reveal class="mt-6 text-pretty leading-relaxed text-neutral-400">
               {site.bio}

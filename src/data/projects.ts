@@ -118,13 +118,14 @@ export const projectOverrides: ProjectOverride[] = [
     category: 'product',
     growthSystemId: 'lead-to-revenue',
     growthSystemStage: 'Prioritize prospects',
+    demoUrl: 'https://spryte-site.vercel.app/',
     demoPath: 'demos/spryte-audit/index.html',
     previewLoop: 'demos/spryte-audit/loop.html',
     sourceUrl: '',
     description:
-      'AI-assisted lead audit demo for turning prospect websites into scored opportunities and prioritized outreach recommendations.',
+      'AI-assisted lead audit for turning prospect websites into scored opportunities and prioritized outreach recommendations.',
     details:
-      'Spryte helps sales and marketing prioritize who to pursue. It evaluates prospect websites, surfaces gaps, and outputs a scored opportunity with outreach angles. In the growth system, it complements inbound capture by giving outbound teams the same data-driven rigor.',
+      'Spryte helps sales and marketing prioritize who to pursue. Paste a prospect URL to evaluate the site, surface gaps, and get a scored opportunity with outreach angles. Live product at spryte-site.vercel.app — the embedded static demo remains a lightweight fallback. In the growth system, it complements inbound capture by giving outbound teams the same data-driven rigor.',
     techStack: ['Next.js', 'AI Audit', 'Lead Scoring', 'SEO', 'Zod'],
     metrics: [
       { value: '10x', label: 'Faster prospect audits' },

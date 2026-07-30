@@ -3,19 +3,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ToolStackMap from '../components/ToolStackMap.astro';
 import JellyButton from '../components/JellyButton.astro';
-import { ownerTools } from '../data/value-offers';
+import { ownerTools, SPRYTE_URL } from '../data/value-offers';
 import { withBase } from '../lib/url';
 ---
 
 <BaseLayout
   title="Owner tools"
-  description="Free diagnostic tools: lead-leak checklist, module quiz, niche booking preview, local visibility score, consult roadmap, pricing bands, and the tool stack map."
+  description="Free diagnostic tools: Spryte lead audit, lead-leak checklist, module quiz, niche booking preview, local visibility score, consult roadmap, pricing bands, and the tool stack map."
 >
   <div class="mx-auto max-w-6xl px-4 py-16">
     <SectionHeading
       eyebrow="Owner tools"
       title="Useful before you hire anyone"
-      subtitle="Self-serve diagnostics and demos — find where leads slip, which module fits, and what a consult actually covers. Nothing here requires a sales call."
+      subtitle="Self-serve diagnostics and demos — audit a prospect with Spryte, find where leads slip, which module fits, and what a consult actually covers. Nothing here requires a sales call."
     />
 
     <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -47,7 +47,8 @@ import { withBase } from '../lib/url';
         Free consult — we name the bottleneck and the smallest useful next step. No obligation.
       </p>
       <div class="mt-6 flex flex-wrap justify-center gap-3">
-        <JellyButton href={withBase('/contact#intake')} label="Book a free consult" />
+        <JellyButton href={SPRYTE_URL} label="Try Spryte audit ↗" external />
+        <JellyButton href={withBase('/contact#intake')} variant="ghost" label="Book a free consult" />
         <JellyButton href={withBase('/work')} variant="ghost" label="Browse live demos" />
       </div>
     </div>

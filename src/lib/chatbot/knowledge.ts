@@ -175,9 +175,9 @@ export function buildChatbotConfig(): ChatbotConfig {
         id: 'spryte',
         label: 'Spryte audits',
         keywords: ['spryte', 'audit', 'lead audit', 'prospect', 'outreach', 'scoring'],
-        response: `Spryte Lead Audit Tool uses AI to turn prospect websites into scored opportunities with prioritized outreach recommendations. Sales and marketing teams use it to decide who to pursue first — the "Prioritize prospects" step in the growth system.`,
+        response: `Spryte Lead Audit Tool uses AI to turn prospect websites into scored opportunities with prioritized outreach recommendations. Sales and marketing teams use it to decide who to pursue first — the "Prioritize prospects" step in the growth system. Try the live app at spryte-site.vercel.app.`,
         links: [
-          { label: 'Live demo', href: withBase('/demos/spryte-audit/index.html') },
+          { label: 'Live demo', href: 'https://spryte-site.vercel.app/' },
           { label: 'Work detail', href: withBase('/work/spryte') },
         ],
         quickReplies: ['Prana AI', 'Start a project'],

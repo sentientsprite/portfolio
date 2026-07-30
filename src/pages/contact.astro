@@ -6,6 +6,7 @@ import GrowthIntakeForm from '../components/GrowthIntakeForm.astro';
 import JellyButton from '../components/JellyButton.astro';
 import SuggestCTA from '../components/SuggestCTA.astro';
 import { site } from '../config/site';
+import { SPRYTE_URL } from '../data/value-offers';
 ---
 
 <BaseLayout
@@ -19,8 +20,9 @@ import { site } from '../config/site';
       subtitle="Book a free, no-obligation hour. Answer a few quick questions below and I'll follow up by email to schedule a consult, review the current bottleneck, and suggest the clearest next step."
     />
 
-    <div class="mt-6">
+    <div class="mt-6 flex flex-wrap gap-3">
       <SuggestCTA />
+      <JellyButton href={SPRYTE_URL} variant="ghost" size="sm" label="Try Spryte audit ↗" external />
     </div>
 
     <div class="mt-10" data-animate>

@@ -1,6 +1,7 @@
 /** Shared copy for the seven value offerings added to the showroom. */
 
 export const NEMO_SCORE_URL = 'https://nemo-app-v-1.vercel.app/';
+export const SPRYTE_URL = 'https://spryte-site.vercel.app/';
 
 export const bookingNiches = [
   {
@@ -145,7 +146,7 @@ export const moduleQuiz = {
       stage: 'Prioritize prospects',
       product: 'Spryte Lead Audit Tool',
       href: '/work/spryte',
-      demo: '/demos/spryte-audit/index.html',
+      demo: 'https://spryte-site.vercel.app/',
       blurb: 'Score who to pursue first so outreach time goes to the highest-likelihood opportunities.',
     },
     measure: {
@@ -323,6 +324,12 @@ export const ownerTools = [
     title: 'Lead-leak checklist',
     body: 'Printable one-pager: find where inquiries die.',
     external: false,
+  },
+  {
+    href: SPRYTE_URL,
+    title: 'Spryte lead audit',
+    body: 'Paste a prospect URL — get a scored opportunity and outreach angles.',
+    external: true,
   },
   {
     href: '/quiz',
