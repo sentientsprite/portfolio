@@ -1,6 +1,6 @@
 ---
 import JellyButton from './JellyButton.astro';
-import GatewayCTAs from './GatewayCTAs.astro';
+import { withBase } from '../lib/url';
 import { site } from '../config/site';
 
 interface Props {
@@ -22,13 +22,13 @@ const mailto = `mailto:${site.email}?subject=${customSubject}&body=${customBody}
 >
   <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Like what you see?</p>
   <h2 class="mx-auto mt-3 max-w-xl text-balance text-2xl font-semibold tracking-tight text-neutral-100 sm:text-3xl">
-    Start with a free audit — then decide on a call
+    Let's build this into your business
   </h2>
   <p class="mx-auto mt-3 max-w-lg text-neutral-400">
-    Same path as Spryte and Nemo: try a free diagnostic first. Book a consult only if you want a human pass, or request a custom version of this tool.
+    Book a free consult and we'll talk through how a system like this fits your business — or request a custom version of this exact tool.
   </p>
-  <div class="mt-8 flex flex-col items-center gap-5">
-    <GatewayCTAs layout="full" size="sm" class="justify-center" />
-    <JellyButton href={mailto} variant="ghost" size="sm" label="Request a custom version" />
+  <div class="mt-8 flex flex-wrap items-center justify-center gap-5">
+    <JellyButton href={withBase('/contact#intake')} eyebrow="Free consult" label="Book a free consult" />
+    <JellyButton href={mailto} variant="ghost" label="Request a custom version" />
   </div>
 </section>

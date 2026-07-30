@@ -2,26 +2,21 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ToolStackMap from '../components/ToolStackMap.astro';
-import GatewayCTAs from '../components/GatewayCTAs.astro';
 import JellyButton from '../components/JellyButton.astro';
-import { ownerTools } from '../data/value-offers';
+import { ownerTools, NEMO_SCORE_URL } from '../data/value-offers';
 import { withBase } from '../lib/url';
 ---
 
 <BaseLayout
   title="Owner tools"
-  description="Free gateway tools: Spryte homepage audit, Nemo visibility score, lead-leak checklist, module quiz, booking preview, consult roadmap, and pricing bands."
+  description="Free diagnostic tools: Spryte lead audit, lead-leak checklist, module quiz, niche booking preview, local visibility score, consult roadmap, pricing bands, and the tool stack map."
 >
   <div class="mx-auto max-w-6xl px-4 py-16">
     <SectionHeading
       eyebrow="Owner tools"
       title="Useful before you hire anyone"
-      subtitle="Start with a free Spryte audit or Nemo visibility score — then use the checklist, quiz, and roadmap if you want to dig deeper. Nothing here requires a sales call."
+      subtitle="Self-serve diagnostics and demos — find where leads slip, which module fits, what a consult covers, and try Nemo or Spryte when you want a live score. Nothing here requires a sales call."
     />
-
-    <div class="mt-6">
-      <GatewayCTAs layout="products" size="sm" />
-    </div>
 
     <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
@@ -47,13 +42,14 @@ import { withBase } from '../lib/url';
     </div>
 
     <div class="mt-14 rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-neutral-900/40 to-neutral-950 p-8 text-center sm:p-10">
-      <h2 class="text-xl font-semibold text-neutral-100">Start with a free audit. Decide on a call after.</h2>
+      <h2 class="text-xl font-semibold text-neutral-100">Ready for a human pass?</h2>
       <p class="mx-auto mt-2 max-w-md text-sm text-neutral-400">
-        No credit card. No auto-enroll. Book a consult only if you want Raymond to walk the score with you.
+        Free consult — we name the bottleneck and the smallest useful next step. Or run a Nemo visibility score first.
       </p>
-      <div class="mt-6 flex flex-col items-center gap-4">
-        <GatewayCTAs layout="full" size="sm" class="justify-center" />
-        <JellyButton href={withBase('/work')} variant="ghost" size="sm" label="Browse live demos" />
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <JellyButton href={withBase('/contact#intake')} label="Book a free consult" />
+        <JellyButton href={NEMO_SCORE_URL} variant="ghost" label="Free Visibility Audit ↗" external />
+        <JellyButton href={withBase('/work')} variant="ghost" label="Browse live demos" />
       </div>
     </div>
   </div>

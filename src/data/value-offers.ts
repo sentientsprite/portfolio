@@ -4,29 +4,29 @@ export const NEMO_SCORE_URL = 'https://nemo-app-v-1.vercel.app/';
 export const SPRYTE_URL = 'https://spryte-site.vercel.app/';
 
 /**
- * Gateway CTA strategy (matches Spryte / Nemo product sites):
- * 1. Free product value first (audit or visibility score)
- * 2. Human follow-up second (consult) — no pressure to hire from the form alone
- * 3. Zephyr “Leave a suggestion” stays tertiary / sidebar, not a hero conversion path
+ * Lead capture on this portfolio (only these two):
+ * 1. Contact intake — `/contact#intake` (consult / human follow-up)
+ * 2. NEMO Local gateway — `NEMO_SCORE_URL` (LVS scorecard + PDF + email → CRM as lvs_wedge)
+ *
+ * Everything else is interlinking (work demos, tools, Spryte product, blog).
+ *
+ * Channel map (do not conflate on this site):
+ * - SPRYTE — wide TOFU for cold/social via shared /audit links → audit_leads. Not a portfolio conversion CTA.
+ * - NEMO Local — warm / close-ready proof → nemo-app-v-1.
+ * - Outbound CRM — operator workbench; sources NEMO wedge (+ Spryte via webhook/manual).
  */
-export const gatewayCtas = {
-  audit: {
-    id: 'audit',
-    label: 'Run a free audit',
-    href: SPRYTE_URL,
-    external: true as const,
-  },
-  score: {
-    id: 'score',
-    label: 'Free visibility score',
-    href: NEMO_SCORE_URL,
-    external: true as const,
-  },
-  consult: {
-    id: 'consult',
-    label: 'Book a free consult',
+export const portfolioLeadCtas = {
+  contact: {
+    id: 'contact',
+    label: "Let's Build",
     href: '/contact#intake',
     external: false as const,
+  },
+  nemo: {
+    id: 'nemo',
+    label: 'Free Visibility Audit',
+    href: NEMO_SCORE_URL,
+    external: true as const,
   },
 } as const;
 
@@ -354,8 +354,8 @@ export const ownerTools = [
   },
   {
     href: SPRYTE_URL,
-    title: 'Run a free audit',
-    body: 'Spryte — paste a site URL, get a scored homepage audit and honest next step.',
+    title: 'Spryte lead audit',
+    body: 'Paste a prospect URL — get a scored opportunity and outreach angles.',
     external: true,
   },
   {
@@ -372,8 +372,8 @@ export const ownerTools = [
   },
   {
     href: NEMO_SCORE_URL,
-    title: 'Free visibility score',
-    body: 'Nemo Local — GBP-style local visibility score for home services.',
+    title: 'Local visibility score',
+    body: 'Free GBP-style score for home services (Nemo Local).',
     external: true,
   },
   {
