@@ -11,9 +11,9 @@ const githubRepo = 'https://github.com/sentientsprite/speed-reader';
 
 <section
   id="try-speed-reader"
-  class="sr-demo mt-10 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-950 shadow-2xl"
+  class="sr-demo mt-8 overflow-hidden rounded-xl border border-emerald-500/30 bg-neutral-950 shadow-2xl"
 >
-  <div class="border-b border-neutral-800 bg-neutral-950/80 px-4 py-3 sm:px-5">
+  <div class="border-b border-neutral-800 bg-neutral-950/80 px-4 py-4 sm:px-5">
     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Browser extension</p>
     <h2 class="mt-1 text-lg font-semibold text-neutral-100">Install once. Speed-read anywhere.</h2>
     <p class="mt-1 max-w-2xl text-sm text-neutral-500">
@@ -21,9 +21,28 @@ const githubRepo = 'https://github.com/sentientsprite/speed-reader';
       <span class="text-neutral-300">Speed read selection</span>. Max 1500 WPM. Fully offline.
     </p>
     <div class="mt-4 flex flex-wrap gap-2">
-      <JellyButton as="a" href={githubZip} external size="sm" label="Download extension (.zip)" />
-      <JellyButton as="a" href={githubRepo} external variant="ghost" size="sm" label="GitHub repo ↗" />
-      <JellyButton as="a" href="#sr-install-steps" variant="ghost" size="sm" label="Install steps ↓" />
+      <a
+        href={githubZip}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400"
+      >
+        Download extension (.zip)
+      </a>
+      <a
+        href={githubRepo}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center rounded-xl border border-neutral-600 px-5 py-3 text-sm font-semibold text-neutral-100 transition hover:border-emerald-500/50 hover:text-emerald-300"
+      >
+        GitHub repo ↗
+      </a>
+      <a
+        href="#sr-install-steps"
+        class="inline-flex items-center justify-center rounded-xl border border-neutral-700 px-5 py-3 text-sm font-medium text-neutral-300 transition hover:border-neutral-500"
+      >
+        Install steps ↓
+      </a>
     </div>
     <ol
       id="sr-install-steps"
