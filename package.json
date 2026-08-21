@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "pack:speed-reader": "bash scripts/pack-speed-reader-extension.sh",
     "preview": "astro preview",
     "astro": "astro"
   },

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RK Speed Reader</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      body {
+        margin: 0;
+        width: 280px;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        background: #0a0a0a;
+        color: #e5e7eb;
+        padding: 14px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #34d399;
+      }
+      p {
+        margin: 8px 0 0;
+        font-size: 12px;
+        line-height: 1.45;
+        color: #a3a3a3;
+      }
+      label {
+        display: block;
+        margin-top: 14px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #737373;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 6px;
+      }
+      input[type='range'] {
+        flex: 1;
+        accent-color: #10b981;
+      }
+      #wpm-val {
+        min-width: 3rem;
+        font-weight: 700;
+        color: #6ee7b7;
+        font-variant-numeric: tabular-nums;
+      }
+      ol {
+        margin: 10px 0 0;
+        padding-left: 1.1rem;
+        font-size: 12px;
+        color: #d4d4d4;
+        line-height: 1.45;
+      }
+      kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        background: #171717;
+        border: 1px solid #404040;
+        border-radius: 4px;
+        padding: 1px 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>RK Speed Reader</h1>
+    <p>Highlight text → right-click → <strong>Speed read selection</strong>.</p>
+    <label for="wpm">Default WPM (max 1500)</label>
+    <div class="row">
+      <input id="wpm" type="range" min="100" max="1500" step="25" value="350" />
+      <span id="wpm-val">350</span>
+    </div>
+    <p>Shortcut: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd></p>
+    <ol>
+      <li>Select any text on a normal web page</li>
+      <li>Right-click → Speed read selection</li>
+      <li>Tune WPM in the overlay or here</li>
+    </ol>
+    <script src="../js/popup.js"></script>
+  </body>
+</html>

@@ -5,18 +5,47 @@
 import JellyButton from './JellyButton.astro';
 
 const sample = `Paste any article, email, or notes into the box and hit Play. The reader flashes one word at a time with the optimal recognition letter highlighted in green — the same Spritz-style engine that powers the blue speed-read button on every page of this site. Adjust words per minute until it feels comfortable, pause anytime, then try your own text.`;
+const githubZip = 'https://github.com/sentientsprite/speed-reader/archive/refs/heads/main.zip';
+const githubRepo = 'https://github.com/sentientsprite/speed-reader';
 ---
 
 <section
   id="try-speed-reader"
   class="sr-demo mt-10 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-950 shadow-2xl"
+>
+  <div class="border-b border-neutral-800 bg-neutral-950/80 px-4 py-3 sm:px-5">
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Browser extension</p>
+    <h2 class="mt-1 text-lg font-semibold text-neutral-100">Install once. Speed-read anywhere.</h2>
+    <p class="mt-1 max-w-2xl text-sm text-neutral-500">
+      Instant download from GitHub, load unpacked, then highlight text on any site and right-click
+      <span class="text-neutral-300">Speed read selection</span>. Max 1500 WPM. Fully offline.
+    </p>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <JellyButton as="a" href={githubZip} external size="sm" label="Download extension (.zip)" />
+      <JellyButton as="a" href={githubRepo} external variant="ghost" size="sm" label="GitHub repo ↗" />
+      <JellyButton as="a" href="#sr-install-steps" variant="ghost" size="sm" label="Install steps ↓" />
+    </div>
+    <ol
+      id="sr-install-steps"
+      class="mt-4 list-decimal space-y-1.5 rounded-xl border border-neutral-800 bg-neutral-900/50 px-5 py-4 pl-9 text-sm text-neutral-400"
+    >
+      <li>Download the zip (or open <code class="text-neutral-300">INSTALL.txt</code> in the repo).</li>
+      <li>Unzip — open the <code class="text-neutral-300">extension</code> folder (it has <code class="text-neutral-300">manifest.json</code>).</li>
+      <li>Open <code class="text-neutral-300">chrome://extensions</code> → Developer mode → <span class="text-neutral-300">Load unpacked</span> → pick <code class="text-neutral-300">extension</code>.</li>
+      <li>Highlight text → right-click → <span class="text-neutral-300">Speed read selection</span> (or Alt+Shift+S).</li>
+    </ol>
+  </div>
+</section>
+
+<section
+  class="sr-demo mt-6 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-950 shadow-2xl"
   data-speed-demo
 >
   <div class="border-b border-neutral-800 bg-neutral-950/80 px-4 py-3 sm:px-5">
     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Live demo</p>
     <h2 class="mt-1 text-lg font-semibold text-neutral-100">Paste your text. Hit play.</h2>
     <p class="mt-1 text-sm text-neutral-500">
-      Runs entirely in your browser — nothing is uploaded.
+      Same engine as the plugin — runs entirely in your browser, nothing uploaded.
     </p>
   </div>
 
@@ -77,6 +106,9 @@ const sample = `Paste any article, email, or notes into the box and hit Play. Th
           <option value="600">600</option>
           <option value="700">700</option>
           <option value="800">800</option>
+          <option value="1000">1000</option>
+          <option value="1200">1200</option>
+          <option value="1500">1500</option>
         </select>
       </div>
     </div>

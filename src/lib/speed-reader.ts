@@ -138,6 +138,11 @@ export function createSpeedReader(callbacks: SpeedReaderCallbacks): SpeedReaderC
   let paused = false;
   let wpm = 350;
 
+  function clampWpm(wpmVal: number) {
+    const n = Number(wpmVal) || 350;
+    return Math.min(1500, Math.max(100, Math.round(n)));
+  }
+
   function clearTimer() {
     if (timer !== null) {
       clearInterval(timer);
@@ -173,7 +178,7 @@ export function createSpeedReader(callbacks: SpeedReaderCallbacks): SpeedReaderC
         return;
       }
 
-      wpm = wpmVal;
+      wpm = clampWpm(wpmVal);
       words = preprocessWords(raw);
       currentWord = 0;
       active = true;
@@ -198,7 +203,7 @@ export function createSpeedReader(callbacks: SpeedReaderCallbacks): SpeedReaderC
       startInterval();
     },
     setWpm(wpmVal) {
-      wpm = wpmVal;
+      wpm = clampWpm(wpmVal);
       if (active && !paused) {
         startInterval();
       }

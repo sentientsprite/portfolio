@@ -5,6 +5,8 @@ import ToolStackMap from '../components/ToolStackMap.astro';
 import JellyButton from '../components/JellyButton.astro';
 import { ownerTools, NEMO_SCORE_URL } from '../data/value-offers';
 import { withBase } from '../lib/url';
+
+const speedReaderZip = 'https://github.com/sentientsprite/speed-reader/archive/refs/heads/main.zip';
 ---
 
 <BaseLayout
@@ -17,6 +19,20 @@ import { withBase } from '../lib/url';
       title="Useful before you hire anyone"
       subtitle="Self-serve diagnostics and demos — find where leads slip, which module fits, what a consult covers, and try Nemo or Spryte when you want a live score. Nothing here requires a sales call."
     />
+
+    <div class="mt-8 flex flex-col gap-4 rounded-2xl border border-emerald-500/25 bg-emerald-500/5 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+      <div class="min-w-0">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Free browser extension</p>
+        <h2 class="mt-1 text-lg font-semibold text-neutral-100">RK Speed Reader</h2>
+        <p class="mt-1 text-sm text-neutral-400">
+          Highlight any text → right-click → speed-read. Max 1500 WPM. Instant GitHub download.
+        </p>
+      </div>
+      <div class="flex shrink-0 flex-wrap gap-2">
+        <JellyButton href={speedReaderZip} external size="sm" label="Download extension" />
+        <JellyButton href={withBase('/work/speed-reader#try-speed-reader')} variant="ghost" size="sm" label="How to install →" />
+      </div>
+    </div>
 
     <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {

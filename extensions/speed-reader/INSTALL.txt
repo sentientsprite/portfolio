@@ -1,0 +1,21 @@
+RK Speed Reader — install (Chrome / Edge / Brave / Arc)
+
+1. Unzip this folder anywhere (Desktop is fine).
+2. Open chrome://extensions  (Edge: edge://extensions)
+3. Turn on "Developer mode" (top right).
+4. Click "Load unpacked".
+5. Select the "extension" folder (the one that contains manifest.json).
+
+Use it
+- Highlight any text on a normal website
+- Right-click → "Speed read selection"
+- Or press Alt+Shift+S
+- Drag the WPM slider up to 1500
+
+Notes
+- Does not work on chrome:// pages, the Chrome Web Store, or some PDF viewers.
+- Fully offline — nothing is uploaded.
+- Firefox: about:debugging → This Firefox → Load Temporary Add-on → pick manifest.json
+  (temporary until browser restart unless you package/sign it).
+
+Source: https://sentientsprite.github.io/portfolio/work/speed-reader/

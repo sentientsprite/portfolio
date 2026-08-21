@@ -264,6 +264,24 @@ export const projectOverrides: ProjectOverride[] = [
     techStack: ['Analytics', 'SEMrush', 'Data Viz'],
   },
   {
+    repoName: 'speed-reader',
+    displayName: 'Speed Reader',
+    category: 'fun',
+    featured: true,
+    screenshot: 'images/projects/webdesign/speed-reader.svg',
+    sourceUrl: 'https://github.com/sentientsprite/speed-reader',
+    description:
+      'Spritz-style speed reading as a downloadable browser extension: highlight any text, right-click to speed-read, up to 1500 WPM. Same engine powers the on-site paste demo and blue FAB.',
+    details:
+      'Adapted from Glance/OpenSpritz (MIT). Download the Chrome/Edge/Brave extension zip, load it unpacked once, then highlight text on any site and right-click “Speed read selection” (or Alt+Shift+S). WPM caps at 1500 and syncs via the extension popup. This page also has a live paste-and-play demo and a site-wide blue FAB that harvests visible <p> copy. Punctuation-aware pacing, emerald pivot letter, pause/resume/Esc — fully offline, no external APIs.',
+    techStack: ['Chrome Extension', 'Manifest V3', 'Glance/OpenSpritz', 'Astro'],
+    metrics: [
+      { value: '100–1500', label: 'WPM range' },
+      { value: 'Right-click', label: 'Any selection' },
+      { value: 'Offline', label: 'No APIs' },
+    ],
+  },
+  {
     repoName: 'provable-roulette',
     displayName: 'Provable Roulette',
     category: 'fun',
@@ -341,24 +359,6 @@ export const projectOverrides: ProjectOverride[] = [
       { value: '0 KB', label: 'Extra JS deps' },
       { value: 'Pure CSS', label: 'Depth + gloss' },
       { value: 'Safe', label: 'Reduced-motion' },
-    ],
-  },
-  {
-    repoName: 'speed-reader',
-    displayName: 'Speed Reader',
-    category: 'meta',
-    featured: false,
-    screenshot: 'images/projects/webdesign/speed-reader.svg',
-    sourceUrl: '',
-    description:
-      'Spritz-style speed reading: paste your own text (or tap the site-wide blue button to harvest page paragraphs) and flash words at a chosen WPM with the optimal recognition letter highlighted.',
-    details:
-      'Adapted from Glance/OpenSpritz (MIT). This page includes a live paste-and-play demo — drop in any article, email, or notes and hit Play. The same engine powers the blue speed-read FAB on every page: it harvests visible <p> copy, preprocesses words for punctuation-aware pacing, and shows each word with the Spritz pivot letter in emerald. WPM is adjustable (200–800). Pause, resume, or close with Escape. No external APIs — everything runs in the browser.',
-    techStack: ['Glance/OpenSpritz', 'Spritz', 'TypeScript', 'Astro'],
-    metrics: [
-      { value: '200–800', label: 'WPM range' },
-      { value: 'Paste', label: 'Your own text' },
-      { value: '0', label: 'External APIs' },
     ],
   },
   {

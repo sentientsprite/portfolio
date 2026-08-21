@@ -59,7 +59,6 @@ const growthModules = growthSystem.modules.map((mod) => ({
 const growthDemoUrl = growthProject
   ? resolveDemoUrl({ demoPath: growthProject.demoPath, demoUrl: growthProject.demoUrl })
   : null;
-const growthDetailUrl = withBase('/work/growth-system');
 
 const githubStats = await fetchGitHubStats();
 const mediumPosts = (await getMediumPosts(3)).slice(0, 3);
@@ -381,7 +380,6 @@ const structuredData = {
               <div class="mt-7 flex flex-wrap items-center gap-4">
                 {growthDemoUrl && <JellyButton href={growthDemoUrl} label="Open benefit showcase" size="sm" external />}
                 <JellyButton href={NEMO_SCORE_URL} size="sm" label="Free Visibility Audit ↗" external />
-                <JellyButton href={growthDetailUrl} variant="ghost" size="sm" label="System overview" />
                 <JellyButton href={withBase('/work/spryte')} variant="ghost" size="sm" label="Spryte overview" />
               </div>
             </div>

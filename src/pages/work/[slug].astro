@@ -83,7 +83,15 @@ const heroImage = project.screenshot ? withBase(`/${project.screenshot}`) : null
       <div class="mt-6 flex flex-wrap gap-3">
         {
           isSpeedReader ? (
-            <JellyButton href="#try-speed-reader" size="sm" label="Try paste demo ↓" />
+            <>
+              <JellyButton
+                href="https://github.com/sentientsprite/speed-reader/archive/refs/heads/main.zip"
+                external
+                size="sm"
+                label="Download extension"
+              />
+              <JellyButton href="#try-speed-reader" variant="ghost" size="sm" label="Install + try ↓" />
+            </>
           ) : hasDemo ? (
             <JellyButton
               href={demoUrl!}
