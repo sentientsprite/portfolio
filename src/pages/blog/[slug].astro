@@ -24,6 +24,12 @@ const dateFmt = post.pubDate.toLocaleDateString('en-US', {
   month: 'long',
   day: 'numeric',
 });
+
+const isSpeedReaderPost =
+  post.slug === 'this-dyslexia-friendly-speed-reading-tool-has-existed-for-over-a-decade-d75d07dffbae';
+const speedReaderZip = 'https://github.com/sentientsprite/speed-reader/archive/refs/heads/main.zip';
+const speedReaderRepo = 'https://github.com/sentientsprite/speed-reader';
+const speedReaderTry = withBase('/work/speed-reader#try-speed-reader');
 ---
 
 <BaseLayout title={post.title} description={post.snippet}>
@@ -52,10 +58,69 @@ const dateFmt = post.pubDate.toLocaleDateString('en-US', {
           </div>
         )
       }
-      <div class="mt-6">
+      <div class="mt-6 flex flex-wrap gap-2">
+        {
+          isSpeedReaderPost && (
+            <>
+              <a
+                href={speedReaderZip}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400"
+              >
+                Download extension
+              </a>
+              <a
+                href={speedReaderTry}
+                class="inline-flex items-center justify-center rounded-xl border border-neutral-600 px-5 py-3 text-sm font-semibold text-neutral-100 transition hover:border-emerald-500/50 hover:text-emerald-300"
+              >
+                Try on site →
+              </a>
+              <a
+                href={speedReaderRepo}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center rounded-xl border border-neutral-700 px-5 py-3 text-sm font-medium text-neutral-300 transition hover:border-neutral-500"
+              >
+                GitHub repo ↗
+              </a>
+            </>
+          )
+        }
         <JellyButton href={post.link} external size="sm" label="Read on Medium ↗" />
       </div>
     </header>
+
+    {
+      isSpeedReaderPost && (
+        <div class="mt-8 rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-5 sm:p-6">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">
+            Free browser extension
+          </p>
+          <h2 class="mt-1 text-lg font-semibold text-neutral-100">RK Speed Reader</h2>
+          <p class="mt-1 text-sm text-neutral-400">
+            Highlight any text → right-click → speed-read. Max 1500 WPM. Instant GitHub download — load
+            unpacked in Chrome/Edge, then use it on any site.
+          </p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <a
+              href={speedReaderZip}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400"
+            >
+              Download extension (.zip)
+            </a>
+            <a
+              href={speedReaderTry}
+              class="inline-flex items-center justify-center rounded-xl border border-neutral-600 px-5 py-3 text-sm font-semibold text-neutral-100 transition hover:border-emerald-500/50 hover:text-emerald-300"
+            >
+              Install steps + demo →
+            </a>
+          </div>
+        </div>
+      )
+    }
 
     {
       post.thumbnail && (
@@ -87,7 +152,21 @@ const dateFmt = post.pubDate.toLocaleDateString('en-US', {
       >
         &larr; All posts
       </a>
-      <JellyButton href={post.link} external size="sm" label="Open on Medium ↗" />
+      <div class="flex flex-wrap gap-2">
+        {
+          isSpeedReaderPost && (
+            <a
+              href={speedReaderZip}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400"
+            >
+              Download extension
+            </a>
+          )
+        }
+        <JellyButton href={post.link} external size="sm" label="Open on Medium ↗" />
+      </div>
     </footer>
   </article>
 </BaseLayout>
