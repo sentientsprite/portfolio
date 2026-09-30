@@ -2,6 +2,7 @@
 import { withBase } from '../lib/url';
 import { site } from '../config/site';
 import JellyButton from './JellyButton.astro';
+import SiteLogo from './SiteLogo.astro';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -30,12 +31,7 @@ const isActive = (href: string) =>
       class="group flex items-center gap-2 font-semibold tracking-tight"
       aria-label={`${site.name} — home`}
     >
-      <span
-        class="grid h-8 w-8 place-items-center rounded-lg bg-emerald-500/15 text-sm text-emerald-400 ring-1 ring-emerald-400/30 transition group-hover:bg-emerald-500/25"
-      >
-        RK
-      </span>
-      <span class="hidden text-sm text-neutral-200 sm:inline">{site.name}</span>
+      <SiteLogo size={32} showLabel labelClass="hidden text-sm text-neutral-200 sm:inline" />
     </a>
 
     <nav class="hidden items-center gap-6 md:flex" aria-label="Main">

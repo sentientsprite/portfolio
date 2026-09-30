@@ -2,6 +2,7 @@
 import { site } from '../config/site';
 import { withBase } from '../lib/url';
 import VisitCounter from './VisitCounter.astro';
+import SiteLogo from './SiteLogo.astro';
 
 const year = new Date().getFullYear();
 const sourceUrl = `${site.social.github}/portfolio`;
@@ -29,11 +30,8 @@ const footerLinks = [
   <div class="mx-auto max-w-6xl px-4 py-12">
     <div class="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
       <div class="max-w-sm">
-        <a href={withBase('/')} class="flex items-center gap-2 font-semibold tracking-tight">
-          <span class="grid h-8 w-8 place-items-center rounded-lg bg-emerald-500/15 text-sm text-emerald-400 ring-1 ring-emerald-400/30">
-            RK
-          </span>
-          <span class="text-neutral-100">{site.name}</span>
+        <a href={withBase('/')} class="group flex items-center gap-2 font-semibold tracking-tight">
+          <SiteLogo size={36} showLabel labelClass="text-neutral-100" />
         </a>
         <p class="mt-4 text-sm leading-relaxed text-neutral-500">
           {site.description}

@@ -11,6 +11,7 @@ import FoxAssistant from '../components/FoxAssistant.astro';
 import AccessibilityWidget from '../components/AccessibilityWidget.astro';
 import SpeedReader from '../components/SpeedReader.astro';
 import VisitCounter from '../components/VisitCounter.astro';
+import SiteLogo from '../components/SiteLogo.astro';
 import VaultSuggestionForm from '../components/VaultSuggestionForm.astro';
 import JellyButton from '../components/JellyButton.astro';
 import SuggestCTA from '../components/SuggestCTA.astro';
@@ -159,6 +160,10 @@ const structuredData = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="icon" href={withBase('/favicon.ico')} sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase('/favicon-32.png')} />
+    <link rel="icon" type="image/png" sizes="16x16" href={withBase('/favicon-16.png')} />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <title>{pageTitle}</title>
 
@@ -219,9 +224,8 @@ const structuredData = {
       <div
         class="nav-shell mx-auto mt-4 flex max-w-6xl items-center justify-between rounded-2xl px-5 py-3 transition-all duration-500"
       >
-        <a href="#hero" class="group flex items-center gap-2 font-semibold tracking-tight">
-          <span class="grid h-8 w-8 place-items-center rounded-lg bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-400/30 transition group-hover:bg-emerald-500/25">RK</span>
-          <span class="hidden text-sm text-neutral-200 sm:inline">{site.name} · Marketing Systems</span>
+        <a href="#hero" class="group flex items-center gap-2 font-semibold tracking-tight" aria-label={`${site.name} — home`}>
+          <SiteLogo size={32} showLabel label={`${site.name} · Marketing Systems`} labelClass="hidden text-sm text-neutral-200 sm:inline" />
         </a>
 
         <nav class="hidden items-center gap-7 md:flex" aria-label="Main">

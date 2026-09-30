@@ -1,0 +1,46 @@
+---
+/**
+ * SiteLogo — Sentient Sprite neon mark used in header/footer brand links.
+ */
+import { withBase } from '../lib/url';
+import { site } from '../config/site';
+
+interface Props {
+  /** Pixel size of the mark (CSS). Default 32. */
+  size?: number;
+  class?: string;
+  /** Show the text label next to the mark. */
+  showLabel?: boolean;
+  /** Optional label override (defaults to site.name). */
+  label?: string;
+  /** Extra classes for the text label. */
+  labelClass?: string;
+}
+
+const {
+  size = 32,
+  class: className = '',
+  showLabel = false,
+  label = site.name,
+  labelClass = 'hidden text-sm text-neutral-200 sm:inline',
+} = Astro.props;
+
+const webp = withBase('/images/sentient-sprite-logo.webp');
+const png = withBase('/images/sentient-sprite-logo.png');
+---
+
+<span class:list={['inline-flex items-center gap-2 font-semibold tracking-tight', className]}>
+  <picture>
+    <source srcset={webp} type="image/webp" />
+    <img
+      src={png}
+      alt=""
+      width={size}
+      height={size}
+      class="site-logo shrink-0 rounded-lg object-contain ring-1 ring-emerald-400/25 transition group-hover:ring-emerald-400/45"
+      style={`width:${size}px;height:${size}px`}
+      decoding="async"
+    />
+  </picture>
+  {showLabel && <span class={labelClass}>{label}</span>}
+</span>

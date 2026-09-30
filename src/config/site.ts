@@ -3,6 +3,8 @@ export const site = {
   title: 'Marketing Systems Builder',
   url: 'https://sentientsprite.github.io/portfolio',
   photo: 'images/raymond-king.png',
+  /** Neon Sentient Sprite mark (header, footer, favicon source). */
+  logo: 'images/sentient-sprite-logo.webp',
   description:
     'Raymond King builds practical marketing systems that connect websites, CRM workflows, follow-up automation, booking flows, and reporting dashboards.',
   githubUsername: 'sentientsprite',
