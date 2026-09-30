@@ -1,0 +1,71 @@
+---
+/**
+ * Site-wide visit counter (once per browser session).
+ * Backed by CountAPI — no signup/keys; public key only.
+ * https://countapi.mileshilliard.com/
+ */
+const COUNTER_KEY = 'sentientsprite-portfolio-site-visits';
+---
+
+<p
+  class="visit-counter text-xs text-neutral-600"
+  data-visit-counter
+  data-counter-key={COUNTER_KEY}
+  aria-live="polite"
+>
+  <span class="tabular-nums text-neutral-500" data-visit-count>—</span>
+  <span> visits</span>
+</p>
+
+<script>
+  const ENDPOINT = 'https://countapi.mileshilliard.com/api/v1';
+  const SESSION_FLAG = 'rk-visit-counted';
+
+  function formatCount(n: number) {
+    return new Intl.NumberFormat('en-US').format(n);
+  }
+
+  async function fetchJson(url: string) {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`counter ${res.status}`);
+    return res.json() as Promise<{ value?: number | string }>;
+  }
+
+  function parseValue(data: { value?: number | string } | null) {
+    const raw = data?.value;
+    const n = typeof raw === 'number' ? raw : Number(raw);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  async function loadCounter(el: HTMLElement) {
+    const key = el.dataset.counterKey;
+    const countEl = el.querySelector<HTMLElement>('[data-visit-count]');
+    if (!key || !countEl) return;
+
+    try {
+      const already = sessionStorage.getItem(SESSION_FLAG) === '1';
+      const data = already
+        ? await fetchJson(`${ENDPOINT}/get/${encodeURIComponent(key)}`)
+        : await fetchJson(`${ENDPOINT}/hit/${encodeURIComponent(key)}`);
+
+      if (!already) sessionStorage.setItem(SESSION_FLAG, '1');
+
+      const value = parseValue(data);
+      if (value === null) return;
+      countEl.textContent = formatCount(value);
+    } catch {
+      // Keep em dash if the counter is unreachable
+    }
+  }
+
+  function boot() {
+    document.querySelectorAll<HTMLElement>('[data-visit-counter]').forEach((el) => {
+      if (el.dataset.bound === '1') return;
+      el.dataset.bound = '1';
+      void loadCounter(el);
+    });
+  }
+
+  boot();
+  document.addEventListener('astro:page-load', boot);
+</script>

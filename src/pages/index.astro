@@ -10,6 +10,7 @@ import '../styles/global.css';
 import FoxAssistant from '../components/FoxAssistant.astro';
 import AccessibilityWidget from '../components/AccessibilityWidget.astro';
 import SpeedReader from '../components/SpeedReader.astro';
+import VisitCounter from '../components/VisitCounter.astro';
 import VaultSuggestionForm from '../components/VaultSuggestionForm.astro';
 import JellyButton from '../components/JellyButton.astro';
 import SuggestCTA from '../components/SuggestCTA.astro';
@@ -675,7 +676,12 @@ const structuredData = {
       <!-- ===================== FOOTER ===================== -->
       <footer class="relative border-t border-neutral-900 px-4 py-12">
         <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 sm:flex-row">
-          <p class="text-sm text-neutral-400">© {new Date().getFullYear()} {site.name}. Built with Astro + Three.js.</p>
+          <div class="text-center sm:text-left">
+            <p class="text-sm text-neutral-400">© {new Date().getFullYear()} {site.name}. Built with Astro + Three.js.</p>
+            <div class="mt-1 flex justify-center sm:justify-start">
+              <VisitCounter />
+            </div>
+          </div>
           <div class="flex items-center gap-6 text-sm">
             <a href={site.social.github} class="nav-link" target="_blank" rel="noopener">GitHub</a>
             <a href={site.social.linkedin} class="nav-link" target="_blank" rel="noopener">LinkedIn</a>
