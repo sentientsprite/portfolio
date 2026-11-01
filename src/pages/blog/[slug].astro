@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import JellyButton from '../../components/JellyButton.astro';
 import { getAllMediumPosts } from '../../lib/medium';
 import { withBase } from '../../lib/url';
+import { NEMO_SCORE_URL } from '../../data/value-offers';
 import type { MediumPost } from '../../lib/medium';
 
 export async function getStaticPaths() {
@@ -30,6 +31,10 @@ const isSpeedReaderPost =
 const speedReaderZip = 'https://github.com/sentientsprite/speed-reader/archive/refs/heads/main.zip';
 const speedReaderRepo = 'https://github.com/sentientsprite/speed-reader';
 const speedReaderTry = withBase('/work/speed-reader#try-speed-reader');
+
+const isLocalSeoPost =
+  post.slug === 'local-seo-didnt-split-into-three-jobs-442e464db241';
+const nemoProduct = withBase('/work/nemo-app-v-1');
 ---
 
 <BaseLayout title={post.title} description={post.snippet}>
@@ -87,11 +92,31 @@ const speedReaderTry = withBase('/work/speed-reader#try-speed-reader');
             </>
           )
         }
+        {
+          isLocalSeoPost && (
+            <>
+              <a
+                href={NEMO_SCORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400"
+              >
+                Free Visibility Audit
+              </a>
+              <a
+                href={nemoProduct}
+                class="inline-flex items-center justify-center rounded-xl border border-neutral-600 px-5 py-3 text-sm font-semibold text-neutral-100 transition hover:border-emerald-500/50 hover:text-emerald-300"
+              >
+                See Nemo Local →
+              </a>
+            </>
+          )
+        }
         <JellyButton href={post.link} external size="sm" label="Read on Medium ↗" />
       </div>
     </header>
 
-    {
+      {
       isSpeedReaderPost && (
         <div class="mt-8 rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-5 sm:p-6">
           <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">
@@ -116,6 +141,37 @@ const speedReaderTry = withBase('/work/speed-reader#try-speed-reader');
               class="inline-flex items-center justify-center rounded-xl border border-neutral-600 px-5 py-3 text-sm font-semibold text-neutral-100 transition hover:border-emerald-500/50 hover:text-emerald-300"
             >
               Install steps + demo →
+            </a>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      isLocalSeoPost && (
+        <div class="mt-8 rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-5 sm:p-6">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">
+            Free listing score
+          </p>
+          <h2 class="mt-1 text-lg font-semibold text-neutral-100">Nemo Local</h2>
+          <p class="mt-1 text-sm text-neutral-400">
+            The Google listing score in this essay. Enter a business name and ZIP, get a 0–100 visibility
+            score, and a one-page PDF of the highest-impact fixes.
+          </p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <a
+              href={NEMO_SCORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400"
+            >
+              Free Visibility Audit
+            </a>
+            <a
+              href={nemoProduct}
+              class="inline-flex items-center justify-center rounded-xl border border-neutral-600 px-5 py-3 text-sm font-semibold text-neutral-100 transition hover:border-emerald-500/50 hover:text-emerald-300"
+            >
+              See Nemo Local →
             </a>
           </div>
         </div>
@@ -162,6 +218,18 @@ const speedReaderTry = withBase('/work/speed-reader#try-speed-reader');
               class="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400"
             >
               Download extension
+            </a>
+          )
+        }
+        {
+          isLocalSeoPost && (
+            <a
+              href={NEMO_SCORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-400"
+            >
+              Free Visibility Audit
             </a>
           )
         }
